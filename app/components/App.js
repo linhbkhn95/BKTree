@@ -25,7 +25,9 @@ import ListUser from './pages/manageuser/ListUser'
 import TableListTree from './pages/managetree/TableListTree'
 import Chat from './pages/chat/ListChat'
 import Notification from './pages/notification/ListNotify'
-
+import ListTree from './client/listtree/ListGroupTree'
+import ListTreeGroup from './client/listtree/ListTree'
+import TreeItem from './client/listtree/component/TreeItem'
  class App extends React.Component{
 
 // require('style-loader!css-loader!foundation-sites/dist/css/foundation.min.css');
@@ -45,7 +47,10 @@ import Notification from './pages/notification/ListNotify'
                       {/* <Route  path="/maptree" component={Maptree}/> */}
                       <Route  path="/create-user" component={CreateUser}/>
                       <Route  path="/create-tree" component={CreateTree}/>
+                      <Route  path="/treedetail" component={TreeItem}/>
 
+                      <Route  path="/list-tree" component={ListTree}/>
+                      <Route  path="/list-tree-group" component={ListTreeGroup}/>
                       <Route  path="/list-user" component={ListUser}/>
                       <Route  path="/users" component={TableListUser}/>
                       <Route  path="/trees" component={TableListTree}/>
@@ -55,7 +60,7 @@ import Notification from './pages/notification/ListNotify'
                       <Route  path="/dashboard" component={DashBoard}/>
                       <Route  path="/login" component={Login}/>
                       <Route  path="/settings" component={Settings}/>
-                      <Route  path="/:username" component={UserHome}/>
+                      {/* <Route  path="/:username" component={UserHome}/> */}
                       <Route render={function(){
                           return <p> not found</p>
                       }
