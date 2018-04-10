@@ -11,6 +11,7 @@ import MenuItem from 'material-ui/MenuItem';
 import moment from 'moment';
 import LinearProgress from 'material-ui/LinearProgress';
 import {Link} from 'react-router-dom'
+import axios from 'axios'
 // import ReactTooltip from 'react-tooltip'
  var date = Date.now();
 var datedemo=1511399642970;
@@ -32,7 +33,18 @@ const rightIconMenu = (
   </IconMenu>
 );
 
-const ListExampleMessages = () => (
+class ListExampleMessages extends React.Component{
+  componentDidMount(){
+       let self = this
+      axios.post('/tree/gitlist_grouptree',{grouptree_id:'1'})
+      .then((res)=>{
+          self.setState({listtree:res.data.DT})
+      })
+  }
+  rende(){
+    return(
+
+  
   <div>
        {/* <div className="title-page">
               Thông báo
@@ -87,5 +99,6 @@ const ListExampleMessages = () => (
     
   </div>
 );
+  }}
 
 export default ListExampleMessages;

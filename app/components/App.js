@@ -12,7 +12,7 @@ var store = require('app/store.js');
 var Layout = require('app/components/Layout.js');
 var Home = require('app/components/Home.js');
 var Settings = require('./pages/settings/Settings.js');
-var EventLog  = require('app/components/pages/eventlog/EventLog.js');
+import EventLog  from '../components/pages/eventLog/EventLog'
 var DashBoard  = require('app/components/pages/dashboard/DashBoard.js')
 var SlideMenu =  require('app/components/SlideMenuBar.js');
 var Login = require('app/components/Login.js');

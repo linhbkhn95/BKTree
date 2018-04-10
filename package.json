@@ -5,6 +5,7 @@
   "description": "a Sails application",
   "keywords": [],
   "dependencies": {
+    "axios": "^0.18.0",
     "babel-core": "^6.25.0",
     "babel-loader": "^7.1.1",
     "babel-preset-es2015": "^6.24.1",
@@ -46,6 +47,8 @@
     "redux": "^3.7.2",
     "sails": "~0.12.13",
     "sails-disk": "~0.10.9",
+    "sails-mysql": "^0.11.5",
+    "sails-redis": "^0.10.7",
     "utils-merge": "^1.0.0",
     "webpack": "^3.0.0",
     "zeromq": "^4.5.0"

@@ -1,7 +1,7 @@
 import React from 'react';
-import Header from './Components/Header.js'
-import Property from './Components/Property.js'
-import Content from './Components/Content.js'
+import Header from './components/Header.js'
+import Property from './components/Property.js'
+import Content from './components/Content.js'
 class EventLog extends React.Component{
 	render(){
 		return(

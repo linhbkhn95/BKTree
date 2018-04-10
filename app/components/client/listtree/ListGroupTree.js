@@ -7,6 +7,7 @@ import Subheader from 'material-ui/Subheader';
 import StarBorder from 'material-ui/svg-icons/toggle/star-border';
 import ViewList from 'material-ui-icons/RemoveRedEye';
 import {Link } from 'react-router-dom'
+import axios from 'axios'
 const styles = {
   root: {
     display: 'flex',
@@ -66,7 +67,25 @@ const tilesData = [
 /**
  * A simple example of a scrollable `GridList` containing a [Subheader](/#/components/subheader).
  */
-const ListTree = () => (
+class ListTree extends React.Component{
+  constructor(props) {
+    super(props)
+    this.state ={
+      listgroup:[]
+    }
+  }
+  componentDidMount(){
+    let self = this
+    axios.post('/group_tree/get_all')
+    .then((resdata)=>{
+       if(resdata.data.EC==0){
+         self.setState({listgroup:resdata.data.DT})
+       }
+    })
+  }
+  render(){
+    let listgroup =this.state.listgroup
+    return (
   <div style={styles.root}>
     <GridList
       cellHeight={180}
@@ -75,30 +94,31 @@ const ListTree = () => (
       padding={1}
     >
       <Subheader>Danh sách cây </Subheader>
-      {tilesData.map((tile) => (
+      {listgroup.map((tile) => (
         <GridTile
         
-          key={tile.img}
-          title={<div>{tile.title}  <span style={{float:"right",fontSize:"14px"}}>19 cây</span></div>}
+          key={tile.id}
+          title={<div>{tile.groupname}  <span style={{float:"right",fontSize:"14px"}}>19 cây</span></div>}
           
           subtitle={
                 <div>
                   
                    <span> Số cây cần tưới: <b>5</b></span>
                    <br />
-                   <span> nguồn gốc <b>{tile.author}</b></span>
+                   <span> nguồn gốc <b>{tile.country}</b></span>
                 </div>
           }
           actionIcon={<IconButton containerElement={ <Link to="/list-tree-group" />}><ViewList  color="white" /></IconButton>}
           // containerElement={<div>19 cây</div>}
           containerElement={ <Link to="/list-tree-group" >19 cây </Link>}
         >
-          <img src={tile.img} />
+          <img src={tile.url_image} />
         </GridTile>
       ))}
     </GridList>
   </div>
 );
+  }}
 
   
   export default ListTree;

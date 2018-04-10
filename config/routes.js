@@ -35,21 +35,21 @@ module.exports.routes = {
   '/': {
     view: 'homepage'
   },
-   '/eventLog':{
-    view:'homepage'
-   },
-   '/login':{
-    view:'homepage'
-   },
-   '/linh':{
-    view:'homepage'
-   },
-   '/dashboard':{
-    view:'homepage'
-   },
-   '/settings':{
-     view:'homepage'
-   }
+  //  '/eventLog':{
+  //   view:'homepage'
+  //  },
+  //  '/login':{
+  //   view:'homepage'
+  //  },
+  //  '/linh':{
+  //   view:'homepage'
+  //  },
+  //  '/dashboard':{
+  //   view:'homepage'
+  //  },
+  //  '/settings':{
+  //    view:'homepage'
+   //}
   /***************************************************************************
   *                                                                          *
   * Custom routes here...                                                    *
