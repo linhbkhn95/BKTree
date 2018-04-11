@@ -12,6 +12,8 @@ import {blue500, yellow600} from 'material-ui/styles/colors';
 import EditorInsertChart from 'material-ui/svg-icons/editor/insert-chart';
 import ModalTree from './modalTree'
 import axios from 'axios'
+import { ToastContainer, toast } from 'react-toastify';
+
 class CardExampleWithAvatar extends React.Component{
   constructor(props){
     super(props);
@@ -37,6 +39,28 @@ class CardExampleWithAvatar extends React.Component{
             self.setState({infoTree:res.data.DT})
           }
       })
+  }
+  access(wateruse){
+    console.log('water use',wateruse)
+    let tree_id = this.props.tree_id
+    let self = this;
+    if(wateruse>0&&tree_id)
+      axios.post('/tree/use_tree',{wateruse,tree_id})
+      .then((res)=>{
+          if(res.data.EC==0){
+             self.state.infoTree.waternow = res.data.DT.waternow;
+            
+             self.setState({infoTree:self.state.infoTree})
+             toast.success('Tưới nước thành công', {
+              position: toast.POSITION.TOP_CENTER
+              });
+          }
+      })
+    else{
+
+    }
+    this.setState({openModal:false})
+
   }
   render(){
     let infoTree = this.state.infoTree
@@ -104,7 +128,7 @@ class CardExampleWithAvatar extends React.Component{
         <FlatButton onClick={this.openModal.bind(this)} label="Tưới cây" />
         <FlatButton label="Phản hồi" />
       </CardActions>
-      <ModalTree open ={this.state.openModal} close={this.close.bind(this)}/>
+      <ModalTree access={this.access.bind(this)} open ={this.state.openModal} close={this.close.bind(this)}/>
     </Card>
     )
   }

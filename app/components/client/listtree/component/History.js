@@ -69,7 +69,7 @@ class ListExampleMessages extends React.Component{
                     secondaryText={
                       <p>
                         <span style={{color: darkBlack}}>{history.username} </span> --
-                        &apos; Đã tưới {history.water_user}ml nước cho cây
+                        &apos; Đã tưới {history.water_use}ml nước cho cây
                          (lượng nước cần lúc đó {history.waterneed}ml)
                         <br />
                         

@@ -5,12 +5,14 @@ var Menu = require('./Menu.js');
 var React = require('react');
 var {connect} = require('react-redux');
 import ListFriend from './ListFriend'
+import { ToastContainer, toast } from 'react-toastify';
+
 class Layout extends React.Component{
        render(){
          console.log(this.props.background)
          return(
                <div className="">
-                  
+                   <ToastContainer />
                         <div className="">
                       		  <Nav />
                             {/* <ListFriend /> */}

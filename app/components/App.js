@@ -28,6 +28,7 @@ import Notification from './pages/notification/ListNotify'
 import ListTree from './client/listtree/ListGroupTree'
 import ListTreeGroup from './client/listtree/ListTree'
 import TreeItem from './client/listtree/component/TreeItem'
+import Resgister from './client/user/RegisterUser'
  class App extends React.Component{
 
 // require('style-loader!css-loader!foundation-sites/dist/css/foundation.min.css');
@@ -48,6 +49,7 @@ import TreeItem from './client/listtree/component/TreeItem'
                       <Route  path="/create-user" component={CreateUser}/>
                       <Route  path="/create-tree" component={CreateTree}/>
                       <Route  path="/treedetail" component={TreeItem}/>
+                      <Route  path="/register" component={Resgister}/>
 
                       <Route  path="/list-tree" component={ListTree}/>
                       <Route  path="/list-tree-group" component={ListTreeGroup}/>

@@ -23,7 +23,7 @@ class Login extends React.Component{
         };
       }
    onChange(event) {
-    if (event.target.value=="") {
+    if (event.target.value =="") {
       this.setState({ errorTextUserName: 'This field is required'})
     } else {
       this.setState({ errorTextUserName: '' })

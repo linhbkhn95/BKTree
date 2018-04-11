@@ -53,10 +53,21 @@ module.exports = {
     },
     use_tree:function(req,res){
         let username = 'linhtd';
-        let wateruse = req.body.wateruse;
+        let wateruse = req.body.wateruse||0;
         let tree_id = req.body.tree_id || null
         if(tree_id){
-            Tree.findOne({id:tree_id}).exec((err,tree))
+            Tree.findOne({id:tree_id}).exec((err,tree)=>{
+                if(err){
+                    res.send(OutputInterface.errServer(err))
+                }
+                if(tree){
+                    tree.waternow += parseInt(wateruse)
+                    tree.save(()=>{
+                        console.log('update thành công')
+                        res.send(OutputInterface.success(tree))
+                    })
+                }
+            })
         }
     },
     getCoodinate:function(tree_id){
