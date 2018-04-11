@@ -56,11 +56,11 @@ export default class TabsExampleControlled extends React.Component {
         onChange={this.handleChange}
       >
         <Tab       icon={<Details />}
- label="Thông tin chi tiết" value="a">
-              <Property />
+      label="Thông tin chi tiết" value="a">
+              <Property tree_id={this.props.tree_id} />
         </Tab>
         <Tab  icon={<History />} label="Lịch sử tưới cây" value="b">
-            <HistoryTree />
+            <HistoryTree tree_id={this.props.tree_id}  />
         </Tab>
       </Tabs>
     );

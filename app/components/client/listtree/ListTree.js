@@ -28,20 +28,40 @@ const iconButtonElement = (
 const rightIconMenu = (
   <IconMenu iconButtonElement={iconButtonElement}>
     <MenuItem>Tưới cây</MenuItem>
-    <MenuItem  containerElement={ <Link to="/treedetail" ></Link>} > Xem chi tiết </MenuItem>
+    <MenuItem  containerElement={ <Link to="/treedetail." ></Link>} > Xem chi tiết </MenuItem>
     <MenuItem >Gửi phản hồi</MenuItem>
   </IconMenu>
 );
 
 class ListExampleMessages extends React.Component{
+  constructor(props){
+    super(props);
+    this.state ={
+      listtree:[]
+    }
+  }
+  renderRightIconMenu(tree_id){
+    let urlDetail = "/treedetail."+tree_id+".html"
+    return(
+          <IconMenu iconButtonElement={iconButtonElement}>
+        <MenuItem>Tưới cây</MenuItem>
+        <MenuItem  containerElement={ <Link to={urlDetail} ></Link>} > Xem chi tiết </MenuItem>
+        <MenuItem >Gửi phản hồi</MenuItem>
+      </IconMenu>
+    )
+  }
   componentDidMount(){
        let self = this
-      axios.post('/tree/gitlist_grouptree',{grouptree_id:'1'})
-      .then((res)=>{
-          self.setState({listtree:res.data.DT})
-      })
+       let grouptree_id = this.props.grouptree_id||null
+       if(grouptree_id)
+        axios.post('/tree/gitlist_grouptree',{grouptree_id})
+        .then((res)=>{
+            self.setState({listtree:res.data.DT})
+        })
   }
-  rende(){
+  render(){
+    let self = this
+    let {listtree} = this.state
     return(
 
   
@@ -52,13 +72,40 @@ class ListExampleMessages extends React.Component{
     <div>
       <List>
         <Subheader>Khế ta</Subheader>
-        <ListItem
+         {listtree.length>0?
+         listtree.map((tree)=>{
+           return(
+            <ListItem
+            leftAvatar={<Avatar src="images/tree/khe.jpg" />}
+            primaryText={<div style={{fontSize:"13px"}}>Mã cây: {tree.code}</div>}
+            rightIconButton={self.renderRightIconMenu(tree.id)}
+            style={{height:"100px"}}
+            secondaryText={
+              <div style={{height:"42px",fontSize:"13px"}}>
+             
+              Tọa độ: <i> X ={tree.coordinate.X} và Y = {tree.coordinate.Y}</i>
+           
+             <br />
+              <div>Tỉ lệ nước </div>
+              <LinearProgress mode="determinate" value={80} />
+              
+              </div>
+            }
+            secondaryTextLines={2}
+          >
+               <span className="time-alert">Trạng thái: {tree.status}</span>
+          </ ListItem>
+           
+           )
+         }):null
+        }
+        {/* <ListItem
           leftAvatar={<Avatar src="images/tree/khe.jpg" />}
           primaryText={<div style={{fontSize:"13px"}}>Mã cây: SUAA123</div>}
           rightIconButton={rightIconMenu}
           style={{height:"100px"}}
           secondaryText={
-            <p style={{height:"42px",fontSize:"13px"}}>
+            <div style={{height:"42px",fontSize:"13px"}}>
            
             Tọa độ: <i> X =12 và Y = 86</i>
          
@@ -66,7 +113,7 @@ class ListExampleMessages extends React.Component{
             <div>Tỉ lệ nước </div>
             <LinearProgress mode="determinate" value={80} />
             
-            </p>
+            </div>
           }
           secondaryTextLines={2}
         >
@@ -79,7 +126,7 @@ class ListExampleMessages extends React.Component{
           rightIconButton={rightIconMenu}
           style={{height:"100px"}}
           secondaryText={
-            <p style={{height:"42px",fontSize:"13px"}}>
+            <div style={{height:"42px",fontSize:"13px"}}>
            
             Tọa độ: <i> X =14 và Y = 86</i>
          
@@ -87,18 +134,17 @@ class ListExampleMessages extends React.Component{
             <div>Tỉ lệ nước </div>
             <LinearProgress mode="determinate" value={50} />
             
-            </p>
+            </div>
           }
           secondaryTextLines={2}
         >
              <span className="time-alert">Trạng thái: bình thường</span>
         </ ListItem>
-     
+      */}
       </List>
     </div>
     
   </div>
 );
   }}
-
-export default ListExampleMessages;
+module.exports = ListExampleMessages;

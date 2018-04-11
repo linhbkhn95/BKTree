@@ -59,6 +59,20 @@ import TreeItem from './client/listtree/component/TreeItem'
                       <Route  path="/eventLog" component={EventLog}/>
                       <Route  path="/dashboard" component={DashBoard}/>
                       <Route  path="/login" component={Login}/>
+                      <Route  path="/treeDetail.:id.html"  render={function ({ match }) {
+                                    console.log(match.params)
+                                    return <div><TreeItem tree_id={match.params.id} /></div>
+                                }
+                                } />
+
+                        } />
+                        <Route  path="/grouptree.:id.html"  render={function ({ match }) {
+                                    console.log(match.params)
+                                    return <div><ListTreeGroup grouptree_id={match.params.id} /></div>
+                                }
+                                } />
+
+                        } />
                       <Route  path="/settings" component={Settings}/>
                       {/* <Route  path="/:username" component={UserHome}/> */}
                       <Route render={function(){

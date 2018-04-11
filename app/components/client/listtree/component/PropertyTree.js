@@ -11,11 +11,13 @@ import ActionAssignment from 'material-ui/svg-icons/action/assignment';
 import {blue500, yellow600} from 'material-ui/styles/colors';
 import EditorInsertChart from 'material-ui/svg-icons/editor/insert-chart';
 import ModalTree from './modalTree'
+import axios from 'axios'
 class CardExampleWithAvatar extends React.Component{
   constructor(props){
     super(props);
     this.state={
-      openModal:false
+      openModal:false,
+      infoTree:{}
     }
   }
   openModal(){
@@ -25,7 +27,19 @@ class CardExampleWithAvatar extends React.Component{
     this.setState({openModal:false})
 
   }
+  componentDidMount(){
+    let self = this
+    let tree_id = this.props.tree_id||null
+    if(tree_id)
+      axios.post('/tree/getDetail',{tree_id})
+      .then((res)=>{
+          if(res.data.EC==0){
+            self.setState({infoTree:res.data.DT})
+          }
+      })
+  }
   render(){
+    let infoTree = this.state.infoTree
     return(
       <Card>
       {/* <CardHeader
@@ -34,9 +48,9 @@ class CardExampleWithAvatar extends React.Component{
         avatar="images/jsa-128.jpg"
       /> */}
       <CardMedia
-        overlay={<CardTitle title="MAD222" subtitle="Khế ta" />}
+        overlay={<CardTitle title={infoTree.code} subtitle={infoTree.groupname}/>}
       >
-        <img src="images/tree/khe.jpg" alt="" />
+        <img src={infoTree.url_image} alt="" />
       </CardMedia>
       {/* <CardTitle title="Khế ta" subtitle="MSDAAA1" /> */}
       <CardText>
@@ -46,44 +60,44 @@ class CardExampleWithAvatar extends React.Component{
           leftAvatar={<Avatar icon={<ActionAssignment />} backgroundColor={blue500} />}
           rightIcon={<ActionInfo />}
           primaryText="Mã cây"
-          secondaryText="MDSSAA"
+          secondaryText={infoTree.code}
         />
         <ListItem
           leftAvatar={<Avatar icon={<EditorInsertChart />} backgroundColor={yellow600} />}
           rightIcon={<ActionInfo />}
           primaryText="Loại cây"
-          secondaryText="Khế ta"
+          secondaryText={infoTree.groupname}
         />
          <ListItem
           leftAvatar={<Avatar icon={<ActionAssignment />} backgroundColor={blue500} />}
           rightIcon={<ActionInfo />}
           primaryText="Tình trạng cây"
-          secondaryText="tốt"
+          secondaryText={infoTree.status}
         />
         <ListItem
           leftAvatar={<Avatar icon={<EditorInsertChart />} backgroundColor={yellow600} />}
           rightIcon={<ActionInfo />}
           primaryText="Lượng nước đang có"
-          secondaryText="250ml"
+          secondaryText={infoTree.waternow +"ml"}
         />
          <ListItem
           leftAvatar={<Avatar icon={<ActionAssignment />} backgroundColor={blue500} />}
           rightIcon={<ActionInfo />}
           primaryText="Lượng nước cần"
-          secondaryText="280ml"
+          secondaryText={infoTree.waterneed +"ml"}
         />
         <ListItem
           leftAvatar={<Avatar icon={<EditorInsertChart />} backgroundColor={yellow600} />}
           rightIcon={<ActionInfo />}
           primaryText="Tuổi đời"
-          secondaryText="5 tháng"
+          secondaryText={infoTree.age}
         />
-          <ListItem
+          {/* <ListItem
           leftAvatar={<Avatar icon={<EditorInsertChart />} backgroundColor={yellow600} />}
           rightIcon={<ActionInfo />}
           primaryText="Nguồn gốc"
-          secondaryText="Việt Nam"
-        />
+          secondaryText={begin.}
+        /> */}
         </List>
       </CardText>
       <CardActions>

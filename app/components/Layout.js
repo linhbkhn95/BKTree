@@ -9,9 +9,9 @@ class Layout extends React.Component{
        render(){
          console.log(this.props.background)
          return(
-               <div className="container-fluid">
+               <div className="">
                   
-                        <div className="row">
+                        <div className="">
                       		  <Nav />
                             {/* <ListFriend /> */}
                         </div>

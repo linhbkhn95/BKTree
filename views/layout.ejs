@@ -10,19 +10,15 @@
     <!--
         Stylesheets and Preprocessors
         ==============================
-
         You can always bring in CSS files manually with `<link>` tags, or asynchronously
         using a solution like AMD (RequireJS).  Or, if you like, you can take advantage
         of Sails' conventional asset pipeline (boilerplate Gruntfile).
-
         By default, stylesheets from your `assets/styles` folder are included
         here automatically (between STYLES and STYLES END). Both CSS (.css) and LESS (.less)
         are supported. In production, your styles will be minified and concatenated into
         a single file.
-
         To customize any part of the built-in behavior, just edit `tasks/pipeline.js`.
         For example, here are a few things you could do:
-
             + Change the order of your CSS files
             + Import stylesheets from other directories
             + Use a different or additional preprocessor, like SASS, SCSS or Stylus
@@ -39,7 +35,6 @@
    <script>
     //    var recognition = new webkitSpeechRecognition();
     //   recognition.continuous = true;
-
     //  var output = document.getElementById('output');
     //   recognition.onresult = function(event) {
     //     console.log(event);
@@ -76,18 +71,14 @@
     <!--
         Client-side Templates
         ========================
-
         HTML templates are important prerequisites of modern, rich client applications.
         To work their magic, frameworks like Backbone, Angular, Ember, and Knockout require
         that you load these templates client-side.
-
         By default, your Gruntfile is configured to automatically load and precompile
         client-side JST templates in your `assets/templates` folder, then
         include them here automatically (between TEMPLATES and TEMPLATES END).
-
         To customize this behavior to fit your needs, just edit `tasks/pipeline.js`.
         For example, here are a few things you could do:
-
             + Import templates from other directories
             + Use a different template engine (handlebars, jade, dust, etc.)
             + Internationalize your client-side templates using a server-side
@@ -100,13 +91,28 @@
 
 
     <!--
-
       Client-side Javascript
       ========================
-
       You can always bring in JS files manually with `script` tags, or asynchronously
       on the client using a solution like AMD (RequireJS).  Or, if you like, you can
       take advantage of Sails' conventional asset pipeline (boilerplate Gruntfile).
-
       By default, files in your `assets/js` folder are included here
-      automatically (
+      automatically (between SCRIPTS and SCRIPTS END).  Both JavaScript (.js) and
+      CoffeeScript (.coffee) are supported. In production, your scripts will be minified
+      and concatenated into a single file.
+      To customize any part of the built-in behavior, just edit `tasks/pipeline.js`.
+      For example, here are a few things you could do:
+          + Change the order of your scripts
+          + Import scripts from other directories
+          + Use a different preprocessor, like TypeScript
+    -->
+    <script src="/js/lib/jquery-3.1.1.min.js"></script>
+    <!--SCRIPTS-->
+    <script src="/js/dependencies/sails.io.js"></script>
+    <script src="/js/bundel.js"></script>
+    <script src="/js/lib/bootstrap.min.js"></script>
+    <script src="/js/lib/jquery-3.1.1.min.js"></script>
+    <script src="/js/notifipopup.js"></script>
+    <!--SCRIPTS END-->
+  </body>
+</html>

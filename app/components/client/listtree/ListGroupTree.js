@@ -83,8 +83,12 @@ class ListTree extends React.Component{
        }
     })
   }
+  getUrl(grouptree_id){
+    return "grouptree."+grouptree_id+".html"
+  }
   render(){
     let listgroup =this.state.listgroup
+    let self  = this
     return (
   <div style={styles.root}>
     <GridList
@@ -108,9 +112,9 @@ class ListTree extends React.Component{
                    <span> nguồn gốc <b>{tile.country}</b></span>
                 </div>
           }
-          actionIcon={<IconButton containerElement={ <Link to="/list-tree-group" />}><ViewList  color="white" /></IconButton>}
+          actionIcon={<IconButton containerElement={ <Link to={self.getUrl(tile.id)} />}><ViewList  color="white" /></IconButton>}
           // containerElement={<div>19 cây</div>}
-          containerElement={ <Link to="/list-tree-group" >19 cây </Link>}
+          containerElement={ <Link to={self.getUrl(tile.id)}  >19 cây </Link>}
         >
           <img src={tile.url_image} />
         </GridTile>
