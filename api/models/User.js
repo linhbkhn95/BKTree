@@ -18,6 +18,26 @@ module.exports = {
     encryptedPassword: {
       type: 'string'
     },
+    fullname:{
+      type:'string'
+    },
+    address:{
+      type:'string'
+    },
+    rolecode:{
+      type:'string'
+    },
+    sex:{
+      type:'string'
+
+    },
+    birthday:{
+      type:'string'
+
+    },
+    url_avatar:{
+      type:'string'
+    },
     // We don't wan't to send back encrypted password either
     toJSON: function () {
       var obj = this.toObject();
@@ -30,6 +50,7 @@ module.exports = {
       if(err) return next(err);
       bcrypt.hash(values.password, salt, function (err, hash) {
         if(err) return next(err);
+        console.log('passs',hash)
         values.encryptedPassword = hash;
         next();
       })

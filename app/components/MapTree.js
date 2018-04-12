@@ -24,7 +24,8 @@ import IconButton from 'material-ui/IconButton';
 import NotificationsIcon from 'material-ui/svg-icons/social/notifications';
 import RaisedButton from 'material-ui/RaisedButton';
 import {NavLink,Link} from 'react-router-dom'
-export default class ListExampleNested extends React.Component {
+import {connect} from 'react-redux'
+ class ListExampleNested extends React.Component {
 
   state = {
     open: false,
@@ -43,6 +44,7 @@ export default class ListExampleNested extends React.Component {
   };
 
   render() {
+    let auth = this.props.auth
     return (
       <div>
         {/* <Toggle
@@ -58,13 +60,13 @@ export default class ListExampleNested extends React.Component {
         <div className="account-menu">
          
             <div className="user-avatar">
-                            <img className="img-user" src="https://scontent.fhan5-1.fna.fbcdn.net/v/t1.0-1/c0.16.80.80/p80x80/28577300_2016525228560373_5392331788461853926_n.jpg?oh=821bf3b7ee04b7f7ffbd02e0cbc850bb&oe=5B037648" />
+                            <img className="img-user" src={auth.isAuthenticated&&auth.user.url_avatar?auth.user.url_avatar:'images/user/me.png' } />
             </div>
         
 
            <div style={{float:"left"}} className="">
                             <div className="user-name">
-                             Trịnh Đức Bảo Linh
+                            {auth.isAuthenticated?auth.user.fullname:'' }
                             </div>
                           
                </div>
@@ -130,3 +132,10 @@ export default class ListExampleNested extends React.Component {
     );
   }
 }
+module.exports = connect(function(state){
+  return{
+   
+    auth:state.auth
+
+  };
+})(ListExampleNested);

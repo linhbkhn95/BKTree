@@ -11,7 +11,17 @@
  * For more information on configuring the session, check out:
  * http://sailsjs.org/#!/documentation/reference/sails.config/sails.config.session.html
  */
+var MySQLSessionStore = require('express-mysql-session');
 
+var store_options = {
+  host: 'localhost',
+  port: 3306,
+  user: 'root',
+  password: '1234',
+  database: 'tree_bk'
+  }
+  
+  
 module.exports.session = {
 
   /***************************************************************************
@@ -34,6 +44,15 @@ module.exports.session = {
   // cookie: {
   //   maxAge: 24 * 60 * 60 * 1000
   // },
+  // adapter: 'connect-mysql',
+  // config: {
+  //   user: 'root', 
+  //   password: '1234', 
+  //   database: 'tree_bk',
+  // },
+  // table: 'sessions',
+  // store: new (MySQLSessionStore(express))('tree_bk','root','1234',{host:'localhost'})
+  store: new MySQLSessionStore(store_options)
 
   /***************************************************************************
   *                                                                          *
@@ -73,7 +92,8 @@ module.exports.session = {
   * Use the latest version with Node >= 4.0                                  *
   *                                                                          *
   ***************************************************************************/
-
+    // adapter: 'connect-mysql',
+    // url: 'mysql://root@localhost:3306/tree_bk',
   // adapter: 'mongo',
   // url: 'mongodb://user:password@localhost:27017/dbname', // user, password and port optional
 

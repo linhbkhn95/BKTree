@@ -32,7 +32,7 @@ class CreateUSer extends React.Component{
                     errorText:'',
                     value:''
                 },
-                us:{
+                username:{
                     errorText:'',
                     value:''
 
@@ -72,19 +72,18 @@ class CreateUSer extends React.Component{
         });
       };
     
-    onChange(type,event,index,value) {
-        console.log(type,event,index,value)
+      onChange(type,event,index,value) {
         if(!value){
             this.state.data[type].value = event.target.value
             if (event.target.value=="") {
-                this.state.data[type].errorText = 'Trương này không được bỏ trống'
+                this.state.data[type].errorText = 'Trường này không được bỏ trống'
             
             } else {
                 this.state.data[type].errorText = ''
             }
         }
         else{
-            this.state.data[type].value = event.target.value
+            this.state.data[type].value = value
         }
         this.setState({data:this.state.data})
       }
@@ -101,14 +100,14 @@ class CreateUSer extends React.Component{
         let password = data.password.value ;
         let confirmPassword = data.confirmPassword.value
         if(username!=''&&password!=''&&confirmPassword!=''){
-            if(data.password!=data.confirmPassword){
+            if(password!=confirmPassword){
                 this.setState({err_msg:'Mật khẩu không khớp'})
             }
             else{
                 axios.post('/user/create',{username,password,confirmPassword})
                 .then((res)=>{
                     if(res.data.EC==0){
-                        console.log(res.data)
+                        self.props.history.push('/list-tree');
                     }
                     else{
                         self.setState({err_msg:res.data.EM})
@@ -122,7 +121,8 @@ class CreateUSer extends React.Component{
         }
     }
     render(){
-
+        let {username,password,confirmPassword} = this.state.data
+    let disabled = username.value==""||!username.value||!password.value||!confirmPassword.value || password =="" || confirmPassword=="" 
     return(
   <div>
     
@@ -135,14 +135,18 @@ class CreateUSer extends React.Component{
                           onChange={this.onChange.bind(this,'fullname')}
                           floatingLabelText="Họ tên"
                     /><br /> */}
-                             <TextField           errorText={this.state.data.fullname.errorText}
+                           
+                    
+                      <TextField  
+                       fullWidth={true}        
                           required={true} 
                           hintText="Tên đăng nhập"
-                          onChange={this.onChange.bind(this,'fullname')}
-                          floatingLabelText="Họ tên" 
+                          onChange={this.onChange.bind(this,'username')}
+                          floatingLabelText="Tên đăng nhập" 
                           />
                           <br />
-                     <TextField
+                          <TextField
+                           fullWidth={true}
                       errorText={this.state.data.password.errorText}
                       onChange={this.onChange.bind(this,'password')}                     
                        required={true} 
@@ -151,8 +155,8 @@ class CreateUSer extends React.Component{
                      
                       type="password"
                     /><br />
-                    
                     <TextField
+                     fullWidth={true}
                       errorText={this.state.data.confirmPassword.errorText}
                       onChange={this.onChange.bind(this,'confirmPassword')}                     
 
@@ -169,6 +173,7 @@ class CreateUSer extends React.Component{
                     <div className="col-md-6" >
                      
                     <TextField
+                     fullWidth={true}
                           errorText={this.state.data.fullname.errorText}
                           required={true} 
                           hintText="Họ tên"
@@ -176,6 +181,7 @@ class CreateUSer extends React.Component{
                           floatingLabelText="Họ tên"
                     /><br />
                     <SelectField
+                     fullWidth={true}
                             floatingLabelText="Giới tính"
                             value={this.state.data.sex.value}
                             onChange={this.onChange.bind(this,'sex')}
@@ -186,6 +192,7 @@ class CreateUSer extends React.Component{
                             </SelectField>
                     <br />
                     <DatePicker
+                     fullWidth={true}
           floatingLabelText="Ngày sinh"
           autoOk={this.state.autoOk}
           minDate={this.state.minDate}
@@ -193,13 +200,13 @@ class CreateUSer extends React.Component{
           disableYearSelection={this.state.disableYearSelection}
         /><br />
                     </div>
-                    <div style={{padding:"20px",color:'red'}}>
+                    <div style={{color:'red'}}>
                             {this.state.err_msg}
                     </div>
-                    <div style={{padding:"20px"}}>
+                    <div >
                        <Divider />
-                        <div style={{padding:"20px"}}>
-                        <RaisedButton onClick={this.register.bind(this)} disabled={(this.state.data.us.value=""||this.state.data.password.value==="")} label="Đăng kí" primary={true} style={style} />
+                        <div >
+                        <RaisedButton  fullWidth={true} onClick={this.register.bind(this)} disabled={disabled} label="Đăng kí" primary={true} style={style} />
                         </div>
                       </div>
                     

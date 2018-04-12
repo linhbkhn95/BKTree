@@ -7,6 +7,11 @@ import Divider from 'material-ui/Divider';
 import {login} from 'app/action/actionUserName';
 import {connect} from 'react-redux';
 import LinearProgress from 'material-ui/LinearProgress';
+import axios from 'axios'
+import setAuthorizationToken from 'app/utils/setAuthorizationToken.js';
+import {setCurrentUser} from 'app/action/authActions.js';
+import jwt from 'jsonwebtoken';
+import jwtDecode from 'jwt-decode';
 const style = {
   
   
@@ -18,29 +23,74 @@ class Login extends React.Component{
         super(props);
 
         this.state = {
-           errorTextUserName: '',
-           errorTextPassword:''
+            data:{
+              password:{
+                errorText:'',
+                value:''
+
+            },
+          
+            username:{
+                errorText:'',
+                value:''
+
+            },
+            }
         };
       }
-   onChange(event) {
-    if (event.target.value =="") {
-      this.setState({ errorTextUserName: 'This field is required'})
-    } else {
-      this.setState({ errorTextUserName: '' })
+      componentDidMount(){
+        let self = this
+        axios.get('/auth/get_session')
+        .then((res)=>{
+           if(res.data.EC==0){
+             self.props.history.push('/list-tree');
+
+           }
+           else{
+            localStorage.removeItem('jwToken');
+    
+           }
+        })
+      }
+      onChange(type,event,index,value) {
+        if(!value){
+            this.state.data[type].value = event.target.value
+            if (event.target.value=="") {
+                this.state.data[type].errorText = 'Trường này không được bỏ trống'
+            
+            } else {
+                this.state.data[type].errorText = ''
+            }
+        }
+        else{
+            this.state.data[type].value = value
+        }
+        this.setState({data:this.state.data})
+      }
+    register(){
+      this.props.history.push('/register');     
     }
-  }
-   onChangePass(event) {
-    if (event.target.value=="") {
-      this.setState({ errorTextPassword: 'This field is required'})
-    } else {
-      this.setState({ errorTextPassword: '' })
-    }
-  }
     login(){
          var {dispatch} = this.props;
-        console.log(this.refs.username.getValue()+' ' +this.refs.password.getValue());
-        dispatch(login(this.refs.username.getValue()));
-        this.props.history.push('/');
+         let {username,password} = this.state.data
+        let self = this
+         if(username.value!=''&&password.value!=''){
+             axios.post('/auth/login',{username:username.value,password:password.value})
+             .then((res)=>{
+                  if(res.data.EC==0){
+                    localStorage.setItem('jwToken',res.data.DT.token);
+                    setAuthorizationToken(res.data.DT.token);
+                    dispatch(setCurrentUser(jwtDecode(res.data.DT.token)));
+                     self.props.history.push('/list-tree');                  
+                  }
+                  else{
+                    self.setState({err_msg:res.data.DT})
+                  }
+             })
+         }
+        // console.log(this.refs.username.getValue()+' ' +this.refs.password.getValue());
+        // dispatch(login(this.refs.username.getValue()));
+        // this.props.history.push('/');
     }
     // _handleTextFieldChange: function(e) {
     //     this.setState({
@@ -48,44 +98,51 @@ class Login extends React.Component{
     //     });
     // }
    render(){
+    let {username,password} = this.state.data
+    let disabled = username.value==""||!username.value||!password.value
 
        return(
          
          <div style={{paddingTop:"34px"}} className=" col-md-4 col-sm-8 col-sm-push-2 col-md-push-4 col-xs-12">
-             <LinearProgress mode="indeterminate" />
-            <Paper zDepth={5}>
+             {/* <LinearProgress mode="indeterminate" /> */}
+            {/* <Paper zDepth={5}> */}
                 <div>
-                  <div className="head">Form Login</div>   
+                  {/* <div className="head">Form Login</div>    */}
                 </div>
-                <div className="" style={{padding:"15px", textAlign:"center"}}>
+                <div className="" style={{ }}>
                    <TextField
-                          errorText={this.state.errorTextUserName}
+                          errorText={this.state.data.username.errorText}
                           required={true} 
-                          hintText="UserName"
+                          hintText="Tên đăng nhập"
                           ref="username"
-                          onChange={this.onChange.bind(this)}
-                          floatingLabelText="username"
+                          fullWidth={true}
+                          onChange={this.onChange.bind(this,'username')}
+                          floatingLabelText="Tên đăng nhập"
                     /><br />
                 
                    <TextField
-                      errorText={this.state.errorTextPassword}
-                      onChange={this.onChangePass.bind(this)}
+                      errorText={this.state.data.password.errorText}
+                      onChange={this.onChange.bind(this,'password')}
                       required={true} 
-                      hintText="Password Field"
-                      floatingLabelText="Password"
+                      hintText="Mật khẩu"
+                      floatingLabelText="Mật khẩu"
                       ref="password"
+                      fullWidth={true}
+
                       type="password"
                     /><br />
-                    
-                    <div style={{padding:"20px"}}>
+                     <div style={{padding:"10px",color:'red'}}>
+                            {this.state.err_msg}
+                    </div>
+                    <div >
                        <Divider />
-                        <div style={{padding:"20px"}}>
-                        <RaisedButton disabled={!(this.state.errorTextPassword===""&&this.state.errorTextUserName==="")} onClick={this.login.bind(this)} label="Login" primary={true} style={style} />
-                        <RaisedButton label="Regester" secondary={true} style={style} />
+                        <div>
+                        <RaisedButton fullWidth={true} disabled={disabled} onClick={this.login.bind(this)} label="Đăng nhập" primary={true} style={style} />
+                        <div style={{textAlign:"center"}}>Nêu chưa có tài khoản thì hãy</div> <RaisedButton onClick={this.register.bind(this)} fullWidth={true} label="Đăng kí" secondary={true} style={style} />
                         </div>
                       </div>
                  </div>
-              </Paper>
+              {/* </Paper> */}
 
         </div>
     );

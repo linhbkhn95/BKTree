@@ -31,6 +31,19 @@ import ListChat from './ListChat'
 
  import { createStore } from 'redux';
 import Notification from './pages/notification/Notification'
+import setAuthorizationToken from 'app/utils/setAuthorizationToken.js';
+import {setCurrentUser} from 'app/action/authActions.js';
+import jwt from 'jsonwebtoken';
+import jwtDecode from 'jwt-decode';
+import axios from 'axios'
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import ContentAdd from 'material-ui/svg-icons/content/add';
+
+const style = {
+  marginRight: 20,
+};
+
+
 
 	class Login extends React.Component {
 	  static muiName = 'FlatButton';
@@ -48,8 +61,8 @@ import Notification from './pages/notification/Notification'
        display:""
     }
     logout(){
-      console.log('logout');
-      this.props.logout();
+     
+       this.props.logout();
     }
     help(){
       console.log('help');
@@ -92,7 +105,7 @@ import Notification from './pages/notification/Notification'
            
          
 
-          <NavLink to={"/"+this.props.username} > <Avatar style={{marginTop:"-15px"}}  src="images/xuan.jpg" /></NavLink>
+          <NavLink to={"/profile"} > <Avatar style={{marginTop:"-15px"}}  src={this.props.auth.user.url_avatar} /></NavLink>
                 {/* <Popover
                   open={this.state.open}
                   anchorEl={this.state.anchorEl}
@@ -121,9 +134,9 @@ import Notification from './pages/notification/Notification'
               targetOrigin={{horizontal: 'right', vertical: 'top'}}
               anchorOrigin={{horizontal: 'right', vertical: 'top'}}
           >
-              <MenuItem primaryText="Me" />
-              <MenuItem onClick={this.help.bind(this)} primaryText="List Friends" />
-              <MenuItem onClick={this.logout.bind(this)} primaryText="Sign out" />
+              <MenuItem primaryText="Thay đổi thông tin cá nhân" />
+              <MenuItem onClick={this.help.bind(this)} primaryText="Thay đổi mật khẩu" />
+              <MenuItem onClick={this.logout.bind(this)} primaryText="Đăng xuất" />
           </IconMenu>
         </div>
       );
@@ -143,6 +156,21 @@ import Notification from './pages/notification/Notification'
      };
   }
   componentDidMount(){
+    let self = this
+    let {dispatch } =this.props
+    axios.get('/auth/get_session')
+    .then((res)=>{
+       if(res.data.EC==0){
+        localStorage.setItem('jwToken',res.data.DT.token);
+        setAuthorizationToken(res.data.DT.token);
+        dispatch(setCurrentUser(jwtDecode(res.data.DT.token)));
+       }
+       else{
+        localStorage.removeItem('jwToken');
+       self.context.router.history.push('/login');
+
+       }
+    })
   //     let store = createStore(settings:{
   //       backgroupNav:"#00bcd4",
   //       backgroupSlideMenu:"White",
@@ -153,9 +181,23 @@ import Notification from './pages/notification/Notification'
   //  );
   }
   logout(){
-    this.props.dispatch(logout());
-    this.context.router.history.push('/login');
-    // this.props.history.push('/login');
+    let self  =this
+    axios.post('/auth/logOut')
+    .then((res)=>{
+       if(res.data.EC==0){
+        var {dispatch,history} = this.props;
+       
+          localStorage.removeItem('jwToken');
+           dispatch(setCurrentUser({}));
+          self.context.router.history.push('/login');
+
+       }
+       else{
+
+       }
+    })
+    // this.context.router.history.push('/login');
+    // // this.props.history.push('/login');
  }
   help(){
     this.setState({help:true});
@@ -164,6 +206,9 @@ import Notification from './pages/notification/Notification'
   handleClose(){
      this.setState({help:false});
   }
+  goback(){
+    this.context.router.history.goBack()
+   }
   handleToggle = () => this.setState({open: !this.state.open});
   closeDrawer = () => {this.setState({ open: false }); console.log('change');};
   render() {
@@ -178,7 +223,7 @@ import Notification from './pages/notification/Notification'
     return (
       <div >
        <div>
-        <AppBar style={{background:this.props.backgroupNav}}   iconElementRight={this.props.username ? <Logged username={this.props.username} help={that.help.bind(this)}  logout={that.logout.bind(this)} /> : <Login />}  title={this.props.nameHeader} onLeftIconButtonTouchTap={this.handleToggle} />
+        <AppBar style={{background:this.props.backgroupNav}}   iconElementRight={this.props.auth.isAuthenticated? <Logged auth={this.props.auth} help={that.help.bind(this)}  logout={that.logout.bind(this)} /> : <Login />}  title={this.props.nameHeader} onLeftIconButtonTouchTap={this.handleToggle} />
         </div>
         {/* <ModalInf open={this.state.help} /> */}
         <ListFriend handleClose={this.handleClose.bind(this)} open={this.state.help} />
@@ -187,7 +232,11 @@ import Notification from './pages/notification/Notification'
               <IconButton onClick={this.handleToggle}>
                   <ChevronLeftIcon />
            	 </IconButton>
+              <FloatingActionButton onClick={this.goback.bind(this)} style={style}>
+      <ContentAdd />
+    </FloatingActionButton>
             </div>
+
           	  {/* <MenuSlide /> */}
               <MenuDemo />
               <Divider />
@@ -205,6 +254,8 @@ import Notification from './pages/notification/Notification'
  	return{
      username:state.username,
      backgroupNav:state.settings.backgroupNav,
-     nameHeader:state.settings.nameHeader
+     nameHeader:state.settings.nameHeader,
+     auth:state.auth
+
  	};
  })(DrawerOpenRightExample);

@@ -11,7 +11,6 @@ export function setCurrentUser(user) {
 
 }
 export function logoutUser() {
-  console.log('logoutUser');
   return dispatch => {
     localStorage.removeItem('jwToken');
     setAuthorizationToken(false);

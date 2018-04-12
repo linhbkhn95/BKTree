@@ -8,6 +8,7 @@ import ListFriend from './ListFriend'
 import { ToastContainer, toast } from 'react-toastify';
 
 class Layout extends React.Component{
+      
        render(){
          console.log(this.props.background)
          return(
@@ -17,7 +18,7 @@ class Layout extends React.Component{
                       		  <Nav />
                             {/* <ListFriend /> */}
                         </div>
-                       
+   
 		                      <div style={{paddingLeft:"0px",paddingRight:"0px",background:this.props.background,paddingTop:"10px"}} className="container " >
                                 {/* <div className="title-page">
                                      Thêm nhân viên

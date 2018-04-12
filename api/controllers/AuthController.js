@@ -6,36 +6,69 @@
  */
 
 module.exports = {
-    index: function (req, res) {
-        var email = req.param('email');
-        var password = req.param('password');
+    login: function (req, res) {
+        let {username,password} = req.body
 
-        if (!email || !password) {
-          return res.json(401, {err: 'email and password required'});
-        }
-
-        Users.findOne({email: email}, function (err, user) {
-          if (!user) {
-            console.log(email);
-            return res.json(401, {err: 'invalid email or password'});
+       try {
+        User.findOne({username:username.trim()}).exec(  (err, user)=> {
+          if(err){
+             return  res.send(OutputInterface.errServer(err))
           }
-
-          Users.comparePassword(password, user, function (err, valid) {
+          if (!user) {
+         
+            return res.send(OutputInterface.errServer('Tên đăng nhập không chính xác'))
+  
+          }
+          User.comparePassword(password, user, async function (err, valid) {
             if (err) {
-              return res.json(403, {err: 'forbidden'});
+              return res.send(OutputInterface.errServer('Lỗi hệ thống'))
             }
 
-            if (!valid) {
-              return res.json(401, {err: 'invalid email or password'});
-            } else {
-            
-              res.json({
+            if (valid) 
+            console.log(req.session)
+               req.session.user = user;
+               console.log(req.session)
+
+              // res.json({
+              //   user: user,
+              //   token: jwToken.issue({id : user.id,username:user.email })
+              // });
+              return res.send(OutputInterface.success({
                 user: user,
-                token: jwToken.issue({id : user.id,username:user.email })
-              });
-            }
+                token: jwToken.issue({id : user.id,username:user.username,fullname:user.fullname,url_avatar:user.url_avatar })
+              }))
+            
+            return res.send(OutputInterface.errServer('Mật khẩu không chính xác'))
           });
         })
+       } catch (error) {
+          return res.send(OutputInterface.errServer('Lỗi hệ thống'))
+
+       }
+      },
+      logOut:function(req,res){
+        console.log('logout',req.session)
+          if(req.session.user){
+            delete req.session.user
+             res.send(OutputInterface.success('Đăng xuất thành công'))
+          }
+          else{
+            return res.send(OutputInterface.errServer('Chưa login'))
+          }
+      },
+       get_session :function(req,res){
+         console.log('session',req.session)
+          if(req.session.user){
+            let user = req.session.user
+            return res.send(OutputInterface.success({
+              user: user,
+              token: jwToken.issue({id : user.id,username:user.username,fullname:user.fullname,url_avatar:user.url_avatar })
+            }))
+          }
+          else{
+           return  res.send(OutputInterface.errServer('Chưa login'))
+          }
+        
       }
 };
 
