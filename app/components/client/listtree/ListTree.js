@@ -73,28 +73,43 @@ class ListExampleMessages extends React.Component{
       <List>
         <Subheader>Khế ta</Subheader>
          {listtree.length>0?
-         listtree.map((tree)=>{
+         listtree.map((tree,index)=>{
+           //ti lệ nước đang có
+           let ratio_water = (tree.waternow*100/tree.waterneed) 
+           let colorStatus = "";
+           let texStatus = "Tốt"
+           if(ratio_water<50){
+             texStatus = "Thiếu nước"
+             colorStatus= "red"
+           }
+           if(ratio_water>50&&ratio_water<80){
+             texStatus="Đủ nước"
+             colorStatus = "#1c4fde"
+           }
+
+           console.log('colorStatus',colorStatus)
            return(
             <ListItem
+            key={index}
             leftAvatar={<Avatar src="images/tree/khe.jpg" />}
             primaryText={<div style={{fontSize:"13px"}}>Mã cây: {tree.code}</div>}
             rightIconButton={self.renderRightIconMenu(tree.id)}
             style={{height:"100px"}}
             secondaryText={
-              <div style={{height:"42px",fontSize:"13px"}}>
+              <div style={{height:"42px",fontSize:"13px",color:"black"}}>
              
               Tọa độ: <i style={{color: "green",
     fontWeight: "bold"}}> X = {tree.coordinate.X} và Y = {tree.coordinate.Y}</i>
            
              <br />
-              <div>Tỉ lệ nước </div>
-              <LinearProgress mode="determinate" value={80} />
+              <div style={{color:"black"}}>Tỉ lệ nước </div>
+              <LinearProgress color={colorStatus} mode="determinate" value={ratio_water} />
               
               </div>
             }
             secondaryTextLines={2}
           >
-               <span className="time-alert">Trạng thái: {tree.status}</span>
+               <span  className="time-alert"><div style={{float:"left",marginRight:"5px",color:"black"}}>Trạng thái:</div> <div style={{fontWeight:"bold",color:colorStatus}}>{texStatus}</div></span>
           </ ListItem>
            
            )

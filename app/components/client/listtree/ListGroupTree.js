@@ -102,19 +102,19 @@ class ListTree extends React.Component{
         <GridTile
         
           key={tile.id}
-          title={<div>{tile.groupname}  <span style={{float:"right",fontSize:"14px"}}>19 cây</span></div>}
+          title={<div>{tile.groupname}  <span style={{float:"right",fontSize:"14px"}}>{tile.count_listtree} cây</span></div>}
           
           subtitle={
                 <div>
                   
-                   <span> Số cây cần tưới: <b>5</b></span>
+                   <span> Số cây cần tưới: <b>{tile.count_listtree_needwater}</b></span>
                    <br />
                    <span> nguồn gốc <b>{tile.country}</b></span>
                 </div>
           }
           actionIcon={<IconButton containerElement={ <Link to={self.getUrl(tile.id)} />}><ViewList  color="white" /></IconButton>}
           // containerElement={<div>19 cây</div>}
-          containerElement={ <Link to={self.getUrl(tile.id)}  >19 cây </Link>}
+          containerElement={ <Link to={self.getUrl(tile.id)}  >{tile.count_listtree} </Link>}
         >
           <img src={tile.url_image} />
         </GridTile>

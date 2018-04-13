@@ -39,7 +39,20 @@ module.exports = {
             if(err){
                 res.send(OutputInterface.errServer(err))
             }
-            res.send(OutputInterface.success(list))
+            Promise.all(list.map((item) => {
+                return new Promise(async (resolve, reject) => {
+                    // let coordinate = await self.getCoodinate(item.id)
+                    let count_listtree = await Tree.count({grouptree_id:item.id});
+                    let count_listtree_needwater = await Tree.count({grouptree_id:item.id,status:"kém"});
+
+                    var newitem = { ...item,count_listtree,count_listtree_needwater  }
+
+                    resolve(newitem)
+                })
+            })).then((data_response)=>{
+                res.send(OutputInterface.success(data_response))
+            })
+     
         })
     }
 };

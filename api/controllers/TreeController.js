@@ -18,6 +18,7 @@ module.exports = {
             Promise.all(listtree.map((item) => {
                 return new Promise(async (resolve, reject) => {
                     let coordinate = await self.getCoodinate(item.id)
+
                     var newitem = { ...item, coordinate  }
 
                     resolve(newitem)
@@ -76,6 +77,39 @@ module.exports = {
                     })
                 }
             })
+        }
+    },
+    get_tree_status : async function(tree){
+        if(tree){
+            let time_use  = tree.time_user_use
+            if(!tree.username_use){
+               if(user){
+                   res.send(OutputInterface.errServer(user))
+
+               }
+                await Tree.update({id:tree_id},{username_use:username_use,time_user_use:time_user_use});
+
+            }
+            else{
+               if(time_use&&CaculateTime.compareNow(time_use)<60){
+                  Tree.update({id:tree_id},{username_use:username_use,time_user_use:time_user_use}).exec((err,treeUpdate)=>{
+                      if(err){
+                       return res.send(OutputInterface.errServer(err)) 
+                      }
+                      return res.send(OutputInterface.errServer(treeUpdate))
+
+                  });
+                   
+
+               }
+               let user = await User.findOne({username:tree.username});
+               if(user)
+
+                   return res.send(OutputInterface.errServer('Cây đang dc chăm sóc bởi' +user.fullname))
+               return res.send(OutputInterface.success(tree))
+
+
+            }
         }
     },
     //set user cham soc cay
