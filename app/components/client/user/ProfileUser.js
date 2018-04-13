@@ -14,7 +14,7 @@ import EditorInsertChart from 'material-ui/svg-icons/editor/insert-chart';
 import axios from 'axios'
 import {connect} from 'react-redux'
 import { ToastContainer, toast } from 'react-toastify';
-
+import {NavLink} from 'react-router-dom'
 class CardExampleWithAvatar extends React.Component{
   constructor(props){
     super(props);
@@ -65,6 +65,7 @@ class CardExampleWithAvatar extends React.Component{
   }
   render(){
     let infoUser = this.state.infoUser
+    let url_editProfile = "editProfile."+infoUser.username+".html"
     return(
       <Card>
       {/* <CardHeader
@@ -125,10 +126,10 @@ class CardExampleWithAvatar extends React.Component{
         /> */}
         </List>
       </CardText>
-      <CardActions>
-        <FlatButton onClick={this.openModal.bind(this)} label="Thay đổi thông tin" />
+      {this.props.auth.user.username==infoUser.username?<CardActions>
+        <NavLink to={url_editProfile} > <FlatButton onClick={this.openModal.bind(this)} label="Thay đổi thông tin" /> </NavLink>
         {/* <FlatButton label="Phản hồi" /> */}
-      </CardActions>
+      </CardActions>:null}
       {/* <ModalTree access={this.access.bind(this)} open ={this.state.openModal} close={this.close.bind(this)}/> */}
     </Card>
     )

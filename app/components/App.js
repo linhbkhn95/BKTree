@@ -30,6 +30,7 @@ import ListTreeGroup from './client/listtree/ListTree'
 import TreeItem from './client/listtree/component/TreeItem'
 import Resgister from './client/user/RegisterUser'
 import ProfileUser from './client/user/ProfileUser'
+import EditProfile from './client/user/components/EditUser'
  class App extends React.Component{
 
 // require('style-loader!css-loader!foundation-sites/dist/css/foundation.min.css');
@@ -51,6 +52,7 @@ import ProfileUser from './client/user/ProfileUser'
                       <Route  path="/create-tree" component={CreateTree}/>
                       <Route  path="/treedetail" component={TreeItem}/>
                       <Route  path="/register" component={Resgister}/>
+                      {/* <Route  path="/editProfile" component={EditProfile}/> */}
 
                       <Route  path="/list-tree" component={ListTree}/>
                       <Route  path="/list-tree-group" component={ListTreeGroup}/>
@@ -65,6 +67,13 @@ import ProfileUser from './client/user/ProfileUser'
                       <Route  path="/treeDetail.:id.html"  render={function ({ match }) {
                                     console.log(match.params)
                                     return <div><TreeItem tree_id={match.params.id} /></div>
+                                }
+                                } />
+
+                        } />
+                        <Route  path="/editProfile.:username.html"  render={function ({ match }) {
+                                    console.log(match.params)
+                                    return <div><EditProfile username={match.params.username} /></div>
                                 }
                                 } />
 

@@ -78,6 +78,48 @@ module.exports = {
             })
         }
     },
+    //set user cham soc cay
+    set_user_user:function(req,res){
+        let username = req.body.username ;
+        let tree_id = req.body.tree_id;
+        let time_user_use = Date.now()
+         Tree.findOne({id:tree_id}).exec(async (err,tree)=>{
+             if(err){
+
+             }
+             if(tree){
+                 let time_use  = tree.time_user_use
+                 if(!tree.username_use){
+                    if(user){
+                        res.send(OutputInterface.errServer(user))
+
+                    }
+                     await Tree.update({id:tree_id},{username_use:username_use,time_user_use:time_user_use});
+
+                 }
+                 else{
+                    if(time_use&&CaculateTime.compareNow(time_use)<60){
+                       Tree.update({id:tree_id},{username_use:username_use,time_user_use:time_user_use}).exec((err,treeUpdate)=>{
+                           if(err){
+                            return res.send(OutputInterface.errServer(err)) 
+                           }
+                           return res.send(OutputInterface.errServer(treeUpdate))
+
+                       });
+                        
+
+                    }
+                    let user = await User.findOne({username:tree.username});
+                    if(user)
+
+                        return res.send(OutputInterface.errServer('Cây đang dc chăm sóc bởi' +user.fullname))
+                    return res.send(OutputInterface.success(tree))
+
+
+                 }
+             }
+         })
+    },
     getCoodinate:function(tree_id){
         return new Promise((resolve,reject)=>{
             Coordinates.findOne({tree_id:tree_id}).exec((err,coordinate)=>{

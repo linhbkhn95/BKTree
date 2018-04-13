@@ -6,10 +6,14 @@
  */
 
 module.exports = {
-    create: function (req, res) {
+    create: async function (req, res) {
      
         console.log('req',req.body)
         try {
+          var userexits= await User.findOne({username:req.body.username});
+          if(userexits){
+            res.send(OutputInterface.errServer('Tên đăng nhập đã tồn tại'))
+          }
           User.create(req.body).exec(function (err, user) {
             if (err) {
               return  res.send(OutputInterface.errServer(err))
@@ -22,13 +26,28 @@ module.exports = {
   
               // res.json(200, {user: user, token: jwToken.issue({id: user.id})});
             }
-            return  res.send(OutputInterface.errServer('not user'))
+            return  res.send(OutputInterface.errServer('Lỗi hệ thống'))
   
           });
         } catch (error) {
           return res.send(OutputInterface.errServer(error.toString()))
         }
      
+      },
+      updateProfile:function(req,res){
+          let username = req.session.user.username;
+          console.log('body',req.body)
+          if(username){
+               User.update({username},req.body).exec((err,userUpdate)=>{
+                if(err){
+                  res.send(OutputInterface.errServer(err))
+                }
+                if(userUpdate){
+                  return res.send(OutputInterface.success(userUpdate))
+                }
+                res.send(OutputInterface.errServer('Lỗi hệ thống'))
+              })
+          }
       },
       get_detail:function(req,res){
           let username = req.body.username;

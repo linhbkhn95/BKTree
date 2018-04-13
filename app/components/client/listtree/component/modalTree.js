@@ -4,7 +4,7 @@ import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import axios from 'axios'
-
+import {Prompt} from 'react-router-dom'
 class ModalTree extends React.Component{
     constructor(props){
       super(props);
@@ -12,6 +12,9 @@ class ModalTree extends React.Component{
         wateruse:0
       }
     }
+
+
+
     handleOpen = () => {
         this.props.close()
       };
@@ -56,6 +59,7 @@ class ModalTree extends React.Component{
           
             onRequestClose={this.handleClose}
           >
+
              <TextField
                value={this.state.wateruse}
                  onChange={this.onChange.bind(this,'wateruse')}
