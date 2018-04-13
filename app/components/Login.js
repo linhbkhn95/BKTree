@@ -12,6 +12,7 @@ import setAuthorizationToken from 'app/utils/setAuthorizationToken.js';
 import {setCurrentUser} from 'app/action/authActions.js';
 import jwt from 'jsonwebtoken';
 import jwtDecode from 'jwt-decode';
+import {setTitlePage} from 'app/action/actionTitlePage'
 const style = {
   
   
@@ -37,6 +38,9 @@ class Login extends React.Component{
             },
             }
         };
+      }
+      componentWillMount(){
+        
       }
       componentDidMount(){
         let self = this

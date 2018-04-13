@@ -52,16 +52,24 @@ module.exports = {
         }
     },
     use_tree:function(req,res){
-        let username = 'linhtd';
+        let username = req.session.user.username;
         let wateruse = req.body.wateruse||0;
         let tree_id = req.body.tree_id || null
         if(tree_id){
-            Tree.findOne({id:tree_id}).exec((err,tree)=>{
+            Tree.findOne({id:tree_id}).exec(async(err,tree)=>{
                 if(err){
                     res.send(OutputInterface.errServer(err))
                 }
                 if(tree){
+                    let dataHistorytree = {};
+                    dataHistorytree.username = username ;
+                    dataHistorytree.water_use = wateruse;
+                    dataHistorytree.waterneed = tree.waterneed;
+                    dataHistorytree.tree_id = tree_id;
+                    dataHistorytree.time_use = Date.now()
                     tree.waternow += parseInt(wateruse)
+
+                    let result  = await Historytree.create(dataHistorytree);
                     tree.save(()=>{
                         console.log('update thành công')
                         res.send(OutputInterface.success(tree))

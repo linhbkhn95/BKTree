@@ -2,5 +2,6 @@ var redux = require('redux');
 var username = require('./username.js');
 var auth = require('./auth.js');
 var settings = require('./settings.js');
- var reducer = redux.combineReducers ({username,auth,settings});
+var titlePage = require('./titlePage')
+ var reducer = redux.combineReducers ({username,auth,settings,titlePage});
  module.exports = reducer;

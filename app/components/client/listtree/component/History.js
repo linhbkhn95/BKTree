@@ -64,11 +64,11 @@ class ListExampleMessages extends React.Component{
              return(
                <div key={index}>
               <ListItem
-                    leftAvatar={<Avatar src="https://scontent.fhan5-4.fna.fbcdn.net/v/t1.0-1/p240x240/29425964_871053206408584_518624791414964224_n.jpg?_nc_cat=0&_nc_eui2=v1%3AAeHHiPYU4N8nj-MLtmfW2k-S6ZhBAf4T8CaAWVGhjW7jwN4vUhfTiFESsWUjpPXDroaYG5q8gNKmkhLedLOecHQuPmVP9qVKeZvw1Zfg5C3lXg&oh=e486ae055fb24eb921965685a8bdbbb4&oe=5B2D2BB0" />}
+                    leftAvatar={<Avatar src={history.url_avatar?history.url_avatar:'images/user/me.png'} />}
                   //   primaryText="Nhỏ Ngọc"
                     secondaryText={
                       <p>
-                        <span style={{color: darkBlack}}>{history.username} </span> --
+                        <span style={{color: darkBlack}}>{history.fullname_user?history.fullname_user:history.username} </span> --
                         &apos; Đã tưới {history.water_use}ml nước cho cây
                          (lượng nước cần lúc đó {history.waterneed}ml)
                         <br />
@@ -77,7 +77,7 @@ class ListExampleMessages extends React.Component{
                     }
                     secondaryTextLines={2}
                   >
-                      <span className="time-alert">{history.time_user}</span>
+                      <span className="time-alert">{moment(history.createdAt).lang('vi').fromNow()=='Invalid date'?'':moment(history.createdAt).lang('vi').fromNow()}</span>
                   </ ListItem>
                   <Divider inset={true} />
                 </div>

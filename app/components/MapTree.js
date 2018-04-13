@@ -25,10 +25,12 @@ import NotificationsIcon from 'material-ui/svg-icons/social/notifications';
 import RaisedButton from 'material-ui/RaisedButton';
 import {NavLink,Link} from 'react-router-dom'
 import {connect} from 'react-redux'
+import axios from 'axios'
  class ListExampleNested extends React.Component {
 
   state = {
     open: false,
+    listMenu:[]
   };
 
   handleToggle = () => {
@@ -42,9 +44,21 @@ import {connect} from 'react-redux'
       open: item.state.open,
     });
   };
-
+  componentDidMount(){
+    let self = this
+    axios.get('/menu/getmenu_by_role')
+    .then((res)=>{
+      if(res.data.EC==0){
+          self.setState({listMenu:res.data.DT})
+      }
+      else{
+        
+      }
+    })
+  }
   render() {
     let auth = this.props.auth
+    let fullname = auth.user.fullname?auth.user.fullname:'Cộng tác viên'
     return (
       <div>
         {/* <Toggle
@@ -66,7 +80,13 @@ import {connect} from 'react-redux'
 
            <div style={{float:"left"}} className="">
                             <div className="user-name">
-                            {auth.isAuthenticated?auth.user.fullname:'' }
+                            {fullname}
+                            </div>
+                          
+               </div>
+               <div style={{float:"",clear:"both",textAlign:"center"}} className="">
+                            <div className="">
+                           ({auth.isAuthenticated?auth.user.rolename:'' })
                             </div>
                           
                </div>
@@ -74,10 +94,30 @@ import {connect} from 'react-redux'
 
         </div>
         {/* <hr style={{}} /> */}
-        <Divider style={{marginTop:"26px"}} />
+        <Divider  />
         <br />
         <div>
+          {this.props.auth.user&&this.props.auth.user.rolecode=="CTV"?
+          
           <List>
+          <Subheader>Tìm kiếm</Subheader>
+          {/* <ListItem primaryText="Tìm đường" leftIcon={<Search />} /> */}
+       
+          <ListItem primaryText="Cây cần hỗ trợ" leftIcon={<Search />} />
+          <ListItem primaryText="Trạng thái của cây" leftIcon={<Search />} />
+          <Divider />
+          <Subheader>Thao tác</Subheader>   
+          <ListItem  containerElement={ <Link to="/list-tree" />}  primaryText="Danh sách cây" leftIcon={<Assignment />} />
+          {/* <ListItem primaryText="Cập nhật bản đồ" leftIcon={<Update />} /> */}
+          <ListItem containerElement={ <Link to="/notification" />} primaryText="Thông báo" leftIcon={<Badge  style={{top: "-22px", left: "-8px"}}
+    badgeContent={4}
+    primary={true}
+  ><Notifications />  </Badge>} />
+          {/* <ListItem primaryText="Thống kê/Báo cáo" leftIcon={<Book />} /> */}
+          <ListItem containerElement={ <Link to="/chats" />} primaryText="Liên hệ"  leftIcon={<Contact />} />
+
+        </List>:
+        <List>
             <Subheader>Tìm kiếm</Subheader>
             <ListItem primaryText="Tìm đường" leftIcon={<Search />} />
          
@@ -94,39 +134,9 @@ import {connect} from 'react-redux'
             <ListItem primaryText="Thống kê/Báo cáo" leftIcon={<Book />} />
             <ListItem containerElement={ <Link to="/chats" />} primaryText="Liên hệ"  leftIcon={<Contact />} />
 
-              {/* <ListItem
-              primaryText="Inbox"
-              leftIcon={<ContentInbox />}
-              initiallyOpen={true}
-              primaryTogglesNestedList={true}
-              nestedItems={[
-                <ListItem
-                  key={1}
-                  primaryText="Starred"
-                  leftIcon={<ActionGrade />}
-                />,
-                <ListItem
-                  key={2}
-                  primaryText="Sent Mail"
-                  leftIcon={<ContentSend />}
-                  disabled={true}
-                  nestedItems={[
-                    <ListItem key={1} primaryText="Drafts" leftIcon={<ContentDrafts />} />,
-                  ]}
-                />,
-                <ListItem
-                  key={3}
-                  primaryText="Inbox"
-                  leftIcon={<ContentInbox />}
-                  open={this.state.open}
-                  onNestedListToggle={this.handleNestedListToggle}
-                  nestedItems={[
-                    <ListItem key={1} primaryText="Drafts" leftIcon={<ContentDrafts />} />,
-                  ]}
-                />,
-              ]}
-            /> */}
           </List>
+        }
+          
         </div>
       </div>
     );

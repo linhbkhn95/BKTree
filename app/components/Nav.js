@@ -105,7 +105,7 @@ const style = {
            
          
 
-          <NavLink to={"/profile"} > <Avatar style={{marginTop:"-15px"}}  src={this.props.auth.user.url_avatar} /></NavLink>
+          <NavLink to={"/profile"} > <Avatar style={{marginTop:"-15px"}}  src={this.props.auth.user.url_avatar?this.props.auth.user.url_avatar:'images/user/me.png'} /></NavLink>
                 {/* <Popover
                   open={this.state.open}
                   anchorEl={this.state.anchorEl}
@@ -227,6 +227,7 @@ const style = {
         </div>
         {/* <ModalInf open={this.state.help} /> */}
         <ListFriend handleClose={this.handleClose.bind(this)} open={this.state.help} />
+        {this.props.auth.isAuthenticated?
         <Drawer docked={false} onRequestChange={this.closeDrawer}  style={{backgroundColor:"black"}} type="permanent" width={250}  open={this.state.open} >
             <div style={{drawerHeader}}>
               <IconButton onClick={this.handleToggle}>
@@ -241,7 +242,7 @@ const style = {
               <MenuDemo />
               <Divider />
               <ListChat />
-        </Drawer>
+        </Drawer>:null}
       </div>
     );
   }

@@ -25,7 +25,18 @@ module.exports = {
             }
 
             if (valid) 
-            console.log(req.session)
+             console.log(req.session)
+              let role = await Role.findOne({rolecode:user.rolecode});
+              if(role){
+                  user.rolename= role.rolename;
+                  user.rolecode = role.rolecode
+              }
+              else{
+                user.rolecode = 'CTV'
+                user.rolename = 'Cộng tác viên'
+              }
+
+              console.log('role',role)
                req.session.user = user;
                console.log(req.session)
 
@@ -35,7 +46,7 @@ module.exports = {
               // });
               return res.send(OutputInterface.success({
                 user: user,
-                token: jwToken.issue({id : user.id,username:user.username,fullname:user.fullname,url_avatar:user.url_avatar })
+                token: jwToken.issue({id : user.id,username:user.username,rolecode:user.rolecode,rolename:user.rolename,fullname:user.fullname,url_avatar:user.url_avatar })
               }))
             
             return res.send(OutputInterface.errServer('Mật khẩu không chính xác'))
@@ -62,7 +73,7 @@ module.exports = {
             let user = req.session.user
             return res.send(OutputInterface.success({
               user: user,
-              token: jwToken.issue({id : user.id,username:user.username,fullname:user.fullname,url_avatar:user.url_avatar })
+              token: jwToken.issue({id : user.id,username:user.username,rolecode:user.rolecode,rolename:user.rolename,fullname:user.fullname,url_avatar:user.url_avatar })
             }))
           }
           else{

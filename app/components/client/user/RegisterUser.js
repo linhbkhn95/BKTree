@@ -7,6 +7,8 @@ import DatePicker from 'material-ui/DatePicker';
 import Divider from 'material-ui/Divider';
 import RaisedButton from 'material-ui/RaisedButton';
 import axios from 'axios'
+import { ToastContainer, toast } from 'react-toastify';
+
 const style = {
   
   
@@ -107,7 +109,10 @@ class CreateUSer extends React.Component{
                 axios.post('/user/create',{username,password,confirmPassword})
                 .then((res)=>{
                     if(res.data.EC==0){
-                        self.props.history.push('/list-tree');
+                        toast.success('Đăng kí thành công', {
+                            position: toast.POSITION.TOP_CENTER
+                        });
+                        self.props.history.push('/login');
                     }
                     else{
                         self.setState({err_msg:res.data.EM})
@@ -120,6 +125,7 @@ class CreateUSer extends React.Component{
 
         }
     }
+    
     render(){
         let {username,password,confirmPassword} = this.state.data
     let disabled = username.value==""||!username.value||!password.value||!confirmPassword.value || password =="" || confirmPassword=="" 
