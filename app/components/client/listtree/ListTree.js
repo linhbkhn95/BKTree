@@ -83,7 +83,8 @@ class ListExampleMessages extends React.Component{
             secondaryText={
               <div style={{height:"42px",fontSize:"13px"}}>
              
-              Tọa độ: <i> X ={tree.coordinate.X} và Y = {tree.coordinate.Y}</i>
+              Tọa độ: <i style={{color: "green",
+    fontWeight: "bold"}}> X = {tree.coordinate.X} và Y = {tree.coordinate.Y}</i>
            
              <br />
               <div>Tỉ lệ nước </div>

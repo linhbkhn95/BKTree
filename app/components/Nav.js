@@ -99,13 +99,13 @@ const style = {
                 </IconButton>
                 </Badge>
              
-             
+             let url_profile = "/profile."+this.props.auth.user.username+".html"   
       return(
         <div >
            
          
 
-          <NavLink to={"/profile"} > <Avatar style={{marginTop:"-15px"}}  src={this.props.auth.user.url_avatar?this.props.auth.user.url_avatar:'images/user/me.png'} /></NavLink>
+          <NavLink to={url_profile} > <Avatar style={{marginTop:"-15px"}}  src={this.props.auth.user.url_avatar?this.props.auth.user.url_avatar:'images/user/me.png'} /></NavLink>
                 {/* <Popover
                   open={this.state.open}
                   anchorEl={this.state.anchorEl}

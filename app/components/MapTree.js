@@ -59,6 +59,7 @@ import axios from 'axios'
   render() {
     let auth = this.props.auth
     let fullname = auth.user.fullname?auth.user.fullname:'Cộng tác viên'
+    let url_profile = "/profile."+auth.user.username+".html"
     return (
       <div>
         {/* <Toggle
@@ -74,7 +75,7 @@ import axios from 'axios'
         <div className="account-menu">
          
             <div className="user-avatar">
-                            <img className="img-user" src={auth.isAuthenticated&&auth.user.url_avatar?auth.user.url_avatar:'images/user/me.png' } />
+                           <NavLink to={url_profile}> <img className="img-user" src={auth.isAuthenticated&&auth.user.url_avatar?auth.user.url_avatar:'images/user/me.png' } /></NavLink>
             </div>
         
 

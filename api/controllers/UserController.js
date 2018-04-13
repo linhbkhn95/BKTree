@@ -29,6 +29,33 @@ module.exports = {
           return res.send(OutputInterface.errServer(error.toString()))
         }
      
+      },
+      get_detail:function(req,res){
+          let username = req.body.username;
+          if(username){
+            console.log('usename',username)
+            try {
+              User.findOne({username:username}).exec(async(err,userinfo)=>{
+                if(err){
+ 
+                }
+             
+                if(userinfo){
+                  userinfo.rolename = "Cộng tác viên"
+                  let role = await Role.findOne({rolecode:userinfo.rolecode});
+                  console.log('role',role)
+                  if(role&&role.rolename){
+                     userinfo.rolename = role.rolename
+                  }
+                  return res.send(OutputInterface.success(userinfo))
+                }
+                res.send(OutputInterface.errServer('Không tìm thấy user'))
+              })
+            } catch (error) {
+              return res.send(OutputInterface.errServer(error.toString()))
+            }
+             
+          }
       }
 };
 
