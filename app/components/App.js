@@ -31,6 +31,7 @@ import TreeItem from './client/listtree/component/TreeItem'
 import Resgister from './client/user/RegisterUser'
 import ProfileUser from './client/user/ProfileUser'
 import EditProfile from './client/user/components/EditUser'
+import ChangePass from './client/user/ModalChangePass'
  class App extends React.Component{
 
 // require('style-loader!css-loader!foundation-sites/dist/css/foundation.min.css');
@@ -56,6 +57,7 @@ import EditProfile from './client/user/components/EditUser'
 
                       <Route  path="/list-tree" component={ListTree}/>
                       <Route  path="/list-tree-group" component={ListTreeGroup}/>
+                      <Route  path="/changePass" component={ChangePass}/>
                       <Route  path="/list-user" component={ListUser}/>
                       <Route  path="/users" component={TableListUser}/>
                       <Route  path="/trees" component={TableListTree}/>

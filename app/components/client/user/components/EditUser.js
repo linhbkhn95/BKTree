@@ -152,7 +152,7 @@ class EditProfile extends React.Component{
     return(
   <div>
     
-    <div className="col-md-6" >
+    <div className=" col-md-4 col-sm-8 col-sm-push-2 col-md-push-4 col-xs-12" >
                         
                  {/* <TextField
                           errorText={this.state.data.fullname.errorText}
@@ -176,8 +176,7 @@ class EditProfile extends React.Component{
                 
                    
        
-                    </div>
-                    <div className="col-md-6" >
+                  
                      
                     <TextField
                      fullWidth={true}
@@ -220,7 +219,7 @@ class EditProfile extends React.Component{
                         maxDate={this.state.maxDate}
                         disableYearSelection={this.state.disableYearSelection}
                         /><br />
-                    </div>
+                  
                     <div style={{color:'red'}}>
                             {this.state.err_msg}
                     </div>
@@ -230,7 +229,7 @@ class EditProfile extends React.Component{
                         <RaisedButton  fullWidth={true} onClick={this.updateProfile.bind(this)} disabled={disabled} label="Cập nhật thông tin" primary={true} style={style} />
                         </div>
                       </div>
-                    
+                    </div>
   </div>
 )   
     }

@@ -14,7 +14,6 @@ module.exports = {
                     if (err) {
                         return res.send(OutputInterface.errServer('Lỗi hệ thống'))
                     }
-                    console.log('data menu',data,server_status)
                     return res.send(OutputInterface.success(data))
                       
                 });

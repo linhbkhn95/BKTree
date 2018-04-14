@@ -109,7 +109,35 @@ class ListExampleMessages extends React.Component{
             }
             secondaryTextLines={2}
           >
-               <span  className="time-alert"><div style={{float:"left",marginRight:"5px",color:"black"}}>Trạng thái:</div> <div style={{fontWeight:"bold",color:colorStatus}}>{texStatus}</div></span>
+               <span  className="time-alert"><div style={{float:"left",marginRight:"5px",color:"black"}}>
+               
+               Trạng thái:</div> <div>  <span style={{
+
+color:
+    tree.status_code == "0" ? 'rgb(162, 42, 79)'
+        : 'rgb(0, 255, 247)' ,
+transition: 'all .3s ease'
+}}>
+&#x25cf;
+</span> {
+tree.status_tree
+}</div>
+               
+               
+               </span>
+
+                                  {/* <span>      <span style={{
+
+                                color:
+                                    tree.status_code == "0" ? 'rgb(162, 42, 79)'
+                                        : 'rgb(0, 255, 247)' ,
+                                transition: 'all .3s ease'
+                                }}>
+                                &#x25cf;
+                                </span> {
+                                tree.status_tree
+                                }
+                                </span> */}
           </ ListItem>
            
            )

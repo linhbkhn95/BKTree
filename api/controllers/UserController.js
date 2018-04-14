@@ -42,13 +42,70 @@ module.exports = {
                 if(err){
                   res.send(OutputInterface.errServer(err))
                 }
-                if(userUpdate){
+                if(userUpdate&&userUpdate[0]){
+                  let data = {}
+                  data = {...req.session.user,...userUpdate[0]}
+                  console.log('data',data)
+                   req.session.user = data ;
                   return res.send(OutputInterface.success(userUpdate))
                 }
                 res.send(OutputInterface.errServer('Lỗi hệ thống'))
               })
           }
       },
+      change_pass:function(req,res){
+          let {password,newpassword} = req.body
+          let username = req.session.user.username
+         try {
+          User.findOne({username:username}).exec((err,user)=>{
+            if(err){
+              return res.send(OutputInterface.errServer('Lỗi hệ thống'))
+            }
+
+            if(user){
+                User.comparePassword(password, user, async function (err, valid) {
+                  if (err) {
+                    return res.send(OutputInterface.errServer('Lỗi hệ thống'))
+                  }
+
+                 if(valid){
+                    // await User.update({username:username},{password:newpassword});
+                    // bcrypt.hash(values.password, salt, function (err, hash) {
+                    //   if(err) return next(err);
+                    //   console.log('passs',hash)
+                    //   values.encryptedPassword = hash;
+                    //   next();
+                    // })
+                    User.updatePassword(username,password,function(err,userUpdate){
+                        if(err){
+                          return res.send(OutputInterface.errServer('Lỗi hệ thống'))
+
+                        }
+                        console.log('usserdadad',userUpdate,err)
+                        if(userUpdate){
+                          return res.send(OutputInterface.success('Cập nhật thành công'))
+                        }
+                        else
+                         return res.send(OutputInterface.errServer('Lỗi hệ thống'))
+
+                    })
+                   
+                  }
+                else
+                 return res.send(OutputInterface.errServer('Mật khẩu không chính xác'))
+                })
+            }
+            else{
+             return res.send(OutputInterface.errServer('Không tìm thấy user'))
+            }
+          
+        })
+         } catch (error) {
+            return res.send(OutputInterface.errServer(error.toString()))
+          
+         }
+        
+       },
       get_detail:function(req,res){
           let username = req.body.username;
           if(username){

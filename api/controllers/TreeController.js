@@ -18,8 +18,18 @@ module.exports = {
             Promise.all(listtree.map((item) => {
                 return new Promise(async (resolve, reject) => {
                     let coordinate = await self.getCoodinate(item.id)
+                    let status_tree =""
+                
+                    let result  = await self.get_tree_status(item);
+                    let status_code = result.EC 
+                    if(result.EC==0){
+                        status_tree = "Chưa có ai chăm sóc"
+                    }
+                    if(result.EC==1){
+                        status_tree = result.DT.fullname +" đang chăm sóc"
+                    }
 
-                    var newitem = { ...item, coordinate  }
+                    var newitem = { ...item, coordinate ,status_tree }
 
                     resolve(newitem)
                 })
@@ -52,10 +62,12 @@ module.exports = {
             })
         }
     },
+    
     use_tree:function(req,res){
         let username = req.session.user.username;
         let wateruse = req.body.wateruse||0;
         let tree_id = req.body.tree_id || null
+        
         if(tree_id){
             Tree.findOne({id:tree_id}).exec(async(err,tree)=>{
                 if(err){
@@ -79,38 +91,47 @@ module.exports = {
             })
         }
     },
-    get_tree_status : async function(tree){
-        if(tree){
-            let time_use  = tree.time_user_use
-            if(!tree.username_use){
-               if(user){
-                   res.send(OutputInterface.errServer(user))
-
-               }
-                await Tree.update({id:tree_id},{username_use:username_use,time_user_use:time_user_use});
-
+    get_tree_status :function(tree){
+        // let tree ={time_use:null,username_use:'linhtd',tree_id:'1'}
+        return new Promise(async(resolve,reject)=>{
+            try {
+                
+                if(tree){
+                    let time_use  = tree.time_user_use
+                      
+                    if(!tree.username_use){ //không có ai đang chăm sóc cây
+                      resolve({EC:"0",DT:"Cây chưa có ai chăm sóc"})
+                       // await Tree.update({id:tree_id},{username_use:username_use,time_user_use:time_user_use});
+        
+                    }
+                    else{
+                      
+                       if(time_use&&CaculateTime.compareNow(time_use)<60){ //Nếu đang có ng chăm sóc cây, thời gian chăm sóc nhỏ hơn 1 phút
+                        let user = await User.findOne({username:tree.username_use});
+                         if(user){
+                            resolve({EC:"1",DT:user})
+                         }
+                        resolve( {EC:"0",DT:"Không tìm thấy user"})
+                       
+               
+        
+                       }
+                       else{
+                          await Tree.update({id:tree.tree_id},{username_use:null,time_user_use:null})
+                          resolve({EC:"0",DT:"Người người tưới cây quá lâu"})
+                       }
+                    }
+                
+        
+        
+                    
+                }
+            } catch (error) {
+               resolve({EC:"-1",DT:error})
             }
-            else{
-               if(time_use&&CaculateTime.compareNow(time_use)<60){
-                  Tree.update({id:tree_id},{username_use:username_use,time_user_use:time_user_use}).exec((err,treeUpdate)=>{
-                      if(err){
-                       return res.send(OutputInterface.errServer(err)) 
-                      }
-                      return res.send(OutputInterface.errServer(treeUpdate))
-
-                  });
-                   
-
-               }
-               let user = await User.findOne({username:tree.username});
-               if(user)
-
-                   return res.send(OutputInterface.errServer('Cây đang dc chăm sóc bởi' +user.fullname))
-               return res.send(OutputInterface.success(tree))
-
-
-            }
-        }
+           
+        })
+      
     },
     //set user cham soc cay
     set_user_user:function(req,res){

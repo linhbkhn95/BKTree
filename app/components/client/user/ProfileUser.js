@@ -67,6 +67,7 @@ class CardExampleWithAvatar extends React.Component{
     let infoUser = this.state.infoUser
     let url_editProfile = "editProfile."+infoUser.username+".html"
     return(
+      // <div className=" col-md-8 col-sm-8 col-sm-push-2 col-md-push-2 col-xs-12 row">
       <Card>
       {/* <CardHeader
         title="URL Avatar"
@@ -132,6 +133,7 @@ class CardExampleWithAvatar extends React.Component{
       </CardActions>:null}
       {/* <ModalTree access={this.access.bind(this)} open ={this.state.openModal} close={this.close.bind(this)}/> */}
     </Card>
+    // </div>
     )
   }
 }

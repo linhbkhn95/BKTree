@@ -64,9 +64,9 @@ const style = {
      
        this.props.logout();
     }
-    help(){
+    changpass(){
       console.log('help');
-      this.props.help();
+      this.props.history.router.push('/changepass');
     }
 
      handleTouchTap = (event) => {
@@ -135,7 +135,7 @@ const style = {
               anchorOrigin={{horizontal: 'right', vertical: 'top'}}
           >
               <MenuItem primaryText="Thay đổi thông tin cá nhân" />
-              <MenuItem onClick={this.help.bind(this)} primaryText="Thay đổi mật khẩu" />
+              <NavLink to="/changepass"><MenuItem  primaryText="Thay đổi mật khẩu" /></NavLink>
               <MenuItem onClick={this.logout.bind(this)} primaryText="Đăng xuất" />
           </IconMenu>
         </div>
@@ -223,7 +223,8 @@ const style = {
     return (
       <div >
        <div>
-        <AppBar style={{background:this.props.backgroupNav}}   iconElementRight={this.props.auth.isAuthenticated? <Logged auth={this.props.auth} help={that.help.bind(this)}  logout={that.logout.bind(this)} /> : <Login />}  title={this.props.nameHeader} onLeftIconButtonTouchTap={this.handleToggle} />
+      
+        <AppBar style={{background:this.props.backgroupNav}}   iconElementRight={this.props.auth.isAuthenticated? <Logged auth={this.props.auth} help={that.help.bind(this)}  logout={that.logout.bind(this)} /> : <Login />}  title={this.props.nameHeader} onLeftIconButtonTouchTap={this.props.auth.isAuthenticated?this.handleToggle:()=>{}} />
         </div>
         {/* <ModalInf open={this.state.help} /> */}
         <ListFriend handleClose={this.handleClose.bind(this)} open={this.state.help} />
