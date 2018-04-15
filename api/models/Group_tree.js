@@ -24,6 +24,9 @@ module.exports = {
       description:{
         type:'text',
 
+      },
+      url_image_gobal:{
+        type:'text',
       }
       
 

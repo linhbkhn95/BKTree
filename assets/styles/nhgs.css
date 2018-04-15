@@ -1,0 +1,298 @@
+.title-main-nhgs{
+    text-align: center;
+    padding-top: 20px;
+    font-size: 17px;
+
+}
+.footer{
+  padding-top: 24px;
+  color: #185cd8;
+  /* padding: 9px; */
+  bottom: 0px;
+ 
+  height: 66px;
+  /* color: #333;
+  font-weight: bold; */
+  font-size: 14px;
+  background: white;
+  /* background: url(../../images/bg_footer.png) repeat-x; */
+  border: 1px solid #bfb5b5;
+}
+  /* .dautu-dinhki .inner55-mua.col-xs-12{
+  height: 28px !important ;
+  color :green
+} */
+/* *{
+    margin: 0px;
+    padding: 0px;
+} */
+.dieuchinhnoptien .label{
+  font-weight: normal!important;
+}
+.dieuchinhnoptien #dcnt{
+  margin-top: 30px !important ;
+}
+dieuchinhnoptien #dcnt>form{
+  margin-bottom: 30px !important;
+}
+#timkiem{
+  margin-left: 50px;
+  margin-right: 17px;
+}
+.dieuchinhnoptien table>tbody>tr>td:nth-child(1){
+  text-align: center;
+}
+.dieuchinhnoptien table>tbody>tr>td>button{
+  margin-left: 10px;
+}
+.dieuchinhnoptien table>thead>tr>th>button{
+  margin-right: 10px;
+}
+
+.dieuchinhnoptien #kqkdkdcnt{
+  margin-top: 30px !important;
+}
+.dieuchinhnoptien #kqkdkdcnt>form{
+  /* margin-bottom: 30px !important; */
+}
+.dieuchinhnoptien .ketquanoptien{
+  margin-top: 50px !important;
+}
+.dieuchinhnoptien{
+  font-size: 14px;
+}
+.dieuchinhnoptien input[type="checkbox"]{margin: 0px 0%;}
+.dieuchinhnoptien .form-group{padding-left: 20px;}
+.dieuchinhnoptien .form-group label{padding-right: 10px;}
+.table-ccq .btn{
+  font-size: 12px !important;
+  margin: 0px !important;
+}
+.info-ccq{
+  font-size: 14px;
+}
+.info-ccq .table-sodu th{
+  padding-bottom: 0px;
+  padding-top: 0px;
+}
+.info-ccq .table-sodu tbody td{
+  padding: 3px;
+  text-align: center;
+}
+
+
+.comparecmd  {
+  font-size: 14p !important;
+}
+.comparecmd .form-search{
+  font-size: 14px;
+}
+.comparecmd .form-search label{
+  padding-right: 8px;
+  font-weight: bold;
+}
+.comparecmd .th-item{
+  font-size: 12px;
+}
+.comparecmd tbody td{
+  font-size: 13px;
+  padding: 5px;
+}
+
+.react-date-picker__calendar{
+  z-index: 999;
+}
+.modal-naptien h5{
+  font-size: 14px;
+}
+
+.main-broad{
+  background: #cdeaf1;
+  padding: 10px;
+  margin-top: 10px;
+}
+
+
+.ReactTable .rt-tbody .rt-td{
+  text-align: center;
+  font-size: 12px;
+  line-height: 28px;
+}
+.head{
+  background: #56bcd5 !important;
+  
+    /* font-size: 28px; */
+    font-weight: normal;
+    padding: 4px 0;
+    text-align: center;
+    text-transform: uppercase;
+  color: white !important;
+
+}
+.ReactTable .rt-tbody .rt-td {
+  border-right: 1px solid #38333330 !important;
+}
+.ReactTable .rt-thead .rt-th, .ReactTable .rt-thead .rt-td{
+  border-right: 1px solid #38333330 !important;
+}
+.ReactTable .rt-tbody .rt-tr-group {
+  border-bottom: solid 1px #38333330 !important;
+}
+.ReactTable .rt-thead.-filters .rt-th {
+  border-right: 1px solid #38333330 !important;
+}
+.ReactTable .rt-th, .ReactTable .rt-td{
+  padding: 0px !important;
+}
+.ReactTable .rt-th, .ReactTable .rt-td .radio, .checkbox{
+  margin: 0px !important;
+}
+.ReactTable .rt-th, .ReactTable .rt-td .radio label, .checkbox label{
+  min-height: 13px;
+}
+.ReactTable .rt-th, .ReactTable .rt-td .btn{
+  padding: 2px 6px !important;
+  
+  font-size: 13px !important;
+}
+.ReactTable{
+  /* border: 1px solid rgba(206, 188, 188, 0.68) !important; */
+}
+.ReactTable .rt-noData{
+  display: none !important
+}
+.ReactTable.-striped .rt-tr.-odd {
+  background: #dbe1ec ;
+}
+
+.ReactTable .rt-thead .head .rt-th{
+  line-height: 32px !important ;
+}
+.modal-acess .ReactTable .rt-tbody .rt-td {
+  text-align: center;
+  /* font-size: 12px; */
+  line-height: 35px;
+}
+.modal-acess .ReactTable .rt-thead .rt-th, .modal-acess .ReactTable .rt-thead .rt-td{
+  line-height: 31px;
+}
+.modal-acess .btn{
+  padding: 4px 12px;
+  font-size: 12px;
+}
+
+.manager-open  .ReactTable .rt-thead .head .rt-th {
+  line-height: 32px !important;
+}
+.manager-open .ReactTable .rt-tbody .rt-td .checkbox-inline input[type="checkbox"]{
+  margin-top: -7px;
+}
+/* .ReactTable .rt-thead .rt-tr {
+  text-align: center;
+  padding: 8px;
+  font-size: 13px;
+  font-weight: bold;
+} */
+ .create-account .ReactTable .rt-th, .ReactTable .rt-td{
+   cursor: pointer;
+ }
+ .create-account .ReactTable .rt-tbody .rt-td .checkbox-inline input[type="checkbox"]{
+    margin-top: -7px;
+ }
+.content-left .ReactTable .rt-tbody .rt-td {
+  /* text-align: center;
+  font-size: 12px;
+  line-height: 25px; */
+  text-align: center;
+    font-size: 13px;
+    line-height: 29px;
+}
+.content-left .ReactTable .rt-tbody .rt-td label input{
+  margin-left: 0px;
+}
+.col-left{
+  float: left;
+  padding-left: 15px;
+}
+  .content-left .ReactTable .rt-resizable-header-content{
+  font-size: 12px;
+  line-height: 20px;
+  font-weight: bold;
+}
+.tile-main-broad{
+  font-size: 14px;
+  padding-bottom: 10px;
+  margin-left: -7px;
+}
+.disable{
+  pointer-events: none;
+  opacity: 0.7;
+}
+.ReactTable .rt-tbody {
+  overflow-x: hidden!important;
+  }
+.modal-dieuchinh-tachtiennop h4{
+  font-size: 16px;
+  font-weight: 100;
+  margin: 0px 0px 20px 5px;
+}
+.custom-modal-thongtin-dieuchinhtachtien{
+  width : 700px;
+}
+.modal-dieuchinh-tachtiennop .col-md-12{
+  padding-bottom: 10px;
+}
+
+.modal-dieuchinh-tachtiennop > .col-md-12 > .col-md-3{
+  width: 23%;
+}
+.modal-dieuchinh-tachtiennop > .col-md-12 > .col-md-6 >.col-md-6{
+  padding: 0px;
+}
+.title-content{
+  padding: 7px;
+    background: #56bcd5;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    width: 50%;
+    border-radius: 0px 50px 50px 0px;
+}
+.input-file {
+  position: relative;
+}
+.btn-file {
+  position: relative;
+  overflow: hidden;
+}
+.btn-file input[type=file] {
+  position: absolute;
+  top: 0;
+  right: 0;
+  min-width: 100%;
+  min-height: 100%;
+  font-size: 100px;
+  text-align: right;
+  filter: alpha(opacity=0);
+  opacity: 0;
+  outline: none;
+  background: white;
+  cursor: inherit;
+  display: block;
+}
+.input-material{
+    /* position: absolute; */
+    /* line-height: 22px; */
+    /* top: 38px; */
+    transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+    /* z-index: 1; */
+    transform: scale(1) translate(0px, 0px);
+    transform-origin: left top 0px;
+    /* pointer-events: none; */
+    /* user-select: none; */
+    font-family: sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    color: rgba(0, 0, 0, 0.3);
+}
+

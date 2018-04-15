@@ -94,15 +94,21 @@ module.exports = {
       })
   },
   comparePassword : function (password, user, cb) {
-    bcrypt.compare(password, user.encryptedPassword, function (err, match) {
+    if(user.encryptedPassword){
+      bcrypt.compare(password, user.encryptedPassword, function (err, match) {
 
-      if(err) cb(err);
-      if(match) {
-        cb(null, true);
-      } else {
-        cb(err);
-      }
-    })
+        if(err) cb(err);
+        if(match) {
+          cb(null, true);
+        } else {
+          cb(err);
+        }
+      })
+    }
+    else{
+      cb(null,false);
+    }
+   
   }
 
 };

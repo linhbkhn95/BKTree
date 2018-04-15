@@ -9,6 +9,8 @@ import RaisedButton from 'material-ui/RaisedButton';
 import axios from 'axios'
 import { ToastContainer, toast } from 'react-toastify';
 import {connect} from 'react-redux'
+import {setCurrentUser} from 'app/action/authActions.js';
+
 const style = {
   
   
@@ -101,7 +103,7 @@ class EditProfile extends React.Component{
         let fullname = data.fullname.value ;
         let address = data.address.value
         let sex = data.sex.value ;
-
+        let {dispatch} = this.props
         if(fullname!=''||!fullname){
            
           
@@ -111,6 +113,8 @@ class EditProfile extends React.Component{
                         toast.success('Cập nhật thành công', {
                             position: toast.POSITION.TOP_CENTER
                         });
+                        dispatch(setCurrentUser(res.data.DT));
+
                         self.goback()
                     }
                     else{

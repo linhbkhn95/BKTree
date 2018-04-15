@@ -70,8 +70,10 @@ class ListExampleMessages extends React.Component{
               Thông báo
           </div> */}
     <div>
+      
       <List>
-        <Subheader>Khế ta</Subheader>
+
+        <Subheader>{listtree.length>0?listtree[0].groupname:""}</Subheader>
          {listtree.length>0?
          listtree.map((tree,index)=>{
            //ti lệ nước đang có
@@ -141,7 +143,7 @@ tree.status_tree
           </ ListItem>
            
            )
-         }):null
+         }):<div className="no-data">Chưa có cây nào được trồng</div>
         }
         {/* <ListItem
           leftAvatar={<Avatar src="images/tree/khe.jpg" />}

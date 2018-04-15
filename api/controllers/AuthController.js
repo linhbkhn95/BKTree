@@ -22,12 +22,12 @@ module.exports = {
           }
           User.comparePassword(password, user, async function (err, valid) {
             if (err) {
-              return res.send(OutputInterface.errServer('Lỗi hệ thống'))
+              console.log('err',err)
+              return res.send(OutputInterface.errServer('Đăng nhập thất bại'))
             }
 
-            if (valid) 
-             console.log(req.session)
-              let role = await Role.findOne({rolecode:user.rolecode});
+            if (valid){
+              var role = await Role.findOne({rolecode:user.rolecode});
               if(role){
                   user.rolename= role.rolename;
                   user.rolecode = role.rolecode
@@ -49,7 +49,7 @@ module.exports = {
                 user: user,
                 token: jwToken.issue({id : user.id,username:user.username,rolecode:user.rolecode,rolename:user.rolename,fullname:user.fullname,url_avatar:user.url_avatar })
               }))
-            
+            }
             return res.send(OutputInterface.errServer('Mật khẩu không chính xác'))
           });
         })

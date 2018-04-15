@@ -47,7 +47,7 @@ module.exports = {
                   data = {...req.session.user,...userUpdate[0]}
                   console.log('data',data)
                    req.session.user = data ;
-                  return res.send(OutputInterface.success(userUpdate))
+                  return res.send(OutputInterface.success(data))
                 }
                 res.send(OutputInterface.errServer('Lỗi hệ thống'))
               })
