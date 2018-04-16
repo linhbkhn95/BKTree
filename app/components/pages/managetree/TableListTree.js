@@ -153,9 +153,9 @@ class QuyDangKy extends React.Component {
             <div className="col-md-12" style={{  padding: "10px 10px 10px 0px"}}>
             {this.props.access == "view" ? null:
                 <div className="" style={{}}>
-                    <button onClick={this.add.bind(this)} className="btn btn-primary" ><span className="glyphicon glyphicon-plus-sign"></span> Thêm</button>
+                    <button onClick={this.add.bind(this)} className="btn btn-info" ><span className="glyphicon glyphicon-plus-sign"></span> Thêm</button>
                     <button className="btn btn-danger" onClick={this.delete}><span className="glyphicon glyphicon-remove"></span> Xoá</button>
-                    <button className="btn btn-info" onClick={this.fetchData}><span className="glyphicon glyphicon-list"></span> Lấy dữ liệu</button>
+                    {/* <button className="btn btn-info" onClick={this.fetchData}><span className="glyphicon glyphicon-list"></span> Lấy dữ liệu</button> */}
                 </div>}
                 <div className="content-left">
                     <ReactTable 

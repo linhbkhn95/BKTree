@@ -30,8 +30,8 @@ class ModalTree extends React.Component{
              
             code:'',
                
-            waterneed:'',
-            waternow:'',
+            waterneed:0,
+            waternow:0,
             description:'',
             
              
@@ -45,14 +45,15 @@ class ModalTree extends React.Component{
     refresh(){
         this.setState({
                 
-            data:{grouptree_id:'',
+            data:{
+                grouptree_id:'',
              
-            code:'',
-               
-            waterneed:'',
-            waternow:'',
-            description:'',
-        }
+                code:'',
+                
+                waterneed:'',
+                waternow:'',
+                description:'',
+            }
         })
     }
     handleOpen = () => {
@@ -86,6 +87,8 @@ class ModalTree extends React.Component{
                     toast.success('Thành công', {
                                                 position: toast.POSITION.TOP_CENTER
                                             });
+                                    self.refresh();
+                                    
                                     self.props.close()
                 }
                 else{
@@ -126,6 +129,9 @@ class ModalTree extends React.Component{
     }
     componentWillReceiveProps(nextProps){
         let dataEdit = nextProps.dataEdit
+        if(dataEdit&&dataEdit.grouptree_id){
+            this.setState({data:dataEdit})
+        }
        
     }
     _handleChange(e) {
@@ -214,8 +220,8 @@ class ModalTree extends React.Component{
                     <SelectField
                      fullWidth={true}
                          required={true} 
-                          value={this.state.data.groupname}
-                          onChange={this.onChange.bind(this,'groupname')}
+                          value={this.state.data.grouptree_id}
+                          onChange={this.onChange.bind(this,'grouptree_id')}
                           floatingLabelText="Nhóm cây"
                         //   errorText={this.state.data.groupname==''?'Trường này không được để trống':''}
                           >{this.renderOptionGroupTree()}

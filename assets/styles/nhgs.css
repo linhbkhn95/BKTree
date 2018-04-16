@@ -130,7 +130,7 @@ dieuchinhnoptien #dcnt>form{
 
 }
 .ReactTable .rt-tbody .rt-td {
-  /* border-right: 1px solid #dee8ec !important */
+  border-right: 1px solid #dee8ec !important
 }
 .ReactTable .rt-thead .rt-th, .ReactTable .rt-thead .rt-td{
   border-right: 1px solid #38333330 !important;

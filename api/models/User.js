@@ -31,6 +31,10 @@ module.exports = {
       type:'string'
 
     },
+    status:{
+      type:'string'
+
+    },
     birthday:{
       type:'string'
 

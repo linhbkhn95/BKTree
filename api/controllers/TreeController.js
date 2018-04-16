@@ -73,7 +73,22 @@ module.exports = {
     },
     insert:function(req,res){
         let data = req.body
-        Tree.create(data).exec((err,tree)=>{
+        try {
+            Tree.create(data).exec((err,tree)=>{
+                if(err){
+                   
+                }
+                return res.send(OutputInterface.success(tree))
+    
+            })
+        } catch (error) {
+            return res.send(OutputInterface.errServer(error))
+        }
+       
+    },
+    update:function(req,res){
+        let data = req.body
+        Tree.update({id:data.id}).exec((err,tree)=>{
             if(err){
                 res.send(OutputInterface.errServer(err))
             }
@@ -81,6 +96,16 @@ module.exports = {
 
         })
     },
+    delete:function(req,res){
+        let data = req.body
+        Tree.destroy({id:data.id}).exec((err,tree)=>{
+            if(err){
+                res.send(OutputInterface.errServer(err))
+            }
+            res.send(OutputInterface.success(tree))
+
+        })
+    },  
     getlist: async function (req, res) {
         // if (!req.isSocket) {
         //     sails.log.debug('no socket');

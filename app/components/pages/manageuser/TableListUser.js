@@ -3,8 +3,42 @@ import ReactTable from 'react-table'
 import {Checkbox} from 'react-bootstrap';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import ModalEdit from './components/ModalEditTree'
+import ModalConfirm from 'app/utils/modal/Modalconfirm'
 // import "react-table/react-table.css";
 // import ModalEdit from './components/ModalEditTree'
+class ListGroupTree extends React.Component {
+    state = {
+        Data: []
+    };
+    componentDidMount() {
+        var that = this;
+        axios.post('/role/getall'
+        ).then(res => {
+            that.setState({ Data: res.data });
+        });
+    }
+
+    render() {
+
+        var Data = this.state.Data,
+            MakeItem = function (X, index) {
+                return <option value={X.rolecode} key={index}>{X.rolename}</option>;
+            };
+
+
+        return (
+            <select
+                onChange={event => this.props.onChange(event.target.value)}
+                style={{ width: "100%" }}
+                value={this.props.filter ? this.props.filter.value : "Tất cả"}>
+                <option></option>
+                {Data.map(MakeItem)}
+            </select>
+        )
+
+    }
+}
 class QuyDangKy extends React.Component {
     constructor(props){
         super(props);
@@ -28,16 +62,17 @@ class QuyDangKy extends React.Component {
           page: 1,
           showModalEdit:null,
           dataEdit:{},
-          acion:'insert'
+          action:'insert',
+          showModalConfirm:false
         }
         this.fetchData = this.fetchData.bind(this);
 
     }
     add(){
-        this.setState({showModalEdit: true,acion:'insert'})
+        this.setState({showModalEdit: true,action:'insert'})
     }
     close(){
-        this.setState({showModalEdit:false })
+        this.setState({showModalEdit:false,dataEdit:{} })
     }
     fetchData(state, instance) {
       // Whenever the table model changes, or the user sorts or changes pages, this method gets called and passed the current table model.
@@ -68,10 +103,10 @@ class QuyDangKy extends React.Component {
 
       });
   }
-    handleEdit(id){
+    handleEdit(username){
         this.setState({
-            dataEdit: this.state.data.filter(e => e.id === id)[0],
-            stateView: 'update',
+            dataEdit: this.state.data.filter(e => e.username === username)[0],
+            action: 'update',
             showModalEdit: true
           })
     }
@@ -81,8 +116,8 @@ class QuyDangKy extends React.Component {
             onDoubleClick: e => {
             },
             style: {
-                background: rowInfo == undefined ? '' : that.state.selectedRows.has(rowInfo.original.id) ? '#dbe1ec' : '',
-                color: rowInfo == undefined ? '' : that.state.selectedRows.has(rowInfo.original.id) ? 'black' : '',
+                background: rowInfo == undefined ? '' : that.state.selectedRows.has(rowInfo.original.username) ? '#dbe1ec' : '',
+                color: rowInfo == undefined ? '' : that.state.selectedRows.has(rowInfo.original.username) ? 'black' : '',
             }
 
         }
@@ -91,9 +126,9 @@ class QuyDangKy extends React.Component {
         this.setState({ checkedAll: event.target.checked })
         if (event.target.checked) {
             this.state.data.map((element) => {
-                if (!this.state.selectedRows.has(element.id)) {
-                    this.state.unSelectedRows.push(element.id)
-                    this.state.selectedRows.add(element.id)
+                if (!this.state.selectedRows.has(element.username)) {
+                    this.state.unSelectedRows.push(element.username)
+                    this.state.selectedRows.add(element.username)
                 }
             })
             this.setState({ selectedRows: this.state.selectedRows, unSelectedRows: this.state.unSelectedRows })
@@ -107,40 +142,33 @@ class QuyDangKy extends React.Component {
     }
     handleChangeRow = (row) => {
         // console.log("row original", row.original);
-        if (!this.state.selectedRows.has(row.original.id))
-            this.state.selectedRows.add(row.original.id);
+        if (!this.state.selectedRows.has(row.original.username))
+            this.state.selectedRows.add(row.original.username);
         else {
-            this.state.selectedRows.delete(row.original.id);
+            this.state.selectedRows.delete(row.original.username);
         }
         this.setState({ selectedRows: this.state.selectedRows });
     }
-    componentWillReceiveProps(nextProps){
-        let CUSTID =  nextProps.CUSTID;
-        let that = this;
-        // console.log("nextProps CUSTID", )
-        if(CUSTID){
-            io.socket.post('/account/getRegistedFunds',{CUSTID}, function(resData, jwRes){
-                if(jwRes.statusCode == "200"){
-                    // console.log("....jwRes",jwRes);
-                    if(resData.EC == 0){
-                    var list = BPSUtils.convertDataRowFromBPS(resData.DT);
-                    that.setState({ data: list })
-                    }
-                }
-            })
-        }
-    }
+   
     delete = () => {
         this.state.selectedRows.forEach((key, value, set) => {
-            let data = this.state.data.filter(e => e.id === value);
+            let data = this.state.data.filter(e => e.username === value);
             let success = null;
-            axios.post('/account/deleteRegistedFunds', data[0])
+            axios.post('/user/delete', data[0])
                 .then(res => success = res.data.EC)
                 .then(() => {
-                    success ? toast.error("Xoá quỹ thất bại !", { position: toast.POSITION.BOTTOM_RIGHT })
-                        : toast.success("Xoá quỹ thành công !", { position: toast.POSITION.BOTTOM_RIGHT });
+                    success ? toast.error("Xóa "+ value+ "thất bại"+res.data.DT , { position: toast.POSITION.BOTTOM_RIGHT })
+                        : toast.success("Xoá "+value+"quỹ thành công !", { position: toast.POSITION.BOTTOM_RIGHT });
                 })
         })
+        this.setState({showModalConfirm:false, selectedRows: new Set(),
+            unSelectedRows: []})
+    }
+    closeModalConfirm(){
+        this.setState({showModalConfirm:false})
+    }
+    showModalConfirm(){
+        this.setState({showModalConfirm:true})
     }
     render() {
         const pageSize = 5;
@@ -153,9 +181,8 @@ class QuyDangKy extends React.Component {
             <div className="col-md-12" style={{  padding: "10px 10px 10px 0px"}}>
             {this.props.access == "view" ? null:
                 <div className="" style={{}}>
-                    <button onClick={this.add.bind(this)} className="btn btn-primary" ><span className="glyphicon glyphicon-plus-sign"></span> Thêm</button>
-                    <button className="btn btn-danger" onClick={this.delete}><span className="glyphicon glyphicon-remove"></span> Xoá</button>
-                    <button className="btn btn-info" onClick={this.fetchData}><span className="glyphicon glyphicon-list"></span> Lấy dữ liệu</button>
+                    <button onClick={this.add.bind(this)} className="btn btn-info" ><span className="glyphicon glyphicon-plus-sign"></span> Thêm</button>
+                    {this.state.selectedRows.size>0?<button className="btn btn-danger" onClick={this.showModalConfirm.bind(this)}><span className="glyphicon glyphicon-remove"></span> Xoá</button>:<button disabled className="btn btn-danger" ><span className="glyphicon glyphicon-remove"></span> Xoá</button>}
                 </div>}
                 <div className="content-left">
                     <ReactTable 
@@ -175,21 +202,21 @@ class QuyDangKy extends React.Component {
                                     <div>
                                         <Checkbox
                                             style={{ textAlign: "center", marginLeft: "-16px", marginTop: "-20px", marginRight: "20px" }}
-                                            checked={that.state.selectedRows.has(row.original.id)}
+                                            checked={that.state.selectedRows.has(row.original.username)}
                                             onChange={that.handleChangeRow.bind(that, row)}
                                             inline
                                         />
-                                       <span onClick={that.handleEdit.bind(that, row.original.id)} className="glyphicon glyphicon-pencil"></span>
+                                       <span onClick={that.handleEdit.bind(that, row.original.username)} className="glyphicon glyphicon-pencil"></span>
                                     </div>
                                 ),
                                 Filter: ({ filter, onChange }) =>
                                     null
                             },
                             {
-                                Header: props => <div className="">Mã nhóm cây</div>,
-                                id: "id",
-                                accessor: "id",
-                                width:100,
+                                Header: props => <div className="">Tên đăng nhập</div>,
+                                id: "username",
+                                accessor: "username",
+                                width:150,
                                 Cell: ({ value }) => {
                                     return (
                                         <span className="col-left">
@@ -198,71 +225,81 @@ class QuyDangKy extends React.Component {
                                 }
                             },
                             {
-                                Header: props => <div className="">Ảnh</div>,
+                                Header: props => <div className="">Avatar</div>,
                               
                                 sortable: false,
-                                accessor: "url_image",
+                                accessor: "url_avatar",
                                 width:70,
                                 Cell: ({ value }) => {
                                   return (
                                       <span style={{textAlign:"center"}} >
-                                         <img style={{width:"36px",borderRadius:"3px"}} src={value} />
+                                         <img style={{width:"36px",borderRadius:"3px",height:"34px"}} src={value?value:'images/user/me.png'} />
                                       </span>)
                               }
   
+                             
+                           
                              },
+                        //     {
+                        //         Header: props => <div className="">Url ảnh cây toàn cục</div>,
+                        //         id: "url_image_gobal",
+                        //         width:300,
+                        //         accessor: "url_image_gobal",
+                        //         Cell: ({ value }) => {
+                        //           return (
+                        //               <span className="col-left">
+                        //                   {value}
+                        //               </span>)
+                        //       }
+
+                        //    },
+                           
                             {
-                              Header: props => <div className="">Url ảnh cây</div>,
-                              id: "url_image",
-                              width:250,
-                              accessor: "url_image",
-                              Cell: ({ value }) => {
-                                return (
-                                    <span className="col-left">
-                                        {value}
-                                    </span>)
+                                Header: props => <div className="">Họ tên</div>,
+                                id: "fullname",
+                                accessor: "fullname",
+                                Cell: ({ value }) => {
+                                    return (
+                                        <span className="col-left">
+                                            {value}
+                                        </span>)
+                                }
                             },
-                             },
                             {
-                                Header: props => <div className="">Url ảnh cây toàn cục</div>,
-                                id: "url_image_gobal",
-                                width:300,
-                                accessor: "url_image_gobal",
+                                Header: props => <div className="">Chức vụ</div>,
+                                id: "rolecode",
+                                accessor: "rolename",
+                                width:150,
+                                Cell: ({ value }) => {
+                                    return (
+                                        <span className="col-left">
+                                            {value}
+                                        </span>)
+                                },
+                            
+                                Filter: ({ filter, onChange }) =>
+
+                                <ListGroupTree onChange={onChange} filter={filter} />
+
+
+                                
+                            },
+                            {
+                                Header: props => <div className="">Trạng thái</div>,
+                                id: "status",
+                                accessor: "status",
+                                width:150,
                                 Cell: ({ value }) => {
                                   return (
                                       <span className="col-left">
                                           {value}
                                       </span>)
-                              }
-
-                           },
-                           
-                            {
-                                Header: props => <div className="">Tên nhóm cây</div>,
-                                id: "groupname",
-                                accessor: "groupname",
-                                Cell: ({ value }) => {
-                                    return (
-                                        <span className="col-left">
-                                            {value}
-                                        </span>)
-                                }
+                              },
                             },
                             {
-                                Header: props => <div className="">Nguồn gốc cây</div>,
-                                id: "country",
-                                accessor: "country",
-                                Cell: ({ value }) => {
-                                    return (
-                                        <span className="col-left">
-                                            {value}
-                                        </span>)
-                                }
-                            },
-                            {
-                              Header: props => <div className="">Mô tả</div>,
-                              id: "description",
-                              accessor: "description",
+                              Header: props => <div className="">Địa chỉ</div>,
+                              id: "address",
+                              accessor: "address",
                               Cell: ({ value }) => {
                                 return (
                                     <span className="col-left">
@@ -271,6 +308,7 @@ class QuyDangKy extends React.Component {
                             }
                           }
                         ]}
+                        
                         getTheadTrProps= {() =>{
                             return{
                                className:'head'
@@ -300,7 +338,9 @@ class QuyDangKy extends React.Component {
                 </div>
                 </div>
             </div>
-            <ModalEdit dataEdit={this.state.dataEdit} open={this.state.showModalEdit} close={this.close.bind(this)} />
+            <ModalConfirm access={this.delete} show={this.state.showModalConfirm} close={this.closeModalConfirm.bind(this)} />
+
+            <ModalEdit action={this.state.action} dataEdit={this.state.dataEdit} open={this.state.showModalEdit} close={this.close.bind(this)} />
             </div>
         );
     }

@@ -132,6 +132,113 @@ module.exports = {
             }
              
           }
+      },
+      getlist: async function (req, res) {
+        // if (!req.isSocket) {
+        //     sails.log.debug('no socket');
+        //     return res.badRequest();
+        // }
+        // if (req.isSocket) {
+        //     // If this code is running, it's made it past the `isAdmin` policy, so we can safely
+        //     // watch for `.publishCreate()` calls about this model and inform this socket, since we're
+        //     // confident it belongs to a logged-in administrator.
+        //     sails.log.debug('is socket');
+        //     //để  đăng kí sự kiện lăng nghe model Command thay đổi kích hoạt sự kiện on('command') bên phía client
+        //     Group_user.watch(req);
+        // }
+        let username = req.session.user.username;
+        let self = this;
+
+        // let listGroup_usermanage = await Group_usermanage.find({ TLID: TLID, select: ['CUSTID'] })
+
+        // let result = await Promise.all(listGroup_usermanage.map((item) => {
+        //     return new Promise((resolve, reject) => {
+        //         resolve(item.CUSTID)
+        //     })
+        // }))
+      
+        var keySearch = Paging.generate_keySearch(req.body)
+        let dataCount = { ...keySearch }
+        console.log('keysearch',keySearch)
+        // chèn thêm điều kiện find dữ liệu theo trường Custid
+        // dataCount.where.CUSTID = result
+        // tính số  bản ghi để  phân trang
+        let length = await User.count(keySearch)
+        let { pagesize, page } = req.body;
+        pagesize = parseInt(pagesize);
+        let numOfPages = Math.ceil(length / pagesize);
+        let response = await User.find(keySearch).paginate({ limit: pagesize, page: req.body.page })
+        // var DT = { data: response, numOfPages: numOfPages }
+        // return res.send(OutputInterface.success(DT));
+            var listRole = await Role.find();
+            Promise.all(response.map((item) => {
+                delete item['encryptedPassword']
+                return new Promise(async (resolve, reject) => {
+                    let rolename = ''
+                    let rs = listRole.filter(role => role.rolecode == item.rolecode)
+                    if (rs.length > 0) {
+                        rolename = rs[0].rolename;
+                    }
+                   
+                    var newitem = { ...item, rolename }
+
+                    resolve(newitem)
+
+                })
+            }))
+                .then((data_response) => {
+                    var DT = { data: data_response, numOfPages: numOfPages }
+                    return res.send(OutputInterface.success(DT));
+                })
+        
+       
+
+    },
+    insert:async function(req,res){
+      let data = req.body
+      data.password="1";
+      try {
+          let user = await User.findOne({username:data.username});
+          if(!user)
+            User.create(data).exec((err,user)=>{
+                if(err){
+                  res.send(OutputInterface.errServer(err))
+                }
+                return res.send(OutputInterface.success(user))
+    
+            })
+            else{
+              res.send(OutputInterface.errServer('Tên đăng nhập đã tồn tại'))
+            }
+      } catch (error) {
+          return res.send(OutputInterface.errServer(error))
       }
+     
+  },
+  update:function(req,res){
+      let data = req.body
+      User.update({username:data.username},data).exec((err,user)=>{
+          if(err){
+              res.send(OutputInterface.errServer(err))
+          }
+          res.send(OutputInterface.success(user))
+
+      })
+  },
+  delete:async function(req,res){
+      let data = req.body
+      let user = await User.findOne({username:data.username});
+      if(user&&user.status!='Hoạt động')
+       User.destroy({username:data.username}).exec((err,user)=>{
+          if(err){
+              res.send(OutputInterface.errServer(err))
+          }
+          res.send(OutputInterface.success(user))
+
+       })
+       else{
+          res.send(OutputInterface.errServer('Không được xóa user đang hoạt động'))
+       }
+  },  
 };
 

@@ -6,6 +6,13 @@
  */
 
 module.exports = {
-	
+        getall:function(req,res){
+            Role.find().exec((err,listrole)=>{
+                if(err){
+                    res.send([])
+                }
+                res.send(listrole)
+            }) 
+        }
 };
 

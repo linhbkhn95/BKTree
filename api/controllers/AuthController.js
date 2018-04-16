@@ -20,6 +20,9 @@ module.exports = {
             return res.send(OutputInterface.errServer('Tên đăng nhập không chính xác'))
   
           }
+          if(user&&user.status!='Hoạt động')
+              return res.send(OutputInterface.errServer('Tài khoản của bạn đã bị khóa'))
+
           User.comparePassword(password, user, async function (err, valid) {
             if (err) {
               console.log('err',err)
