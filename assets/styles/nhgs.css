@@ -123,14 +123,14 @@ dieuchinhnoptien #dcnt>form{
   
     /* font-size: 28px; */
     font-weight: normal;
-    padding: 4px 0;
+    padding: 6px 0;
     text-align: center;
     text-transform: uppercase;
   color: white !important;
 
 }
 .ReactTable .rt-tbody .rt-td {
-  border-right: 1px solid #38333330 !important;
+  /* border-right: 1px solid #dee8ec !important */
 }
 .ReactTable .rt-thead .rt-th, .ReactTable .rt-thead .rt-td{
   border-right: 1px solid #38333330 !important;
@@ -151,9 +151,8 @@ dieuchinhnoptien #dcnt>form{
   min-height: 13px;
 }
 .ReactTable .rt-th, .ReactTable .rt-td .btn{
-  padding: 2px 6px !important;
-  
-  font-size: 13px !important;
+  padding: 5px 6px !important;
+  font-size: 14px !important;
 }
 .ReactTable{
   /* border: 1px solid rgba(206, 188, 188, 0.68) !important; */
@@ -204,8 +203,8 @@ dieuchinhnoptien #dcnt>form{
   font-size: 12px;
   line-height: 25px; */
   text-align: center;
-    font-size: 13px;
-    line-height: 29px;
+  font-size: 14px;
+  line-height: 36px;
 }
 .content-left .ReactTable .rt-tbody .rt-td label input{
   margin-left: 0px;
@@ -250,13 +249,13 @@ dieuchinhnoptien #dcnt>form{
   padding: 0px;
 }
 .title-content{
-  padding: 7px;
+padding: 10px;
     background: #56bcd5;
     color: white;
-    font-size: 14px;
+    font-size: 18px;
     font-weight: bold;
     width: 50%;
-    border-radius: 0px 50px 50px 0px;
+    border-radius: 0px 50px 50px 0px
 }
 .input-file {
   position: relative;

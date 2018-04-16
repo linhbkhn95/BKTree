@@ -71,6 +71,16 @@ module.exports = {
             })
         }
     },
+    insert:function(req,res){
+        let data = req.body
+        Tree.create(data).exec((err,tree)=>{
+            if(err){
+                res.send(OutputInterface.errServer(err))
+            }
+            res.send(OutputInterface.success(tree))
+
+        })
+    },
     getlist: async function (req, res) {
         // if (!req.isSocket) {
         //     sails.log.debug('no socket');
@@ -108,7 +118,6 @@ module.exports = {
         let response = await Tree.find(keySearch).paginate({ limit: pagesize, page: req.body.page })
         // var DT = { data: response, numOfPages: numOfPages }
         // return res.send(OutputInterface.success(DT));
-        if (response.length > 0) {
             var listgrouptree = await Group_tree.find();
             Promise.all(response.map((item) => {
                 return new Promise(async (resolve, reject) => {
@@ -128,8 +137,8 @@ module.exports = {
                     var DT = { data: data_response, numOfPages: numOfPages }
                     return res.send(OutputInterface.success(DT));
                 })
-       }
-
+        
+       
 
     },
     use_tree:function(req,res){

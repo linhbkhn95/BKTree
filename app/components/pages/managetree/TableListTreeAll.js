@@ -180,7 +180,7 @@ class QuyDangKy extends React.Component {
           var that = this;
         return (
           <div style={{ padding: "10px" }} className="container panel panel-default">
-          <div className="title-content">Quản lý cây</div>
+          <div className="title-content">QUẢN LÝ CÂY </div>
           <div className="body-content">
             <div className="col-md-12" style={{  padding: "10px 10px 10px 0px"}}>
             {this.props.access == "view" ? null:
@@ -339,7 +339,7 @@ class QuyDangKy extends React.Component {
                 </div>
                 </div>
             </div>
-            <ModalEdit dataEdit={this.state.dataEdit} open={this.state.showModalEdit} close={this.close.bind(this)} />
+            <ModalEdit dataEdit={this.state.dataEdit} open={this.state.showModalEdit} action={this.state.acion} close={this.close.bind(this)} />
             </div>
         );
     }

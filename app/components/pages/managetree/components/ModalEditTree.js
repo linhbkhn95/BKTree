@@ -26,32 +26,35 @@ class ModalTree extends React.Component{
         
         data:{
                
-            groupname:{
-                errorText:'',
-                value:''
-
-            },
-            country:{
-                errorText:'',
-                value:''
-
-            },
-            description:{
-                errorText:'',
-                value:''
-
-            },
-            address:{
-                errorText:'',
-                value:''
-            },
-        
-         }
+            grouptree_id:'',
+             
+            code:'',
+               
+            waterneed:'',
+            waternow:'',
+            description:'',
+            
+             
+         },
+         listGroupTree:[]
+         
       }
     }
 
 
-
+    refresh(){
+        this.setState({
+                
+            data:{grouptree_id:'',
+             
+            code:'',
+               
+            waterneed:'',
+            waternow:'',
+            description:'',
+        }
+        })
+    }
     handleOpen = () => {
         this.props.close()
       };
@@ -63,35 +66,40 @@ class ModalTree extends React.Component{
  
       onChange(type,event,index,value) {
         if(!value){
-            this.state.data[type].value = event.target.value
-            if (event.target.value=="") {
-                this.state.data[type].errorText = 'Trường này không được bỏ trống'
-            
-            } else {
-                this.state.data[type].errorText = ''
-            }
+            this.state.data[type] = event.target.value
+           
         }
         else{
-            this.state.data[type].value = value
+            this.state.data[type] = value
         }
         this.setState({data:this.state.data})
       }
       access(){
         let data = this.state.data
         let self = this
-        let groupname = data.groupname.value ;
-        let country = data.country.value ;
-        let description = data.description.value
 
-        if(groupname!=''||!groupname){
-            self.fileUpload(this.state.file).then((response)=>{
-                if(response.data.EC==0){
+        let urlApi = '/tree/'+this.props.action
+        if(data.groupname!=''&&data.code!=''){
+            axios.post(urlApi,data)
+            .then((res)=>{
+                if(res.data.EC==0){
                     toast.success('Thành công', {
-                                    position: toast.POSITION.TOP_CENTER
-                                });
-                        self.props.close()
+                                                position: toast.POSITION.TOP_CENTER
+                                            });
+                                    self.props.close()
+                }
+                else{
+                    self.setState({err_msg:res.data.DT})
                 }
             })
+            // self.fileUpload(this.state.file).then((response)=>{
+            //     if(response.data.EC==0){
+            //         toast.success('Thành công', {
+            //                         position: toast.POSITION.TOP_CENTER
+            //                     });
+            //             self.props.close()
+            //     }
+            // })
 
           
                 // axios.post('/group_tree/insert',{groupname,country,description})
@@ -118,13 +126,7 @@ class ModalTree extends React.Component{
     }
     componentWillReceiveProps(nextProps){
         let dataEdit = nextProps.dataEdit
-        if(dataEdit){
-            this.state.data.groupname.value = dataEdit.groupname;
-            this.state.data.country.value = dataEdit.country
-            this.state.data.description.value = dataEdit.description
-            this.state.fileName = dataEdit.url_image
-            this.setState(this.state)
-        }
+       
     }
     _handleChange(e) {
         e.preventDefault();
@@ -152,6 +154,21 @@ class ModalTree extends React.Component{
         }
         return axios.post(url,formData,config)
     }
+
+    componentDidMount(){
+        let that = this
+          axios.post('/group_tree/getlist_options'
+            ).then(res => {
+                that.setState({ listGroupTree: res.data });
+            });
+    }
+    renderOptionGroupTree(){
+           const items = [];
+            for (let i = 0; i < this.state.listGroupTree.length; i++ ) {
+            items.push(<MenuItem value={this.state.listGroupTree[i].id} key={i} primaryText={this.state.listGroupTree[i].groupname} />);
+            }
+            return items;
+    }
     render(){
         const actions = [
             <FlatButton
@@ -167,9 +184,9 @@ class ModalTree extends React.Component{
             />,
           ];
           let {groupname} = this.state.data
-            let disabled = groupname.value==""||!groupname.value
+            let disabled = groupname==""||!groupname
 
-            let titleModal = this.props.action=="insert"?"Thêm nhóm cây":"Cập nhập thông tin nhóm cây"
+            let titleModal = this.props.action=="insert"?"Thêm  cây":"Cập nhập thông tin  cây"
             
         return(
             <Dialog
@@ -194,48 +211,61 @@ class ModalTree extends React.Component{
                     
                     
                      
-                    <TextField
+                    <SelectField
                      fullWidth={true}
-                          errorText={this.state.data.groupname.errorText}
-                          required={true} 
-                          hintText="Tên nhóm cây"
-                          value={this.state.data.groupname.value}
+                         required={true} 
+                          value={this.state.data.groupname}
                           onChange={this.onChange.bind(this,'groupname')}
-                          floatingLabelText="Tên nhóm cây"
-                    /><br />
+                          floatingLabelText="Nhóm cây"
+                        //   errorText={this.state.data.groupname==''?'Trường này không được để trống':''}
+                          >{this.renderOptionGroupTree()}
+                          </SelectField>
+                    <br />
                            
                            <TextField
-                     fullWidth={true}
-                          errorText={this.state.data.country.errorText}
+                         fullWidth={true}
+                        //   errorText={this.state.data.code==''?'Trường này không được để trống':''}
                           required={true} 
-                          hintText="Nguồn gốc"
-                          value={this.state.data.country.value}
-                          onChange={this.onChange.bind(this,'country')}
-                          floatingLabelText="Nguồn gốc"
+                          hintText="Mã cây"
+                          value={this.state.data.code}
+                          onChange={this.onChange.bind(this,'code')}
+                          floatingLabelText="Mã cây"
                     /><br />
-                 
+                   <TextField
+                         fullWidth={true}
+                          hintText="Lượng nước cần"
+                          value={this.state.data.waterneed}
+                          onChange={this.onChange.bind(this,'waterneed')}
+                          floatingLabelText="Lượng nước cần(mml)"
+                          type="number"
+                    /><br />
+                      <TextField
+                         fullWidth={true}
+                          hintText="Lượng nước đang có"
+                          value={this.state.data.waternow}
+                          onChange={this.onChange.bind(this,'waternow')}
+                          floatingLabelText="Lượng nước đang có(mml)"
+                          type="number"
+                    /><br />
                      <TextField
-                     fullWidth={true}
+                         fullWidth={true}
                           hintText="Mô tả"
-                          value={this.state.data.description.value}
+                          value={this.state.data.description}
                           onChange={this.onChange.bind(this,'description')}
                           floatingLabelText="Mô tả"
                     /><br />
                  
-                     <div className="col-md-2 row">
+                     {/* <div className="col-md-2 row">
                             <h5 className="input-material">Ảnh cây</h5>
                         </div>
 
                         <div style={{color:"#56bcd5"}} className="col-md-6 input-file">
-                            {/* <input type="text" className="form-control" style={{ position: "relative" }} placeholder="Chọn đường dẫn" value={this.state.fileName} disabled />
-                            <label className="btn btn-default glyphicon glyphicon-cloud-upload" style={{ padding: "5px 10px", fontSize: "14px", position: "absolute", right: "-22px" }}>
-                                <input type="file" accept=".jpg,.png" className="inputfile" onChange={this._handleChange.bind(this)} />
-                            </label> */}
+                         
                             {this.state.fileName}
                             <span style={{marginLeft:"20px"}} className="btn btn-default btn-file">
     Chọn ảnh <input onChange={this._handleChange.bind(this)} type="file" />
 </span>
-                        </div>
+                        </div> */}
 
                   
                     <div style={{color:'red'}}>
