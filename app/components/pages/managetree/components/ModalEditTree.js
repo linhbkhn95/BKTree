@@ -216,8 +216,7 @@ class ModalTree extends React.Component{
                            
                     
                     
-                     
-                    <SelectField
+                           <SelectField
                      fullWidth={true}
                          required={true} 
                           value={this.state.data.grouptree_id}

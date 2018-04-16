@@ -126,7 +126,11 @@ import axios from 'axios'
             <ListItem primaryText="Trạng thái của cây" leftIcon={<Search />} />
             <Divider />
             <Subheader>Thao tác</Subheader>   
-            <ListItem  containerElement={ <Link to="/trees" />}  primaryText="Quản lý cây" leftIcon={<Assignment />} />
+            <ListItem  containerElement={ <Link to="/trees" />}  primaryText="Quản nhóm cây" leftIcon={<Assignment />} />
+            <ListItem  containerElement={ <Link to="/listall-tree" />}  primaryText="Quản lý cây" leftIcon={<Assignment />} />
+
+            <ListItem  containerElement={ <Link to="/users" />}  primaryText="Quản lý user" leftIcon={<Assignment />} />
+
             <ListItem primaryText="Cập nhật bản đồ" leftIcon={<Update />} />
             <ListItem containerElement={ <Link to="/notification" />} primaryText="Thông báo" leftIcon={<Badge  style={{top: "-22px", left: "-8px"}}
       badgeContent={4}

@@ -112,8 +112,13 @@ module.exports = {
         });
       
       },
-    delete:function(req,res){
+    delete:async function(req,res){
         let idDelete = req.body.idDelete
+        let count_listtree = await Tree.find({grouptree_id:idDelete}).count();
+        if(count_listtree>0)
+            res.send(OutputInterface.errServer('Bạn phải xóa hết các cây trong nhóm cây trước'))
+
+        
         Group_tree.destroy({id:idDelete}).exec((err,gt)=>{
             if(err){
                 res.send(OutputInterface.errServer(err))

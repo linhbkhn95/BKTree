@@ -4,7 +4,9 @@ import {Checkbox} from 'react-bootstrap';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 // import "react-table/react-table.css";
-import ModalEdit from './components/ModalEditTree'
+import ModalEdit from './components/modalEditGroupTree'
+import ModalConfirm from 'app/utils/modal/Modalconfirm'
+
 class QuyDangKy extends React.Component {
     constructor(props){
         super(props);
@@ -28,7 +30,8 @@ class QuyDangKy extends React.Component {
           page: 1,
           showModalEdit:null,
           dataEdit:{},
-          acion:'insert'
+          acion:'insert',
+          showModalConfirm:false
         }
         this.fetchData = this.fetchData.bind(this);
 
@@ -68,6 +71,12 @@ class QuyDangKy extends React.Component {
 
       });
   }
+  closeModalConfirm(){
+    this.setState({showModalConfirm:false})
+}
+showModalConfirm(){
+    this.setState({showModalConfirm:true})
+}
     handleEdit(id){
         this.setState({
             dataEdit: this.state.data.filter(e => e.id === id)[0],
@@ -134,11 +143,11 @@ class QuyDangKy extends React.Component {
         this.state.selectedRows.forEach((key, value, set) => {
             let data = this.state.data.filter(e => e.id === value);
             let success = null;
-            axios.post('/account/deleteRegistedFunds', data[0])
+            axios.post('/group_tree/delete', data[0])
                 .then(res => success = res.data.EC)
                 .then(() => {
-                    success ? toast.error("Xoá quỹ thất bại !", { position: toast.POSITION.BOTTOM_RIGHT })
-                        : toast.success("Xoá quỹ thành công !", { position: toast.POSITION.BOTTOM_RIGHT });
+                    success ? toast.error("Xoá  thất bại !" +res.data.DT, { position: toast.POSITION.BOTTOM_RIGHT })
+                        : toast.success("Xoá  thành công !", { position: toast.POSITION.BOTTOM_RIGHT });
                 })
         })
     }
@@ -154,7 +163,7 @@ class QuyDangKy extends React.Component {
             {this.props.access == "view" ? null:
                 <div className="" style={{}}>
                     <button onClick={this.add.bind(this)} className="btn btn-info" ><span className="glyphicon glyphicon-plus-sign"></span> Thêm</button>
-                    <button className="btn btn-danger" onClick={this.delete}><span className="glyphicon glyphicon-remove"></span> Xoá</button>
+                    {this.state.selectedRows.size>0?<button className="btn btn-danger" onClick={this.showModalConfirm.bind(this)}><span className="glyphicon glyphicon-remove"></span> Xoá</button>:<button disabled className="btn btn-danger" ><span className="glyphicon glyphicon-remove"></span> Xoá</button>}
                     {/* <button className="btn btn-info" onClick={this.fetchData}><span className="glyphicon glyphicon-list"></span> Lấy dữ liệu</button> */}
                 </div>}
                 <div className="content-left">
@@ -300,6 +309,8 @@ class QuyDangKy extends React.Component {
                 </div>
                 </div>
             </div>
+            <ModalConfirm access={this.delete} show={this.state.showModalConfirm} close={this.closeModalConfirm.bind(this)} />
+
             <ModalEdit dataEdit={this.state.dataEdit} open={this.state.showModalEdit} close={this.close.bind(this)} />
             </div>
         );
