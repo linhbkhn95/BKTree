@@ -49,6 +49,20 @@ class ListExampleMessages extends React.Component{
             self.setState({listHistoryTree:res.data.DT})
           }
       })
+
+
+  }
+  componentWillMount(){
+    io.socket.get('/notifycation/follow', function gotResponse(data, jwRes) {
+      console.log('Server responded with status code ' + jwRes.statusCode + ' and data: ', data);
+    
+        io.socket.on('follow', function (data) {
+          console.log('Socket `' + data.id + '` joined the party!',data);
+        });
+        io.socket.on('add', function (data) {
+          console.log('Socket `' + data.id + '` joined the party!',data);
+        });
+    });
   }
   render(){
     let listHistoryTree = this.state.listHistoryTree

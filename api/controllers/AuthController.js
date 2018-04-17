@@ -20,42 +20,50 @@ module.exports = {
             return res.send(OutputInterface.errServer('Tên đăng nhập không chính xác'))
   
           }
-          if(user&&user.status!='Hoạt động')
+          console.log('user',user)
+          if(user&&user.status&&user.status.trim()=='Hoạt động'){
+
+          
+             
+
+              User.comparePassword(password, user, async function (err, valid) {
+                if (err) {
+                  console.log('err',err)
+                  return res.send(OutputInterface.errServer('Đăng nhập thất bại'))
+                }
+
+                if (valid){
+                  var role = await Role.findOne({rolecode:user.rolecode});
+                  if(role){
+                      user.rolename= role.rolename;
+                      user.rolecode = role.rolecode
+                  }
+                  else{
+                    user.rolecode = 'CTV'
+                    user.rolename = 'Cộng tác viên'
+                  }
+
+                  console.log('role',role)
+                  req.session.user = user;
+                  console.log(req.session)
+
+                  // res.json({
+                  //   user: user,
+                  //   token: jwToken.issue({id : user.id,username:user.email })
+                  // });
+                  return res.send(OutputInterface.success({
+                    user: user,
+                    token: jwToken.issue({id : user.id,username:user.username,rolecode:user.rolecode,rolename:user.rolename,fullname:user.fullname,url_avatar:user.url_avatar })
+                  }))
+                }
+                return res.send(OutputInterface.errServer('Mật khẩu không chính xác'))
+              });
+            }
+            else{
               return res.send(OutputInterface.errServer('Tài khoản của bạn đã bị khóa'))
-
-          User.comparePassword(password, user, async function (err, valid) {
-            if (err) {
-              console.log('err',err)
-              return res.send(OutputInterface.errServer('Đăng nhập thất bại'))
             }
-
-            if (valid){
-              var role = await Role.findOne({rolecode:user.rolecode});
-              if(role){
-                  user.rolename= role.rolename;
-                  user.rolecode = role.rolecode
-              }
-              else{
-                user.rolecode = 'CTV'
-                user.rolename = 'Cộng tác viên'
-              }
-
-              console.log('role',role)
-               req.session.user = user;
-               console.log(req.session)
-
-              // res.json({
-              //   user: user,
-              //   token: jwToken.issue({id : user.id,username:user.email })
-              // });
-              return res.send(OutputInterface.success({
-                user: user,
-                token: jwToken.issue({id : user.id,username:user.username,rolecode:user.rolecode,rolename:user.rolename,fullname:user.fullname,url_avatar:user.url_avatar })
-              }))
-            }
-            return res.send(OutputInterface.errServer('Mật khẩu không chính xác'))
-          });
-        })
+            })
+            
        } catch (error) {
           return res.send(OutputInterface.errServer('Lỗi hệ thống'))
 

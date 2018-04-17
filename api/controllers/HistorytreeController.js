@@ -7,6 +7,9 @@
 
 module.exports = {
 	gitlist_bytree:function(req,res){
+        // if (!req.isSocket) {
+        //     return res.badRequest();
+        //   }
         let tree_id = req.body.tree_id||null
         if(tree_id){
             try {
@@ -27,6 +30,7 @@ module.exports = {
     
                         })
                     })).then((data_response)=>{
+                        
                         return res.send(OutputInterface.success(data_response))
                     })
                 })

@@ -57,17 +57,17 @@ module.exports = {
 
             Tree.findOne({id:tree_id}).exec(async (err,tree)=>{
                 if(err){
-                    res.send(OutputInterface.errServer(err))
+                  return  res.send(OutputInterface.errServer(err))
                 }
                 if(tree){
                     let grouptree = await Group_tree.findOne({id:tree.grouptree_id});
                     tree.groupname = grouptree.groupname;
                     tree.url_image = grouptree.url_image;
 
-                    res.send(OutputInterface.success(tree))
+                  return   res.send(OutputInterface.success(tree))
                 }
              
-                res.send(OutputInterface.errServer('không tìm thấy cây'))
+               return  res.send(OutputInterface.errServer('không tìm thấy cây'))
             })
         }
     },
@@ -170,11 +170,14 @@ module.exports = {
         let username = req.session.user.username;
         let wateruse = req.body.wateruse||0;
         let tree_id = req.body.tree_id || null
-        
+         // Make sure this is a socket request (not traditional HTTP)
+         if (!req.isSocket) {
+            return res.badRequest();
+          }
         if(tree_id){
             Tree.findOne({id:tree_id}).exec(async(err,tree)=>{
                 if(err){
-                    res.send(OutputInterface.errServer(err))
+                    return res.send(OutputInterface.errServer(err))
                 }
                 if(tree){
                     let dataHistorytree = {};
@@ -186,13 +189,65 @@ module.exports = {
                     tree.waternow += parseInt(wateruse)
 
                     let result  = await Historytree.create(dataHistorytree);
+                    result.user = req.session.user
+                    let dataNotify ={}
+                    dataNotify.type ="use_tree"
+                    dataNotify.data = result;
+                    dataNotify.room_id = tree_id;
+                    dataNotify.time = Date.now();
+                    console.log('datanotify',dataNotify)
+                    let notify_tree = await Notifi_tree.create(dataNotify);
+
+                    sails.sockets.broadcast('Subscribe_Tree',tree_id, notify_tree, req);
+
                     tree.save(()=>{
                         console.log('update thành công')
-                        res.send(OutputInterface.success(tree))
+                       return  res.send(OutputInterface.success(tree))
                     })
                 }
             })
         }
+    },
+    getlist_subscribe_tree:function(req,res){
+         if (!req.isSocket) {
+            sails.log.debug('no socket');
+            return res.badRequest();
+        }
+        // if (req.isSocket) {
+        //     // If this code is running, it's made it past the `isAdmin` policy, so we can safely
+        //     // watch for `.publishCreate()` calls about this model and inform this socket, since we're
+        //     // confident it belongs to a logged-in administrator.
+        //     sails.log.debug('is socket');
+        //     //để  đăng kí sự kiện lăng nghe model Command thay đổi kích hoạt sự kiện on('command') bên phía client
+        //     Group_tree.watch(req);
+        // }
+        let username = req.body.username||req.session.user.username
+        Subscribe_tree.find({username:username,select: ['room_id']}).exec((err,list)=>{
+            if(err){
+                return res.send(OutputInterface.errServer(err))
+            }
+           
+            return  res.send(OutputInterface.success(list))
+        })
+
+    },
+    subscribe_tree:async function(req,res){
+        let data ={};
+        data.username = req.session.user.username
+        data.room_id = req.body.tree_id
+        data.time = Date.now()
+        let sb_tree = await Subscribe_tree.findOne({username:data.username});
+        console.log('sb_tree',sb_tree)
+        if(sb_tree&&sb_tree.use_tree)
+             return  res.send(OutputInterface.success('Bạn đã theo dõi')) 
+        Subscribe_tree.create(data).exec((err,sb)=>{
+            if(err){
+                return res.send(OutputInterface.errServer(err))
+            }
+           
+            return  res.send(OutputInterface.success(sb))
+            
+        })
     },
     get_tree_status :function(tree){
         // let tree ={time_use:null,username_use:'linhtd',tree_id:'1'}

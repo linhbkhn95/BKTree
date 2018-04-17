@@ -26,11 +26,15 @@ import RaisedButton from 'material-ui/RaisedButton';
 import {NavLink,Link} from 'react-router-dom'
 import {connect} from 'react-redux'
 import axios from 'axios'
+import { format } from 'util';
+import { ToastContainer, toast } from 'react-toastify';
+
  class ListExampleNested extends React.Component {
 
   state = {
     open: false,
-    listMenu:[]
+    listMenu:[],
+    list_subscribe_tree:[]
   };
 
   handleToggle = () => {
@@ -56,12 +60,46 @@ import axios from 'axios'
       }
     })
   }
+  componentWillMount(){
+    let self = this
+    io.socket.post('/tree/getlist_subscribe_tree',{username:this.props.auth.user.username},function(res,jwres){
+      if(res.EC==0){
+          self.setState({list_subscribe_tree:res.DT})
+      }
+      else{
+        console.log(jwres)
+
+      }
+    })
+  }
+  render_subscribe_tree(){
+     let list_subscribe_tree = this.state.list_subscribe_tree;
+     console.log('render_subscribe_tree',list_subscribe_tree)
+
+     if(list_subscribe_tree.length>0){
+       for(let i=0;i<list_subscribe_tree.length;i++){
+      //  list_subscribe_tree.map((sb)=>{
+          io.socket.on('follow', function (data) {
+            console.log('Socket `' + data.id + '` đã đăng kí nhận thông báo!',data);
+          });
+          
+          io.socket.on(list_subscribe_tree[i].room_id, function (data) {
+              toast.success('', {
+                position: toast.POSITION.TOP_CENTER
+            });
+            console.log('Socket `' + data.id + '` joined the party!',data);
+        //  });
+         })
+      }
+     }
+  }
   render() {
     let auth = this.props.auth
     let fullname = auth.user.fullname?auth.user.fullname:'Cộng tác viên'
     let url_profile = "/profile."+auth.user.username+".html"
     return (
       <div>
+        {this.render_subscribe_tree()}
         {/* <Toggle
           toggled={this.state.open}
           onToggle={this.handleToggle}

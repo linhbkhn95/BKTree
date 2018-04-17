@@ -40,13 +40,25 @@ class ListExampleMessages extends React.Component{
       listtree:[]
     }
   }
+  follow(tree_id){
+    console.log('follow',tree_id)
+        io.socket.post('/tree/subscribe_tree',{tree_id},function(jwres,res){
+          if(res.EC==0){
+                console.log(res)
+          }
+          else{
+
+          }
+        })
+  }
   renderRightIconMenu(tree_id){
     let urlDetail = "/treedetail."+tree_id+".html"
+    let self = this
     return(
           <IconMenu iconButtonElement={iconButtonElement}>
-        <MenuItem>Tưới cây</MenuItem>
+        {/* <MenuItem>Tưới cây</MenuItem> */}
         <MenuItem  containerElement={ <Link to={urlDetail} ></Link>} > Xem chi tiết </MenuItem>
-        <MenuItem >Gửi phản hồi</MenuItem>
+        <MenuItem onClick={self.follow.bind(this,tree_id)} >Nhận thông báo</MenuItem>
       </IconMenu>
     )
   }

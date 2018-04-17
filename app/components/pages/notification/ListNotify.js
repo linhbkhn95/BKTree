@@ -29,83 +29,85 @@ const rightIconMenu = (
   </IconMenu>
 );
 
-const ListExampleMessages = () => (
-  <div>
-       <div className="title-page">
-              Thông báo
-          </div>
-    <div>
-      <List>
-        <Subheader>Hôm nay</Subheader>
-        <ListItem
-          leftAvatar={<Avatar src="https://scontent.fhan5-4.fna.fbcdn.net/v/t1.0-1/p240x240/29425964_871053206408584_518624791414964224_n.jpg?_nc_cat=0&_nc_eui2=v1%3AAeHHiPYU4N8nj-MLtmfW2k-S6ZhBAf4T8CaAWVGhjW7jwN4vUhfTiFESsWUjpPXDroaYG5q8gNKmkhLedLOecHQuPmVP9qVKeZvw1Zfg5C3lXg&oh=e486ae055fb24eb921965685a8bdbbb4&oe=5B2D2BB0" />}
-        //   primaryText="Nhỏ Ngọc"
-          secondaryText={
-            <p>
-              <span style={{color: darkBlack}}>Nhỏ Ngọc </span> --
-              I&apos; vừa tạo một cây mới trong bản đồ
-              <br />
-              
-            </p>
-          }
-          secondaryTextLines={2}
-        >
-             <span className="time-alert">{moment(date).lang('vi').fromNow()}</span>
-        </ ListItem>
-        <Divider inset={true} />
-        <ListItem
-          leftAvatar={<Avatar src="https://scontent.fhan5-4.fna.fbcdn.net/v/t1.0-1/p240x240/12565587_584562221695924_8989777346784784785_n.jpg?_nc_cat=0&_nc_eui2=v1%3AAeFwS3gvxxfher6lM1Jc3Wo-QwIwiBu4nNVRJRr6LR70fGDNsZO2Dzs_8qtf8k1f2FsVPHGYp1b31hMgqQ8tFV3NpUINMtkDMKwh4X9kSCzw3w&oh=5b2eb0fa428edec7b89e3dcade7dec62&oe=5B45E24C" />}
-        //   primaryText={
-        //     <p>Phương Anh&nbsp;&nbsp;<span style={{color: lightBlack}}>4</span></p>
-        //   }
-          secondaryText={
-            <p>
-              <span style={{color: darkBlack}}>Phương Anh</span> --
-             &apos; vừa cập nhập trang thái cây <span style={{color: darkBlack}}>Hoa Hồng </span>
-            
-            </p>
-          }
-          secondaryTextLines={5}
-        >
-         <span className="time-alert">{moment(date).lang('vi').fromNow()}</span>
-        </ ListItem>
-        <Divider inset={true} />
-        <ListItem
-          leftAvatar={<Avatar src="images/xuan.jpg" />}
-        //   primaryText="Nguyễn xuân"
-          secondaryText={
-            <p>
-              <span style={{color: darkBlack}}>Nguyễn Xuân</span> --
-               vừa chọc bạn
-            
-            </p>
-          }
-          secondaryTextLines={2}
-        >
-        <span className="time-alert">{moment(date).lang('vi').fromNow()}</span>
-        </ ListItem>
-      </List>
-    </div>
-    <div>
-      <List>
-        <Subheader>Hôm qua</Subheader>
-        <ListItem
-          leftAvatar={<Avatar src="images/duong.jpg" />}
-          rightIconButton={rightIconMenu}
-        //   primaryText="Đăng Dương"
-          secondaryText={
-            <p>
-              <span style={{color: darkBlack}}>Đăng Dương</span><br />
-              &apos; đã tạo ra cây <span style={{color: darkBlack}}>Xương Rồng</span> mới
-            </p>
-          }
-          secondaryTextLines={2}
-        >
-            <span className="time-alert">{moment(datedemo).lang('vi').fromNow()}</span>
-            </ ListItem>
-      </List>
-    </div>
-  </div>
-);
+class ListExampleMessages extends React.Component {
+  constructor(props){
+      super(props)
+      this.state ={
+          listNotify:[]
+      }
+  }
+  componentDidMount(){
+     let self  =this;
+      io.socket.get('/notification/getlist',function(res,jwres){
+        console.log('notifi',res,jwres);
+        if(res.EC==0){
+
+            self.setState({listNotify:res.DT})
+
+        }
+      })
+  }
+  render(){
+    let listNotifi = this.state.listNotify
+    return(
+      <div>
+           <div className="title-page">
+                  Thông báo
+              </div>
+        <div>
+          
+          <List>
+            <Subheader>Hôm nay</Subheader>
+            {
+           listNotifi.length>0?
+           listNotifi.map(( notifi,index)=>{
+             return(
+               <div key={index}>
+              <ListItem
+                    leftAvatar={<Avatar src={ notifi.data.user.url_avatar? notifi.data.user.url_avatar:'images/user/me.png'} />}
+                  //   primaryText="Nhỏ Ngọc"
+                    secondaryText={
+                      <p>
+                        <span style={{color: darkBlack}}>{ notifi.data.user.fullname_user? notifi.data.user.fullname_user: notifi.username} </span> --
+                        &apos; Đã tưới { notifi.data.water_use}ml nước cho cây
+                         (lượng nước cần lúc đó { notifi.data.waterneed}ml)
+                        <br />
+                        
+                      </p>
+                    }
+                    secondaryTextLines={2}
+                  >
+                      <span className="time-alert">{moment( notifi.data.createdAt).lang('vi').fromNow()=='Invalid date'?'':moment( notifi.createdAt).lang('vi').fromNow()}</span>
+                  </ ListItem>
+                  <Divider inset={true} />
+                </div>
+             )
+           }):null
+         }
+          </List>
+        </div>
+        <div>
+          <List>
+            <Subheader>Hôm qua</Subheader>
+            <ListItem
+              leftAvatar={<Avatar src="images/duong.jpg" />}
+              rightIconButton={rightIconMenu}
+            //   primaryText="Đăng Dương"
+              secondaryText={
+                <p>
+                  <span style={{color: darkBlack}}>Đăng Dương</span><br />
+                  &apos; đã tạo ra cây <span style={{color: darkBlack}}>Xương Rồng</span> mới
+                </p>
+              }
+              secondaryTextLines={2}
+            >
+                <span className="time-alert">{moment(datedemo).lang('vi').fromNow()}</span>
+                </ ListItem>
+          </List>
+        </div>
+      </div>
+    );
+  } 
+}
 
 export default ListExampleMessages;

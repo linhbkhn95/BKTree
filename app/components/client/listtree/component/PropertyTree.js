@@ -45,9 +45,8 @@ class CardExampleWithAvatar extends React.Component{
     let tree_id = this.props.tree_id
     let self = this;
     if(wateruse>0&&tree_id)
-      axios.post('/tree/use_tree',{wateruse,tree_id})
-      .then((res)=>{
-          if(res.data.EC==0){
+      io.socket.post('/tree/use_tree',{wateruse,tree_id},(status,res)=>{
+          if(res.EC==0){
              self.state.infoTree.waternow = res.data.DT.waternow;
             
              self.setState({infoTree:self.state.infoTree})
