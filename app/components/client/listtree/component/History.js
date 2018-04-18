@@ -53,7 +53,7 @@ class ListExampleMessages extends React.Component{
 
   }
   componentWillMount(){
-    io.socket.get('/notifycation/follow', function gotResponse(data, jwRes) {
+    io.socket.get('/notification/follow', function gotResponse(data, jwRes) {
       console.log('Server responded with status code ' + jwRes.statusCode + ' and data: ', data);
     
         io.socket.on('follow', function (data) {

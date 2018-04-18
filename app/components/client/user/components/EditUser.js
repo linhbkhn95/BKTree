@@ -9,6 +9,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import axios from 'axios'
 import { ToastContainer, toast } from 'react-toastify';
 import {connect} from 'react-redux'
+import PropTypes from 'prop-types';
 import {setCurrentUser} from 'app/action/authActions.js';
 
 const style = {
@@ -239,7 +240,7 @@ class EditProfile extends React.Component{
     }
 }
 EditProfile.contextTypes = {
-    router: React.PropTypes.object.isRequired
+    router: PropTypes.object.isRequired
   }
 module.exports =connect(function(state){
     return{

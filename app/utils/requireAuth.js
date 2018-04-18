@@ -56,12 +56,12 @@ export default function(ComposedComponent,allowedRoles) {
   }
 
   // Authenticate.propTypes = {
-  //   isAuthenticated: React.PropTypes.bool.isRequired,
-  //   addFlashMessage: React.PropTypes.func.isRequired
+  //   isAuthenticated: PropTypes.bool.isRequired,
+  //   addFlashMessage: PropTypes.func.isRequired
   // }
   //
   Authenticate.contextTypes = {
-    router: React.PropTypes.object.isRequired
+    router: PropTypes.object.isRequired
   }
 
   function mapStateToProps(state) {

@@ -8,6 +8,8 @@ import Divider from 'material-ui/Divider';
 import RaisedButton from 'material-ui/RaisedButton';
 import axios from 'axios'
 import { ToastContainer, toast } from 'react-toastify';
+var PropTypes = require('prop-types'); // ES5 with npm
+
 import {connect} from 'react-redux'
 const style = {
   
@@ -174,7 +176,7 @@ class ChangePass extends React.Component{
     }
 }
 ChangePass.contextTypes = {
-    router: React.PropTypes.object.isRequired
+    router: PropTypes.object.isRequired
   }
 module.exports =connect(function(state){
     return{

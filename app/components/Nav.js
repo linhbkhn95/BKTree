@@ -11,6 +11,7 @@ import MenuIcon from 'material-ui-icons/Menu';
 import IconMenu from 'material-ui/IconMenu';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 var MenuSlide = require('./Menu.js');
+import Notifications from 'material-ui-icons/Notifications';
 
 var ModalInf = require('./user/ModalInf.js');
 var ListFriend = require('./user/ListFriend.js');
@@ -38,7 +39,10 @@ import jwtDecode from 'jwt-decode';
 import axios from 'axios'
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
-
+import {List, ListItem} from 'material-ui/List';
+import notifications from 'material-ui/svg-icons/social/notifications';
+import {setNotification,resetNotification} from 'app/action/actionNotification'
+import Logged from './Logout'
 const style = {
   marginRight: 20,
 };
@@ -55,96 +59,7 @@ const style = {
 	  }
 	}
   
-	class Logged extends React.Component{
-    state={
-       open:false,
-       display:""
-    }
-    logout(){
-     
-       this.props.logout();
-    }
-    changpass(){
-      console.log('help');
-      this.props.history.router.push('/changepass');
-    }
-
-     handleTouchTap = (event) => {
-    // This prevents ghost click.
-        event.preventDefault();
-
-            this.setState({
-              open: true,
-              display:"none",
-              anchorEl: event.currentTarget,
-            });
-      };
-
-      handleRequestClose = () => {
-        this.setState({
-          open: false,
-        });
-      };
-    render(){
-     
-      var notify= <Badge
-                      badgeContent={10}
-                      secondary={true}
-                     
-                     
-                      badgeStyle={{top: 12, display:this.state.display, right: 12}}
-                    >
-                <IconButton onClick={this.handleTouchTap} tooltip="Thông báo">
-                  <NotificationsIcon />
-                </IconButton>
-                </Badge>
-             
-             let url_profile = "/profile."+this.props.auth.user.username+".html"   
-      return(
-        <div >
-           
-         
-
-          <NavLink to={url_profile} > <Avatar style={{marginTop:"-15px"}}  src={this.props.auth.user.url_avatar?this.props.auth.user.url_avatar:'images/user/me.png'} /></NavLink>
-                {/* <Popover
-                  open={this.state.open}
-                  anchorEl={this.state.anchorEl}
-                  anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
-                  targetOrigin={{horizontal: 'left', vertical: 'top'}}
-                  onRequestClose={this.handleRequestClose}
-                >
-                
-                 Thông báo 
-                 <Divider/ >
-                  <Menu>
-                    <MenuItem primaryText="Refresh" />
-                    <MenuItem primaryText="Help &amp; feedback" />
-                    <MenuItem primaryText="Settings" />
-                    <MenuItem primaryText="Sign out" />
-                  </Menu>
-             
-                </Popover> */}
-               {/* {notify} */}
-           
-          <IconMenu
-            
-              iconButtonElement={
-                <IconButton><MoreVertIcon /></IconButton>
-              }
-              targetOrigin={{horizontal: 'right', vertical: 'top'}}
-              anchorOrigin={{horizontal: 'right', vertical: 'top'}}
-          >
-              <MenuItem primaryText="Thay đổi thông tin cá nhân" />
-              <NavLink to="/changepass"><MenuItem  primaryText="Thay đổi mật khẩu" /></NavLink>
-              <MenuItem onClick={this.logout.bind(this)} primaryText="Đăng xuất" />
-          </IconMenu>
-        </div>
-      );
-    }
-  }
-
- Logged.muiName = 'IconMenu';
-
+	
   class DrawerOpenRightExample extends React.Component {
 
   constructor(props) {
@@ -171,6 +86,12 @@ const style = {
 
        }
     })
+    io.socket.post('/notification/get_number_notifi',{username:this.props.auth.user.username},function(res,jwRes){
+        if(res.EC==0){
+          dispatch(setNotification(res.DT))
+        }
+    })
+
   //     let store = createStore(settings:{
   //       backgroupNav:"#00bcd4",
   //       backgroupSlideMenu:"White",
@@ -179,6 +100,12 @@ const style = {
   //       nameHeader:"WebAssitant"
   //        }
   //  );
+  }
+  componentWillMount(){
+    io.socket.get('/notification/follow', function gotResponse(data, jwRes) {
+      console.log('Server responded with status code ' + jwRes.statusCode + ' and data: ', data);
+    
+    });
   }
   logout(){
     let self  =this
@@ -224,7 +151,7 @@ const style = {
       <div >
        <div>
       
-        <AppBar style={{background:this.props.backgroupNav}}   iconElementRight={this.props.auth.isAuthenticated? <Logged auth={this.props.auth} help={that.help.bind(this)}  logout={that.logout.bind(this)} /> : <Login />}  title={this.props.nameHeader} onLeftIconButtonTouchTap={this.props.auth.isAuthenticated?this.handleToggle:()=>{}} />
+        <AppBar style={{background:this.props.backgroupNav,position: "fixed"}}   iconElementRight={this.props.auth.isAuthenticated? <Logged notification={this.props.notification} auth={this.props.auth} help={that.help.bind(this)}  logout={that.logout.bind(this)} /> : <Login />}  title={this.props.nameHeader} onLeftIconButtonTouchTap={this.props.auth.isAuthenticated?this.handleToggle:()=>{}} />
         </div>
         {/* <ModalInf open={this.state.help} /> */}
         <ListFriend handleClose={this.handleClose.bind(this)} open={this.state.help} />
@@ -250,14 +177,15 @@ const style = {
 }
 
   DrawerOpenRightExample.contextTypes = {
-    router: React.PropTypes.object.isRequired
+    router: PropTypes.object.isRequired
   }
  module.exports = connect(function(state){
  	return{
      username:state.username,
      backgroupNav:state.settings.backgroupNav,
      nameHeader:state.settings.nameHeader,
-     auth:state.auth
+     auth:state.auth,
+     notification:state.notification
 
  	};
  })(DrawerOpenRightExample);

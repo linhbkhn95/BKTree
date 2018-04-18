@@ -19,7 +19,7 @@ class Layout extends React.Component{
                             {/* <ListFriend /> */}
                         </div>
    
-		                      <div style={{paddingLeft:"0px",paddingRight:"0px",background:this.props.background,paddingTop:"10px"}} className="container " >
+		                      <div style={{paddingLeft:"0px",paddingTop:"64px",paddingRight:"0px",background:this.props.background}} className="container " >
                                 {/* <div className="title-page">
                                      Thêm nhân viên
                                     

@@ -28,7 +28,7 @@ import {connect} from 'react-redux'
 import axios from 'axios'
 import { format } from 'util';
 import { ToastContainer, toast } from 'react-toastify';
-
+import {addNotification} from 'app/action/actionNotification'
  class ListExampleNested extends React.Component {
 
   state = {
@@ -73,6 +73,9 @@ import { ToastContainer, toast } from 'react-toastify';
     })
   }
   render_subscribe_tree(){
+    var {dispatch} = this.props; 
+    let self = this;
+    let username = this.props.auth.user.username
      let list_subscribe_tree = this.state.list_subscribe_tree;
      console.log('render_subscribe_tree',list_subscribe_tree)
 
@@ -84,7 +87,17 @@ import { ToastContainer, toast } from 'react-toastify';
           });
           
           io.socket.on(list_subscribe_tree[i].room_id, function (data) {
-              toast.success('', {
+            dispatch(addNotification(data))
+            let msg =  data.data.user.fullname_user? data.data.user.fullname_user: data.data.user.username+
+         " Đã tưới "+data.data.water_use+"ml nước cho cây"
+
+            //tawng so notifi trong db
+              // io.socket.post('/user/count_number_notifi',{username},function(res,jwres){
+
+              // })
+
+
+              toast.success(msg, {
                 position: toast.POSITION.TOP_CENTER
             });
             console.log('Socket `' + data.id + '` joined the party!',data);

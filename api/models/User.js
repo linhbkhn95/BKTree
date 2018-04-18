@@ -39,6 +39,9 @@ module.exports = {
       type:'string'
 
     },
+    number_notifi:{
+      type:'integer'
+    },
     url_avatar:{
       type:'string'
     },

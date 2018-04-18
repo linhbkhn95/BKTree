@@ -6,7 +6,7 @@
  * @description :: Server-side logic for managing trees
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
-
+var NotificationController = require('./NotificationController.js')
 module.exports = {
 	gitlist_grouptree:function(req,res){
         let grouptree_id = req.body.grouptree_id
@@ -197,9 +197,9 @@ module.exports = {
                     dataNotify.time = Date.now();
                     console.log('datanotify',dataNotify)
                     let notify_tree = await Notifi_tree.create(dataNotify);
-
+                    let list_count_notifi = await NotificationController.count_number_notifi(dataNotify.room_id);
                     sails.sockets.broadcast('Subscribe_Tree',tree_id, notify_tree, req);
-
+                    
                     tree.save(()=>{
                         console.log('update thành công')
                        return  res.send(OutputInterface.success(tree))

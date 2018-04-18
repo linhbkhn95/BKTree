@@ -9,7 +9,7 @@ module.exports = {
   autoCreatedAt: false,
   autoUpdatedAt: false,
   attributes: {
-      tree_id:{
+      room_id:{
         type:'string'
       },
       username:{

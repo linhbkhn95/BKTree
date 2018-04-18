@@ -9,6 +9,8 @@ import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import moment from 'moment';
+import {setNotification,resetNotification} from 'app/action/actionNotification'
+import {connect} from 'react-redux'
 // import ReactTooltip from 'react-tooltip'
  var date = Date.now();
 var datedemo=1511399642970;
@@ -38,10 +40,11 @@ class ListExampleMessages extends React.Component {
   }
   componentDidMount(){
      let self  =this;
+     let {dispatch} = this.props
       io.socket.get('/notification/getlist',function(res,jwres){
         console.log('notifi',res,jwres);
         if(res.EC==0){
-
+            dispatch(resetNotification());
             self.setState({listNotify:res.DT})
 
         }
@@ -77,7 +80,7 @@ class ListExampleMessages extends React.Component {
                     }
                     secondaryTextLines={2}
                   >
-                      <span className="time-alert">{moment( notifi.data.createdAt).lang('vi').fromNow()=='Invalid date'?'':moment( notifi.createdAt).lang('vi').fromNow()}</span>
+                      <span className="time-alert">{moment( notifi.data.createdAt).lang('vi').fromNow()=='Invalid date'?'':moment(notifi.data.createdAt).lang('vi').fromNow()}</span>
                   </ ListItem>
                   <Divider inset={true} />
                 </div>
@@ -110,4 +113,8 @@ class ListExampleMessages extends React.Component {
   } 
 }
 
-export default ListExampleMessages;
+module.exports =connect(function(state){
+  return{
+
+  }
+}) (ListExampleMessages);

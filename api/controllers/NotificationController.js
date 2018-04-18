@@ -105,6 +105,69 @@ module.exports = {
            let response = await Notifi_tree.find({}).where({ room_id: result }).sort('time DESC');
            return res.send(OutputInterface.success(response));
 
+      },
+      get_number_notifi:function(req,res){
+        let username = req.body.username||req.session.user.username
+        this.reset_number_notifi(username);
+
+        User.findOne({username}).exec((err,user)=>{
+            if(err){
+              return res.send(OutputInterface.errServer(err))
+            }
+            if(user){
+             
+                  return  res.send(OutputInterface.success(user.number_notifi))
+
+              
+            }
+            return res.send(OutputInterface.errServer('Khong tim thay user'))
+          });
+      },
+      reset_number_notifi: function(username){
+         
+          User.findOne({username:username}).exec((err,user)=>{
+            if(err){
+              return ''
+            }
+            if(user){
+              user.number_notifi = 0;
+              user.save(()=>{})
+            }
+          });
+      },
+      count_number_notifi: async function(room_id){
+          // let username = req.body.username||req.session.user.username
+          console.log('room_id',room_id)
+          let listSub = await Subscribe_tree.find({room_id});
+          return new Promise((resolve,reject)=>{
+              Promise.all(listSub.map((item)=>{
+              
+                return new Promise((resolve,reject)=>{
+    
+                  User.findOne({username:item.username}).exec((err,user)=>{
+                    if(err){
+                      return resolve(null)
+                    }
+                    if(user){
+                        if(!user.number_notifi)
+                          user.number_notifi =0;
+                        user.number_notifi +=1;
+                        user.save(()=>{
+                          return  resolve(user)
+                        })
+                    }
+                  resolve(null)
+                    
+                })
+                })
+              })).then((response)=>{
+                resolve(response)
+              })
+          
+          })
+          
+         
+         
       }
 };
 
