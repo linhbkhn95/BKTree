@@ -91,3 +91,51 @@
         For example, here are a few things you could do:
             + Import templates from other directories
             + Use a different template engine (handlebars
+             + Import templates from other directories
+           + Use a different template engine (handlebars, jade, dust, etc.)
+           + Internationalize your client-side templates using a server-side
+              stringfile before they're served.
+    -->
+
+   <!--TEMPLATES-->
+   
+   <!--TEMPLATES END-->
+
+
+    <!--
+      Client-side Javascript
+      ========================
+      You can always bring in JS files manually with `script` tags, or asynchronously
+      on the client using a solution like AMD (RequireJS).  Or, if you like, you can
+      take advantage of Sails' conventional asset pipeline (boilerplate Gruntfile).
+      By default, files in your `assets/js` folder are included here
+      automatically (between SCRIPTS and SCRIPTS END).  Both JavaScript (.js) and
+      CoffeeScript (.coffee) are supported. In production, your scripts will be minified
+      and concatenated into a single file.
+      To customize any part of the built-in behavior, just edit `tasks/pipeline.js`.
+      For example, here are a few things you could do:
+         + Change the order of your scripts
+         + Import scripts from other directories
+         + Use a different preprocessor, like TypeScript
+   -->
+   <script src="/js/lib/jquery-3.1.1.min.js"></script>
+   <!--SCRIPTS-->
+   <script src="/js/dependencies/sails.io.js"></script>
+   <script src="/js/acess.js"></script>
+   <script src="/js/bundel.js"></script>
+   <script src="/js/lib/bootstrap.min.js"></script>
+   <script src="/js/lib/jquery-3.1.1.min.js"></script>
+   <script src="/js/menu.js"></script>
+   <script src="/js/notifipopup.js"></script>
+   <script src="/js/scripts/Control.FullScreen.js"></script>
+   <script src="/js/scripts/Control.Geocoder.js"></script>
+   <script src="/js/scripts/jquery-ui.js"></script>
+   <script src="/js/scripts/L.Control.Locate.js"></script>
+   <script src="/js/scripts/leaflet-routing-machine.js"></script>
+   <script src="/js/scripts/leaflet-routing-machine.min.js"></script>
+   <script src="/js/scripts/leaflet-src.js"></script>
+   <script src="/js/scripts/leaflet.draw.js"></script>
+   <script src="/js/scripts/leaflet.js"></script>
+   <!--SCRIPTS END-->
+ </body>
+</html> 

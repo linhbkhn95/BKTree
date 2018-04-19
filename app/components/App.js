@@ -65,7 +65,7 @@ import ListTreeAll from './pages/managetree/TableListTreeAll'
                       <Route  path="/trees" component={TableListTree}/>
                       <Route  path="/chats" component={Chat}/>
                       <Route  path="/notification" component={Notification}/>
-                      <Route  path="/eventLog" component={EventLog}/>
+                      <Route  path="/statis" component={EventLog}/>
                       <Route  path="/dashboard" component={DashBoard}/>
                       <Route  path="/login" component={Login}/>
                       <Route  path="/treeDetail.:id.html"  render={function ({ match }) {
@@ -99,7 +99,14 @@ import ListTreeAll from './pages/managetree/TableListTreeAll'
                       <Route  path="/settings" component={Settings}/>
                       {/* <Route  path="/:username" component={UserHome}/> */}
                       <Route render={function(){
-                          return <p> not found</p>
+                          return <div style={{marginTop:"50"}} className="row">
+                          <div className="col-md-4 col-md-offset-3">
+                          <div></div>
+                          <div  className="alert alert-info">
+                            <strong>Thông báo</strong> trang không tồn tại
+                          </div>
+                          </div>
+                          </div>
                       }
                     } />
                  </Switch>

@@ -90,6 +90,9 @@ module.exports = {
       },
       getlist:async function(req,res){
         console.log('getlist notify')
+        let pagesize = req.body.pagesize||10
+        let page = req.body.page||1
+        console.log('getlist notify',page,pagesize)
 
         if (!req.isSocket) {
           return res.badRequest();
@@ -102,7 +105,8 @@ module.exports = {
                   resolve(item.room_id)
               })
            }))
-           let response = await Notifi_tree.find({}).where({ room_id: result }).sort('time DESC');
+          //  let response = await Tree.find(keySearch).paginate({ limit: pagesize, page: req.body.page })
+           let response = await Notifi_tree.find({}).where({ room_id: result }).sort('time DESC').paginate({ limit: pagesize, page: page });
            return res.send(OutputInterface.success(response));
 
       },

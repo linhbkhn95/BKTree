@@ -4,6 +4,7 @@ import MenuItem from 'material-ui/MenuItem';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import ModalCreateAlert from './ModalCreateAlert.js';
+import axios from 'axios'
 
 // import {Tabs, Tab} from 'material-ui/Tabs';
 // import FontIcon from 'material-ui/FontIcon';
@@ -117,21 +118,34 @@ const CustomizedLabel = React.createClass({
 });
 
 const CustomShapeBarChart = React.createClass({
-  
+
  getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 },
 
   componentDidMount(){
    var that=this;
-     
+     axios.get('/Statistical/statis_status_tree')
+     .then((res)=>{
+        if(res.data.EC==0){
+         //  that.setState({data:res.data.DT})
+        }
+     })
+  //   //  axios.post('/Statistical/statistic_historytree_by_turns',)
+  //   //  .then((res)=>{
+  //   //     if(res.data.EC==0){
+  //   //        that.setState({data:res.data.DT})
+  //   //     }
+  //   //  })
   },
   getInitialState(){
     
     return{       
-       value:1,
+       typestatis:"",
        open:false,
-       data: data
+       data: [],
+       listproperty:[]
+      
     }
   },
   cancel(){
@@ -144,24 +158,46 @@ const CustomShapeBarChart = React.createClass({
     this.setState({open:true});
     
   },
-  handleChange(event, index, value){ this.setState({value})},
+  handleChange(event, index, value){
+      console.log(value)
+      this.setState({typestatis:value})
+      var that=this;
+      axios.post('/statistical/'+value)
+      .then((res)=>{
+         if(res.data.EC==0&&res.data.DT.length>0){
+            that.getPropertyObjectData(res.data.DT[0]);
+            that.setState({data:res.data.DT})
+         }
+      })
+    
+    },
+    getPropertyObjectData(obj){
+      this.state.listproperty= [];
+      for(var property in obj) {
+         this.state.listproperty.push(property)
+       }
+       this.setState({listproperty:this.state.listproperty})
+    },
 	render () {
   	return (
       <div className="row">
+       <div style={{}} className="container ">
+          <div className="title-content">THỐNG KÊ</div>
           <div className="col-md-12">
              <div className="col-md-3 col-md-offset-2 ">
                <SelectField
-                    style={{fontSize:"12px"}} 
-                    floatingLabelText="Chọn agent*"
-                    value={this.state.value}
+                    // style={{fontSize:"12px"}} 
+                    floatingLabelText="Chọn loại thống kê*"
+                    value={this.state.typestatis}
                     onChange={this.handleChange}
                   >
-                    <MenuItem value={1} primaryText="Tất cả các Agents" />
-                    <MenuItem value={2} primaryText="Webassitant" />
-                 
+                    <MenuItem value={"statistic_role"} primaryText="Thống kê người dùng" />
+                    <MenuItem value={"statistic_tree"} primaryText="Thống kê Cây" />
+                    <MenuItem value={"statis_status_tree"} primaryText="Thống kê theo trạng thái cây" />
+
                   </SelectField>
               </div>
-              <div className="col-md-3">
+              {/* <div className="col-md-3">
                  <TextField
                      style={{fontSize:"12px"}} 
                     hintText="Nhập từ tìm kiếm"
@@ -174,22 +210,27 @@ const CustomShapeBarChart = React.createClass({
               </div>
               <div className="col-md-2 btn-search-eventlog">
                       <RaisedButton labelStyle={{fontSize:"12px"}} onClick={this.openModal} label="Tạo cảnh báo" secondary={true}  />
-              </div>
+              </div> */}
       </div>
       {/* <Divider/> */}
-        <div className="col-md-12" style={{paddingTop:"31px"}}>
-          <BarChart width={1300} height={100} data={this.state.data}
+        <div className="col-md-12" style={{marginTop:"130px"}}>
+         {this.state.data.length?
+          <BarChart width={1300} height={300} data={this.state.data}
                 margin={{top: 20, right: 30, left: 20, bottom: 5}}>
-          <XAxis  label={<CustomizedLabel value="Thống kê sự kiện log"/>} dataKey="time"/>
+          <XAxis  label={<CustomizedLabel value="Thống kê"/>} dataKey={this.state.listproperty[0]}/>
           <YAxis label={<AxisLabel axisType='yAxis'>Số lượng sự kiện</AxisLabel>} />
           <Tooltip />
             {/* <Tooltip content={<CustomToolTip/>}/> */}
           {/* <CartesianGrid strokeDasharray="3 3"/> */}
-          <Bar dataKey="event" fill="#8884d8" shape={<TriangleBar/>}/>
+          <Bar dataKey={this.state.listproperty[1]} fill="#8884d8" shape={<TriangleBar/>}/>
           </BarChart>
+         :<div style={{textAlign:"center",padding: "60px",
+         fontSize: "14px"}}>Hãy chọn loại thống kê</div>}
         </div>
         <ModalCreateAlert cancel={this.cancel} create={this.create} open={this.state.open} />
       </div>
+      </div>
+      
     );
   }
 })

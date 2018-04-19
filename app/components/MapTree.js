@@ -171,10 +171,9 @@ import {addNotification} from 'app/action/actionNotification'
         </List>:
         <List>
             <Subheader>Tìm kiếm</Subheader>
-            <ListItem primaryText="Tìm đường" leftIcon={<Search />} />
+            <ListItem primaryText="Tìm cây" leftIcon={<Search />} />
          
-            <ListItem primaryText="Cây cần hỗ trợ" leftIcon={<Search />} />
-            <ListItem primaryText="Trạng thái của cây" leftIcon={<Search />} />
+            <ListItem primaryText="Tìm kiếm người dùng" leftIcon={<Search />} />
             <Divider />
             <Subheader>Thao tác</Subheader>   
             <ListItem  containerElement={ <Link to="/trees" />}  primaryText="Quản nhóm cây" leftIcon={<Assignment />} />
@@ -183,11 +182,11 @@ import {addNotification} from 'app/action/actionNotification'
             <ListItem  containerElement={ <Link to="/users" />}  primaryText="Quản lý user" leftIcon={<Assignment />} />
 
             <ListItem containerElement={ <a href="/maptree/map"></a>}  primaryText="Cập nhật bản đồ" leftIcon={<Update />} />
-            <ListItem containerElement={ <Link to="/notification" />} primaryText="Thông báo" leftIcon={<Badge  style={{top: "-22px", left: "-8px"}}
+            {/* <ListItem containerElement={ <Link to="/notification" />} primaryText="Thông báo" leftIcon={<Badge  style={{top: "-22px", left: "-8px"}}
       badgeContent={4}
       primary={true}
-    ><Notifications />  </Badge>} />
-            <ListItem primaryText="Thống kê/Báo cáo" leftIcon={<Book />} />
+    ><Notifications />  </Badge>} /> */}
+            <ListItem containerElement={ <Link to="/statis" />}  primaryText="Thống kê/Báo cáo" leftIcon={<Book />} />
             <ListItem containerElement={ <Link to="/chats" />} primaryText="Liên hệ"  leftIcon={<Contact />} />
 
           </List>

@@ -40,16 +40,16 @@ class ListExampleMessages extends React.Component {
       }
   }
   componentDidMount(){
-     let self  =this;
-     let {dispatch} = this.props
-      io.socket.get('/notification/getlist',function(res,jwres){
-        console.log('notifi',res,jwres);
-        if(res.EC==0){
-            dispatch(resetNotification());
-            self.setState({listNotify:res.DT})
+    //  let self  =this;
+    //  let {dispatch} = this.props
+    //   io.socket.get('/notification/getlist',function(res,jwres){
+    //     console.log('notifi',res,jwres);
+    //     if(res.EC==0){
+    //         dispatch(resetNotification());
+    //         self.setState({listNotify:res.DT})
 
-        }
-      })
+    //     }
+    //   })
   }
   render(){
     let listNotifi = this.state.listNotify
