@@ -11,6 +11,7 @@ import MenuItem from 'material-ui/MenuItem';
 import moment from 'moment';
 import {setNotification,resetNotification} from 'app/action/actionNotification'
 import {connect} from 'react-redux'
+import Inti from './Inti'
 // import ReactTooltip from 'react-tooltip'
  var date = Date.now();
 var datedemo=1511399642970;
@@ -58,8 +59,8 @@ class ListExampleMessages extends React.Component {
                   Thông báo
               </div>
         <div>
-          
-          <List>
+          <Inti />
+          {/* <List>
             <Subheader>Hôm nay</Subheader>
             {
            listNotifi.length>0?
@@ -106,7 +107,7 @@ class ListExampleMessages extends React.Component {
             >
                 <span className="time-alert">{moment(datedemo).lang('vi').fromNow()}</span>
                 </ ListItem>
-          </List>
+          </List> */}
         </div>
       </div>
     );

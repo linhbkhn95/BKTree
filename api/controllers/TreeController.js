@@ -10,6 +10,7 @@ var NotificationController = require('./NotificationController.js')
 module.exports = {
 	gitlist_grouptree:function(req,res){
         let grouptree_id = req.body.grouptree_id
+        console.log(req.body)
         let self = this 
         Tree.find({grouptree_id:grouptree_id}).exec(async(err,listtree)=>{
             if(err){

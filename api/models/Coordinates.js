@@ -11,6 +11,9 @@ module.exports = {
     tree_id:{
       type:'integer'
     },
+    data:{
+      type:'json'
+    },
     X:{
       type:'string'
     },
