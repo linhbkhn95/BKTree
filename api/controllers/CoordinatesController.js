@@ -45,6 +45,16 @@ module.exports = {
                 }
                 
          },
+         delete:function(req,res){
+                let tree_id = req.body.tree_id
+                console.log(req.body);
+                Coordinates.destroy({tree_id}).exec((err,coordinates)=>{
+                    if(err){
+                        res.send(OutputInterface.errServer(err))                        }
+                    res.send(OutputInterface.success(coordinates))
+                })
+            
+         },
          getall:function(req,res){
             StoredProcedure.query("call tree_bk.getall_coordinates()", [], function (err, [data, server_status]) {
                 if (err) {
@@ -65,6 +75,7 @@ module.exports = {
                              note:item.code,
                              status:item.status,
                              url_image:item.url_image,
+                             tree_id:item.tree_id
 
                          },
                          geometry:{

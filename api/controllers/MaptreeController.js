@@ -6,6 +6,7 @@
  */
 
 module.exports = {
+        
         createMap:function(req,res){
              let data = req.body;
             //  console.log(req)
@@ -21,7 +22,10 @@ module.exports = {
              })
             
         },
-        
+        map:function(req,res){
+            res.view('map/test',{user:req.session.user}, { layout: null } );
+
+        },
         getMap:function(req,res){
             console.log('getmap')
             Maptree.find().exec((err,list)=>{

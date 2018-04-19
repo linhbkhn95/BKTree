@@ -182,7 +182,7 @@ import {addNotification} from 'app/action/actionNotification'
 
             <ListItem  containerElement={ <Link to="/users" />}  primaryText="Quản lý user" leftIcon={<Assignment />} />
 
-            <ListItem primaryText="Cập nhật bản đồ" leftIcon={<Update />} />
+            <ListItem containerElement={ <a href="/maptree/map"></a>}  primaryText="Cập nhật bản đồ" leftIcon={<Update />} />
             <ListItem containerElement={ <Link to="/notification" />} primaryText="Thông báo" leftIcon={<Badge  style={{top: "-22px", left: "-8px"}}
       badgeContent={4}
       primary={true}

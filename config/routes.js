@@ -35,9 +35,15 @@ module.exports.routes = {
   '/': {
     view: 'homepage'
   },
-  //  '/eventLog':{
-  //   view:'homepage'
-  //  },
+    
+
+   '/map/*' : {
+    controller: 'MapController',
+    action: 'map',
+    locals: {
+       layout: 'map/layout'
+    }
+ }
   //  '/login':{
   //   view:'homepage'
   //  },

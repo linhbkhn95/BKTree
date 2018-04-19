@@ -20,6 +20,8 @@ module.exports = function serverError (data, options) {
   var sails = req._sails;
 
   // Set status code
+  // return res.view('map/layout');
+
   res.status(500);
 
   // Log error to console
@@ -40,6 +42,7 @@ module.exports = function serverError (data, options) {
   if (req.wantsJSON || sails.config.hooks.views === false) {
     return res.jsonx(data);
   }
+
 
   // If second argument is a string, we take that to mean it refers to a view.
   // If it was omitted, use an empty object (`{}`)
@@ -65,7 +68,11 @@ module.exports = function serverError (data, options) {
 
   // If no second argument provided, try to serve the default view,
   // but fall back to sending JSON(P) if any errors occur.
-  else return res.view('500', { data: viewData, title: 'Server Error' }, function (err, html) {
+  else return
+  
+  return
+  // res.redirect('/maptree/map')
+  res.view('500', { data: viewData, title: 'Server Error' }, function (err, html) {
 
     // If a view error occured, fall back to JSON(P).
     if (err) {
@@ -81,7 +88,7 @@ module.exports = function serverError (data, options) {
       }
       return res.jsonx(data);
     }
-
+ 
     return res.send(html);
   });
 
