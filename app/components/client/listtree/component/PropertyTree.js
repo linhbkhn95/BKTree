@@ -45,10 +45,10 @@ class CardExampleWithAvatar extends React.Component{
     let tree_id = this.props.tree_id
     let self = this;
     if(wateruse>0&&tree_id)
-      io.socket.post('/tree/use_tree',{wateruse,tree_id},(status,res)=>{
+      io.socket.post('/tree/use_tree',{wateruse,tree_id},(res,status)=>{
           if(res.EC==0){
-             self.state.infoTree.waternow = res.data.DT.waternow;
-            
+             self.state.infoTree.waternow = res.DT.waternow;
+             
              self.setState({infoTree:self.state.infoTree})
              toast.success('Tưới nước thành công', {
               position: toast.POSITION.TOP_CENTER

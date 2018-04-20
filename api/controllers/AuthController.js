@@ -82,9 +82,10 @@ module.exports = {
        get_session :function(req,res){
          console.log('session',req.session)
           if(req.session.user){
-            let user = req.session.user
+            let user = {...req.session.user}
             return res.send(OutputInterface.success({
               user: user,
+              rolecode:user.rolecode,
               token: jwToken.issue({id : user.id,username:user.username,rolecode:user.rolecode,rolename:user.rolename,fullname:user.fullname,url_avatar:user.url_avatar })
             }))
           }

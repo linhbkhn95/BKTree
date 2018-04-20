@@ -6,6 +6,8 @@
     let listgrouptree = []
     let listtree = []
     let listcoordinates =[]
+    let isCreateMap=false
+    var use={};
      var customOptions =
     {
     'maxWidth': '500',
@@ -169,7 +171,7 @@ background-color: #920957;
      
      <a id="menu-toggle" href="#" class="btn btn-primary btn-lg toggle"><i class="glyphicon glyphicon-bookmark"></i></a>
      <div id="sidebar-wrapper">
-       <ul class="sidebar-nav">
+       <!-- <ul class="sidebar-nav">
          <a id="menu-close" style="margin-right: 10px" href="#" class=" pull-right toggle"><i class="glyphicon glyphicon-remove"></i></a>
          <li class="sidebar-brand">
               
@@ -177,28 +179,23 @@ background-color: #920957;
          </li>
       
          <hr >
+        
          <li>
-           <a href="#">Bản đồ  cây</a>
-         </li>
-         <li>
-           <a href="#about">Tạo bản đồ khu vực</a>
-         </li>
-         <li>
-           <a href="#contact">Thêm cây trên bản đồ</a>
-         </li>
-         <li>
-            <a href="/auth/logout">Đăng xuất</a>
           </li>
-       </ul>
+       </ul> -->
     </div>
      <div id="content">
           
-       <div id="">
-           <div style="text-align: center">
-                <button class="btn btn-info btn-update"  type="button" onclick="return updateMap()">Cập nhật bản đồ</button>
+       <div  id="">
 
-           </div>
-           <hr style="margin-top:50px" />
+           <div id="update-map">
+                
+               <div style="margin-top:5px" class"col-md-12"> <a href="/list-tree"> <button   class='btn btn-default'><i class="glyphicon glyphicon-arrow-left"></i>  Quay lại trang chủ </button>        </a>   </div>
+               <div  style="margin-top:15px; text-align: center" >
+                   <div class="col-md-12">     <a href="#">  <%= user.fullname %></a></div>
+                <div class="col-md-12">   <div> ( <%= user.rolename %>)</div></div>
+                </div>
+               <hr style="margin-top:50px" />
            <div  class="col-md-12 title-note">Chú thích bản đồ</div>
 
              <div class="list-note">
@@ -281,20 +278,23 @@ background-color: #920957;
                   <label htmlFor="username">Tên điểm</label>
                   <input type="text" id="name" name="username"  id="Text1"  class="form-control"  placeholder="Tên bản đồ" name="codeGroup"  required>
               </div> -->
-              <div class="form-group">
-                    <label htmlFor="username">Nhóm cây</label>
-                    <select  class="form-control" id="listgrouptree">
-
-                    </select>
-               </div>
-              <div class="form-group">
-                    <label htmlFor="username">Mã cây</label>
-                    <select  class="form-control" id="tree">
-
-                     </select>
-                    <!-- <input type="text" id="description" name="description" id="Text2"   class="form-control" placeholder="Ghi chú" name="codeindex"/> -->
-               </div>
-    <!--<fieldset style="border: none;">
+              <div id="create-cood">
+                    <div class="form-group">
+                            <label htmlFor="username">Nhóm cây</label>
+                            <select  class="form-control" id="listgrouptree">
+        
+                            </select>
+                       </div>
+                      <div class="form-group">
+                            <label htmlFor="username">Mã cây</label>
+                            <select  class="form-control" id="tree">
+        
+                             </select>
+                            <!-- <input type="text" id="description" name="description" id="Text2"   class="form-control" placeholder="Ghi chú" name="codeindex"/> -->
+                       </div>
+              </div>
+              
+    <!-- <fieldset id="create-map-cood" style="border: none;">
       <ul style="list-style-type: none; padding-left: 0px">
         <li><label class for="username">Tên</label></li>
         <li><input type="text" name="username" id="username" placeholder="nhập tên " class="text ui-widget-content ui-corner-all"></li>
@@ -302,7 +302,7 @@ background-color: #920957;
         <li><input type="text" name="description" id="description" placeholder="nhập ghi chú" class="text ui-widget-content ui-corner-all"></li>
       </ul>
       <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
-    </fieldset>-->
+    </fieldset> -->
   </form>
 </div>
 
@@ -403,8 +403,8 @@ background-color: #920957;
             // GetData_Map();
             // getlistGroupTree()
             // getall_coordinates()
-
-            setInterval(refreshData(), 5000);
+            refreshData();
+            // setInterval(function(){refreshData();},60000);
             //   getGeoJSON_FeatureGroup();
             //  setInterval(function () { getList_ECustoms(); }, 30000);
         });
@@ -880,7 +880,8 @@ blueIcon = new LeafIcon({iconUrl: '../View/leaf-blue.png'}),
            
             drawnItems.addLayer(layer_);
             //sự kiện click vào layer_
-            layer_.on('click', onMarkerClick);
+
+            // layer_.on('click', onMarkerClick);
             markers[layer_._leaflet_id] = layer_;
             console.log(layer_);
             console.log(layer_._leaflet_id);
@@ -963,8 +964,13 @@ blueIcon = new LeafIcon({iconUrl: '../View/leaf-blue.png'}),
                 
             }
             let icon = newIcon
-
-            layer_.setIcon(icon).bindPopup(getPopupContent(dataBind));
+            
+            if(!isCreateMap)
+                layer_.setIcon(icon).bindPopup(getPopupContent(dataBind));
+            else{
+              
+                layer_.bindPopup(getPopupContent(dataBind));
+            }
             console.log(layer_);
 
 

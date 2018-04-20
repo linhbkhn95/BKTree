@@ -3,6 +3,12 @@
     /* background: #e93434;
     color: #ffffff; */
 }
+.ui-dialog-content .ui-widget-content{
+    height:100% !important;
+}
+.ui-dialog .ui-dialog-content{
+    height: auto !important;
+}
 .custom {
     width: 300px;
     font-size: 14px;

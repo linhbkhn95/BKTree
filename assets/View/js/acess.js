@@ -1,12 +1,28 @@
-﻿           
+﻿            $(document).mouseup(function(e) 
+            {
+                var container = $("#sidebar-wrapper");
+
+                // if the target of the click isn't the container nor a descendant of the container
+                if (!container.is(e.target) && container.has(e.target).length === 0) 
+                {
+                    container.hide();
+                }
+            }); 
+                        
+
+
            $('#listgrouptree').on('change', function() {
                 let grouptree_id = $(this).find(":selected").val()
                 getlistTree(grouptree_id)
             });
             function refreshData(){
-                GetData_Map();
-                getlistGroupTree()
-                getall_coordinates()
+                getSession(function(user){
+                    GetData_Map();
+                    getlistGroupTree()
+                    getall_coordinates()
+                });
+             
+
             }
             function getPopupContent(data){
                 var popupContent = "<div>";
@@ -32,14 +48,17 @@
                     popupContent += "<div class='line-info'><strong>Trạng thái</strong>: "+ data.status +"</div>"
                     popupContent += "</div>";
                 }   
-                   if(!data.datanew){
-                    popupContent += "<div class='btn-remove'>";
+                   if(!data.datanew&&user.rolecode=="PM"){
+                    popupContent += "<div id='btn-remove-tree' class='btn-remove'>";
 
                     popupContent+=  "<button onclick='return removeCood("+data.tree_id+")' class='btn btn-danger'>"+'<i class="glyphicon glyphicon-remove"></i> Xóa </button>'
                     popupContent += "</div>";
                    }
 
                     return popupContent
+            }
+            function logout(){
+
             }
             function getall_coordinates() {
 
@@ -144,6 +163,40 @@
                 }
                
             }
+            function getSession(cb) {
+
+                $.ajax({
+
+                    url: sUrl_OSM_Server + "auth/get_session",
+                    //   data: '{toado:"' + JSON.stringify(drawnItems.toGeoJSON()) + '",name:"' + name + '",note:"' + name + '"}',
+                    // contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (data) {
+                       
+                         if(data.EC==0){
+                            user = data.DT.user
+                            if(data.DT.user.rolecode=="PM"){
+                              
+                                // $('#update-map').css({
+                                //     'display' : 'block',
+                                 
+                                // });
+                                $('#update-map').append
+                                (   '<div style="text-align:center" class="col-md-12"><button class="btn btn-info btn-update"  type="button" onclick="return updateMap()">Cập nhật bản đồ</button></div>')
+                             
+                                cb(user)
+                            }
+                            else{
+                                cb(null)
+                            }
+                         }
+                       
+                                                //getGeoJSON_FeatureGroup();
+
+                    }
+
+             });
+            }
             function getlistTree(id) {
 
                 $.ajax({
@@ -168,7 +221,6 @@
                             for(var a = 0; a < data.DT.length; a++){
                                 $('#tree').append($('<option></option>').val(data.DT[a].id).html(data.DT[a].code));
                             };
-                            
                         }
                         else{
 
@@ -200,7 +252,8 @@
     
                         console.log(data);
                         
-                       
+                        getlistTree(data[0].id)
+
                        listgrouptree = data
                        for(var a = 0; a < data.length; a++){
                             $('#listgrouptree').append($('<option></option>').val(data[a].id).html(data[a].groupname));
