@@ -1,19 +1,23 @@
 #sidebar-wrapper {
-    margin-right: -250px;
-    right: 0;
-    width: 250px;
-    background: rgb(0,0,0);
-    position: fixed;
-    height: 100%;
-    overflow-y: auto;
-    z-index: 1000;
-    transition: all 0.5s ease-in 0s;
-    -webkit-transition: all 0.5s ease-in 0s;
-    -moz-transition: all 0.5s ease-in 0s;
-    -ms-transition: all 0.5s ease-in 0s;
-    -o-transition: all 0.5s ease-in 0s;
+  margin-right: -250px;
+  right: 0;
+  width: 250px;
+  opacity: 1;
+  height: 100%;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  background: #fff;
+  /* background: rgb(214, 187, 186); */
+  position: fixed;
+  height: 100%;
+  overflow-y: auto;
+  z-index: 1000;
+  transition: all 0.5s ease-in 0s;
+  -webkit-transition: all 0.5s ease-in 0s;
+  -moz-transition: all 0.5s ease-in 0s;
+  -ms-transition: all 0.5s ease-in 0s;
+  -o-transition: all 0.5s ease-in 0s;
   }
-
+ 
   .sidebar-nav {
     position: absolute;
     top: 0;
@@ -22,7 +26,24 @@
     margin: 0;
     padding: 0;
   }
-
+  .btn-menuleft{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .btn-menuleft a{
+    top: 0;
+    /* right: 0; */
+    text-align: center;
+    position: fixed;
+    z-index: 1;
+  }
   .sidebar-nav li {
     line-height: 50px;
     text-indent: 20px;
@@ -35,7 +56,7 @@
   }
 
   .sidebar-nav li a:hover {
-    color: #fff;
+    /* color: #fff; */
     background: rgba(255,255,255,0.2);
     text-decoration: none;
   }
@@ -55,20 +76,20 @@
   }
 
   .sidebar-nav > .sidebar-brand a:hover {
-    color: #fff;
+    /* color: #fff; */
     background: none;
   }
 
   #menu-toggle {
     top: 0;
-    right: 0;
+    /* right: 0; */
     position: fixed;
     z-index: 1;
   }
 
   #sidebar-wrapper.active {
     right: 250px;
-    width: 250px;
+    width: 408px;
     transition: all 0.5s ease-out 0s;
     -webkit-transition: all 0.5s ease-out 0s;
     -moz-transition: all 0.5s ease-out 0s;

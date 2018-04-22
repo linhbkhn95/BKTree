@@ -12,7 +12,7 @@ module.exports = {
         try {
           var userexits= await User.findOne({username:req.body.username});
           if(userexits){
-            res.send(OutputInterface.errServer('Tên đăng nhập đã tồn tại'))
+            return res.send(OutputInterface.errServer('Tên đăng nhập đã tồn tại'))
           }
           User.create(req.body).exec(function (err, user) {
             if (err) {

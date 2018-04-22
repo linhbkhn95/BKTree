@@ -2,14 +2,19 @@ var path = require('path');
 var webpack = require('webpack');
 module.exports={
 
-  entry:[
+  entry:
       //   'script!jquery/dist/jquery.min.js',
       // 'script!foundation-sites/dist/js/foundation.min.js',
-      'app/index.js'
-  ],
+    { 
+      app: 'app/index.js',
+        map:['babel-polyfill','app/map.js',]
+      },
+  
   output:{
-     path:__dirname,
-     filename:'./assets/js/bundel.js'
+    //  path:__dirname,
+    //  filename:'./assets/js/bundel.js'
+    path: __dirname,
+    filename: './assets/js/[name].bundel.js'
   },
   // externals: {
   //   jquery: 'jQuery'
@@ -25,6 +30,9 @@ module.exports={
         '__SERVER__': 'false',
         '__BROWSER__': 'true', // you really only need one of these, but I like to have both
     }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'map',
+    })
   ],
   resolve:{
     modules: [__dirname, 'node_modules'],

@@ -19,5 +19,5 @@ ReactDOM.render(
      		 <App />
    	   
     ,
-  document.getElementById('layout')
+  document.getElementById('container')
 );

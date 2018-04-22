@@ -8,12 +8,15 @@
     let listcoordinates =[]
     let isCreateMap=false
     var use={};
+    var layerTree
      var customOptions =
     {
     'maxWidth': '500',
     'className' : 'custom'
     }
 </script>	
+   <script src="/js/dependencies/sails.io.js"></script>
+
   <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" >
 <link href="/bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet"
     type="text/css" />
@@ -23,6 +26,7 @@
 <meta content="application/json" charset="utf-8" />
 <link href="../Style/css/leaflet.css" rel="stylesheet" type="text/css" />
 <link href="../Style/css/leaflet.draw.css" rel="stylesheet" type="text/css" />
+<link href="../../assets/View/css/react-select.css" rel="stylesheet" type="text/css" />
 
 <link href="../Style/css/Control.FullScreen.css" rel="stylesheet" type="text/css" />
 <link href="../Style/css/jquery-ui.css" rel="stylesheet" type="text/css" />
@@ -32,7 +36,10 @@
 <link href="../Style/bootstrap-3.3.7-dist/css/menu.css" rel="stylesheet" type="text/css" />
 
 <link href="../View/css/custom.css" rel="stylesheet" type="text/css" />
+<link href="../View/css/react-select.css" rel="stylesheet" type="text/css" />
+<link href="../View/css/switch.min.css" rel="stylesheet" type="text/css" />
 
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
 <!-- <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7/leaflet.css" />
 <link rel="stylesheet" href="http://leaflet.github.io/Leaflet.draw/leaflet.draw.css" />-->
@@ -60,10 +67,10 @@
         width: 444px;
         height: 99px;
     }
-    #map { float:left; width: 80%; height: 100%; position:absolute}	
+    #map { float:left;height: 100%;width: 100%; position:absolute}	
     
     
-    #content{ float:right;Width:19%}
+    /* #content{ float:right;Width:19%} */
     
  /*   #btn
     {
@@ -150,6 +157,7 @@ background-color: #920957;
     }
     .note-map li{
         list-style: none;
+        border-bottom: 1px solid #ece9de;
     }
 </style>
 </head>
@@ -169,7 +177,7 @@ background-color: #920957;
 
      <!------ Include the above in your HEAD tag ---------->
      
-     <a id="menu-toggle" href="#" class="btn btn-primary btn-lg toggle"><i class="glyphicon glyphicon-bookmark"></i></a>
+     <div class="btn-menuleft"><a id="menu-toggle" href="#" class="btn btn-primary btn-lg toggle"><i class="glyphicon glyphicon-bookmark"></i></a></div>
      <div id="sidebar-wrapper">
        <!-- <ul class="sidebar-nav">
          <a id="menu-close" style="margin-right: 10px" href="#" class=" pull-right toggle"><i class="glyphicon glyphicon-remove"></i></a>
@@ -183,8 +191,102 @@ background-color: #920957;
          <li>
           </li>
        </ul> -->
+       <div id="content">
+          
+            <div  id="">
+     
+                <div id="update-map">
+                     
+                    <div style="margin-top:5px" class"col-md-12"> <a href="/list-tree"> <button   class='btn btn-default'><i class="glyphicon glyphicon-arrow-left"></i>  Quay lại trang chủ </button>        </a>   </div>
+                    <div  style="margin-top:15px; text-align: center" >
+                        <div class="col-md-12">     <a href="#">  <%= user.fullname %></a></div>
+                     <div class="col-md-12">   <div> ( <%= user.rolename %>)</div></div>
+                     </div>
+                  <div class="col-md-12">
+                        <hr  style="width: 100%" />
+                  </div>
+                
+              
+                 <div id="container"></div>
+
+
+                <div class="col-md-12">
+
+                <hr style="width: 100%"  >
+                </div>
+                <div  class="col-md-12 title-menu-right"><i style="margin-right:5px;font-size: 18px" class="fa fa-forumbee" aria-hidden="true"></i>
+                    Chú thích bản đồ</div>
+     
+                  <div class="list-note">
+                         <ul class="note-map">
+                             <li>
+                                <img style="width: 47px" src="../View/pagelines.svg">Cây mới tạo (chưa lưu vào hệ thống) 
+                             </li>
+                             <li>
+                                     <img src="../View/leaf-green.png">   Cây ở trạng thái tốt
+                              </li>
+                              <li>
+                                     <img src="../View/leaf-orange.png">   Cây ở trạng thái trung bình
+                              </li>
+                              <li>
+                                     <img src="../View/leaf-red.png">  Cây ở trạng thái kém
+                              </li>
+                         </ul>
+                  </div>
+     
+                     <!-- <h3 class="text-info">Thêm bản đồ</h3>
+                   <div class="form-group">
+                       <label htmlFor="username">Tên bản đồ</label>
+                       <input type="text"  id="txtName"  class="form-control"  placeholder="Tên bản đồ" name="codeGroup"/>
+                   </div>
+                   <div class="form-group">
+     
+                   <div class="form-group">
+                         <label htmlFor="username">Ghi chú</label>
+                         <input type="text" id="txtNote"   class="form-control" placeholder="Ghi chú" name="codeindex"/>
+                    </div>
+                  <button class="btn btn-info"  type="button" onclick="return btn_onclick()">Thêm</button>
+                   <div class="form-group">
+                   <div id="lbMessage" class="">
+                    
+                     </div>
+               </div> -->
+     
+                
+     
+              </div>
+     
+     <!-- 
+                <h3 class="text-info-delete">Xoá bản đồ</h3>
+                   <div class="form-group">
+                       <label htmlFor="username">Tên bản đồ</label>
+                       <input type="text"  id="txtNamDelete"  class="form-control"  placeholder="Tên bản đồ" name="codeGroup"/>
+                   </div>
+                   <div class="form-group">
+     
+                 
+                  <button class="btn btn-danger" id="btnDeleteMap"  onclick="return btnDeleteMap_onclick()"   type="button">Xoá</button>
+                   <div class="form-group">
+                   <div id="lbMesageDel" class="">
+                    
+                     </div>
+                 </div> -->
+            </div>
+     
+        
+       <!--  <div ondblclick="myFunction()">aa</div>
+     
+         <h3 class="text-info">Danh sách item mới</h3>
+          <div id="overlay" 
+              style="height:120px;
+              margin-top:20px;
+              overflow:scroll;
+              overflow-x:hidden;">
+             
+         </div>-->
+        </div>
     </div>
-     <div id="content">
+     <!-- <div id="content">
           
        <div  id="">
 
@@ -265,7 +367,7 @@ background-color: #920957;
          overflow-x:hidden;">
         
     </div>-->
-   </div>
+   </div> -->
    
 </div>
 
@@ -331,7 +433,17 @@ background-color: #920957;
 <script src="../Style/bootstrap-3.3.7-dist/js/bootstrap.js" type="text/javascript"></script>
 <script src="../View/js/acess.js" type="text/javascript"></script>
 <script src="../Style/bootstrap-3.3.7-dist/js/menu.js" type="text/javascript"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+<script src="/js/map.bundel.js"></script>
 
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.1.0/react.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.1.0/react-dom.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.24/browser.js"></script>
+
+<!-- <script src="../../assets/View/js/custommap.js" type="text/babel"> -->
+ </script>
 <!--<script src="http://leaflet.github.io/Leaflet.draw/leaflet.draw.js" type="text/javascript"></script>-->
 <!-- <script src="https://rawgit.com/opencagedata/leaflet-opencage-search/master/dist/js/L.Control.OpenCageSearch.dev.js"></script>-->
 
@@ -607,7 +719,23 @@ background-color: #920957;
                 //                    document.getElementById("shapeName").value = "AADASDA";
 
                 //                });
+                           if (type === "marker") {
+                               console.log('point');
 
+
+                               // sự kiện click vào maker thì show ra popup 
+                               layer.on('click', function (event) {
+
+                                   var content = '<span><b>Shape Name</b></span><br/><input id="shapeName" type="text"/><br/><br/><span><b>Shape Description<b/></span><br/><textarea id="shapeDesc" cols="25" rows="5"></textarea><br/><br/><input type="button" id="okBtn" value="Save" onclick="return okBtn_onclick()"/>';
+                                   popup
+                                   .setLatLng(event.latlng)
+                                   .setContent(content)
+                                   .openOn(map);
+                                   document.getElementById("shapeName").value = "AADASDA";
+
+
+                                   });
+                                }
 
             }
 
@@ -728,7 +856,9 @@ background-color: #920957;
 
         map.on('draw:edited', function (e) {
             var layers = e.layers;
+            console.log('edit',layers)
             layers.eachLayer(function (layer) {
+                console.log('layers',layer)
 
                 layer.on('click', function (event) {
                     var content = 'HIHI';
@@ -810,26 +940,16 @@ blueIcon = new LeafIcon({iconUrl: '../View/leaf-blue.png'}),
 
 
 
-        //   marker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
-      
-         //"name": "aás", "note": "aa",
-        //gán biến json từ db
-        var geojsonFeature1 = { "type": "FeatureCollection", "features": [{ "type": "Feature", "properties": { "name": "aá", "note": "aa" }, "geometry": { "type": "LineString", "coordinates": [[105.32730102539062, 21.076811782249443], [105.51681518554688, 21.062715530618092], [105.37330627441406, 21.0441320672616], [105.37467956542969, 21.040286923148376]]} }, { "type": "Feature", "properties": { "darius": 6731.43858250528 }, "geometry": { "type": "Point", "coordinates": [105.29434204101562, 21.025546284581797]}}] };
-        var geojsonFeature = { "type": "Feature", "properties": { "radius": 2805.805448916459 }, "geometry": { "type": "Point", "coordinates": [105.81619262695312, 21.04269014985289]} };
-        var dd = { "type": "Feature", "properties": { "radius": 6731.43858250528 }, "geometry": { "type": "Point", "coordinates": [105.29434204101562, 21.025546284581797]} };
-        var aaa ={ "type": "Feature", "properties": { "radius": 2242.421465809996 }, "geometry": { "type": "Point", "coordinates": [105.80881118774414, 21.034519020858237]} };
-        var geojsonFeature2 = { "type": "FeatureCollection", "features": [{ "type": "Feature", "properties": {}, "geometry": { "type": "Point", "coordinates": [105.81258773803711, 21.042049293189994]} }, { "type": "Feature", "properties": { "radius": 2242.421465809996 }, "geometry": { "type": "Point", "coordinates": [105.80881118774414, 21.034519020858237]} }, { "type": "Feature", "properties": {}, "geometry": { "type": "Point", "coordinates": [105.80881118774414, 21.034519020858237]} }, { "type": "Feature", "properties": {}, "geometry": { "type": "Polygon", "coordinates": [[[105.84400177001953, 21.055666903853975], [105.84400177001953, 21.05582710362461], [105.84417343139648, 21.05582710362461], [105.84417343139648, 21.055666903853975], [105.84400177001953, 21.055666903853975]]]} }, { "type": "Feature", "properties": {}, "geometry": { "type": "Polygon", "coordinates": [[[105.87112426757812, 21.037082560558073], [105.87112426757812, 21.05582710362461], [105.90511322021484, 21.05582710362461], [105.90511322021484, 21.037082560558073], [105.87112426757812, 21.037082560558073]]]} }, { "type": "Feature", "properties": {}, "geometry": { "type": "Polygon", "coordinates": [[[105.82958221435547, 21.055186303507444], [105.85018157958984, 21.05742909184647], [105.86048126220703, 21.051501649294103], [105.83730697631836, 21.04701586019392], [105.84142684936523, 21.051982261538054], [105.82958221435547, 21.055186303507444]]]} }, { "type": "Feature", "properties": {}, "geometry": { "type": "LineString", "coordinates": [[105.81722259521484, 21.05919125897227], [105.83147048950195, 21.05230266883862], [105.83730697631836, 21.0399664899913], [105.83988189697266, 21.02843043729991], [105.88245391845703, 21.021380187691733], [105.85807800292969, 21.014810336839382]]}}] };
-       //  L.geoJson(aaa).addTo(map);
-       // L.geoJson(dd).addTo(map);
 
 
-       var data = [{ "type": "Feature", "properties": { "name": "s", "note": "d" }, "geometry": { "type": "Point", "coordinates": [105.8203125, 21.035480353414883]} }, { "type": "Feature", "properties": { "name": "sa", "note": "ds" }, "geometry": { "type": "Point", "coordinates": [105.81859588623047, 21.026347443712655]} }, { "type": "Feature", "properties": { "name": "sas", "note": "dss" }, "geometry": { "type": "Point", "coordinates": [105.88691711425781, 21.043010577150227]}}]
 
-               var data = { "type": "FeatureCollection", "features": [{ "type": "Feature", "properties": { "name": "diem1" }, "geometry": { "type": "Point", "coordinates": [105.81516265869139, 21.037723438590533]} }, { "type": "Feature", "properties": { "name": "diem2" }, "geometry": { "type": "Point", "coordinates": [105.81087112426758, 21.031154308064544]} }, { "type": "Feature", "properties": { "name": "diem3" }, "geometry": { "type": "Point", "coordinates": [105.8287239074707, 21.036922340619142]}}] }
-                  L.geoJson(data, {
-                           onEachFeature: onEachFeature
+    //    var data = [{ "type": "Feature", "properties": { "name": "s", "note": "d" }, "geometry": { "type": "Point", "coordinates": [105.8203125, 21.035480353414883]} }, { "type": "Feature", "properties": { "name": "sa", "note": "ds" }, "geometry": { "type": "Point", "coordinates": [105.81859588623047, 21.026347443712655]} }, { "type": "Feature", "properties": { "name": "sas", "note": "dss" }, "geometry": { "type": "Point", "coordinates": [105.88691711425781, 21.043010577150227]}}]
+
+    //            var data = { "type": "FeatureCollection", "features": [{ "type": "Feature", "properties": { "name": "diem1" }, "geometry": { "type": "Point", "coordinates": [105.81516265869139, 21.037723438590533]} }, { "type": "Feature", "properties": { "name": "diem2" }, "geometry": { "type": "Point", "coordinates": [105.81087112426758, 21.031154308064544]} }, { "type": "Feature", "properties": { "name": "diem3" }, "geometry": { "type": "Point", "coordinates": [105.8287239074707, 21.036922340619142]}}] }
+    //               L.geoJson(data, {
+    //                        onEachFeature: onEachFeature
                       
-                   }).addTo(map);
+    //                }).addTo(map);
 
 
 
@@ -855,6 +975,8 @@ blueIcon = new LeafIcon({iconUrl: '../View/leaf-blue.png'}),
             //popupContent += "<br /><div> <input type='button' value='Delete this marker' class='marker-delete-button'/></div>"; 
 
             layer.bindPopup(popupContent);
+            drawnItems.addLayer(layer);
+
         }
         
         var markers = new Array();
@@ -1268,6 +1390,5 @@ blueIcon = new LeafIcon({iconUrl: '../View/leaf-blue.png'}),
 
 </script>
 
-<p>
-    <input id="Button1" type="button" value="button" onclick="return Button1_onclick()" /></p>
+
 

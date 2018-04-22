@@ -1,13 +1,13 @@
-﻿            $(document).mouseup(function(e) 
-            {
-                var container = $("#sidebar-wrapper");
+﻿            // $(document).mouseup(function(e) 
+            // {
+            //     var container = $("#sidebar-wrapper");
 
-                // if the target of the click isn't the container nor a descendant of the container
-                if (!container.is(e.target) && container.has(e.target).length === 0) 
-                {
-                    container.hide();
-                }
-            }); 
+            //     // if the target of the click isn't the container nor a descendant of the container
+            //     if (!container.is(e.target) && container.has(e.target).length === 0) 
+            //     {
+            //         container.hide();
+            //     }
+            // }); 
                         
 
 
@@ -17,9 +17,9 @@
             });
             function refreshData(){
                 getSession(function(user){
-                    GetData_Map();
+                    // GetData_Map();
                     getlistGroupTree()
-                    getall_coordinates()
+                    // getall_coordinates()
                 });
              
 
@@ -48,10 +48,21 @@
                     popupContent += "<div class='line-info'><strong>Trạng thái</strong>: "+ data.status +"</div>"
                     popupContent += "</div>";
                 }   
+                if (data && data.short) {
+                    popupContent += "<div>";
+                    popupContent += "<div class='line-info'><strong>Lượng nước cần tưới</strong>: "+ data.short +" ml</div>"
+                    popupContent += "</div>";
+                }   
                    if(!data.datanew&&user.rolecode=="PM"){
                     popupContent += "<div id='btn-remove-tree' class='btn-remove'>";
-
-                    popupContent+=  "<button onclick='return removeCood("+data.tree_id+")' class='btn btn-danger'>"+'<i class="glyphicon glyphicon-remove"></i> Xóa </button>'
+                    popupContent+=  "<button onclick='return user_tree("+data.tree_id+")' class='btn btn-primary'>"+'<i class="glyphicon glyphicon-tint"></i> Tưới cây </button>'
+                    popupContent+=  "<button style='margin-left:3px' onclick='return removeCood("+data.tree_id+")' class='btn btn-danger'>"+'<i class="glyphicon glyphicon-remove"></i> Xóa </button>'
+                    popupContent += "</div>";
+                   }
+                   else{
+                    popupContent += "<div id='btn-remove-tree' class='btn-remove'>";
+                    popupContent+=  "<button onclick='return user_tree("+data.tree_id+")' class='btn btn-primary'>"+'<i class="glyphicon glyphicon-tint"></i> Tưới cây </button>'
+                    // popupContent+=  "<button style='margin-left:3px' onclick='return removeCood("+data.tree_id+")' class='btn btn-danger'>"+'<i class="glyphicon glyphicon-remove"></i> Xóa </button>'
                     popupContent += "</div>";
                    }
 
@@ -60,6 +71,7 @@
             function logout(){
 
             }
+            
             function getall_coordinates() {
 
                 $.ajax({
@@ -72,28 +84,44 @@
                        
                       
                          if(data.EC==0){
-                        //     L.geoJson(data.DT, {
-                        //         onEachFeature: onEachFeature
-                           
-                        // }).addTo(map);
-
-	//  L.marker(data.DT.features[0].geometry.coordinates, {icon: greenIcon}).bindPopup("I am a green leaf.11111").addTo(map);
-	// L.marker([21.00623203956375,105.84283232688904], {icon: redIcon}).bindPopup("I am a red leaf.").addTo(map);
-	// L.marker([105.84283232688904, -21.00623203956375], {icon: orangeIcon}).bindPopup("I am an orange leaf.").addTo(map);
-                            data.DT.features.forEach(element => {
-                                let Y  = parseFloat(element.geometry.coordinates[0]);
-                                let X = parseFloat(element.geometry.coordinates[1])
-                                let cood = [];
-                                cood[0]=X, cood[1] = Y
-                                console.log('status',element.properties.status.trim()=="tốt")
-                                let icon
-                                    if(element.properties.status)
-                                         icon= element.properties.status.trim()=="tốt"?greenIcon:element.properties.status.trim()=="kém"?redIcon:orangeIcon
+                            L.geoJson(data.DT, {
+                                onEachFeature: onEachFeatureTree,
+                                
+                                pointToLayer: function(feature, latlng) {
+                                        // var smallIcon = new L.Icon({
+                                        //         iconSize: [27, 27],
+                                        //         iconAnchor: [13, 27],
+                                        //         popupAnchor:  [1, -24],
+                                        //         iconUrl:feature.properties
+                                            
+                                        // });
+                                    let icon
+                                    if(feature.properties.status)
+                                         icon= feature.properties.status.trim()=="tốt"?greenIcon:feature.properties.status.trim()=="kém"?redIcon:orangeIcon
                                     else
-                                        icon  = greenIcon
-                                    L.marker(cood,{icon}).bindPopup(getPopupContent(element.properties),customOptions).addTo(map);
+                                        icon  = greenIcon 
+                                        return L.marker(latlng, {icon});
+                                    },
+                           
+                        }).addTo(map);
 
-                            });
+
+                        //add từng điểm trên bản đồ nhưng k edit dc điểm trên bản đồ
+
+                            // data.DT.features.forEach(element => {
+                            //     let Y  = parseFloat(element.geometry.coordinates[0]);
+                            //     let X = parseFloat(element.geometry.coordinates[1])
+                            //     let cood = [];
+                            //     cood[0]=X, cood[1] = Y
+                            //     console.log('status',element.properties.status.trim()=="tốt")
+                            //     let icon
+                            //         if(element.properties.status)
+                            //              icon= element.properties.status.trim()=="tốt"?greenIcon:element.properties.status.trim()=="kém"?redIcon:orangeIcon
+                            //         else
+                            //             icon  = greenIcon
+                            //         L.marker(cood,{icon}).bindPopup(getPopupContent(element.properties),customOptions).addTo(map);
+
+                            // });
                             
                         }
                         else{
@@ -109,6 +137,15 @@
 
                
             }
+              //sự kiện khi click vào layer
+        function onEachFeatureTree(feature, layer) {
+           
+       
+            layer.bindPopup(getPopupContent(feature.properties));
+            drawnItems.addLayer(layer);
+
+        }
+            //xóa diểm trên bản đò"
             function removeFromListCoordinates(tree_id){
                 $.each(listcoordinates, function(i){
                     if(listcoordinates[i].name === 'Kristian') {

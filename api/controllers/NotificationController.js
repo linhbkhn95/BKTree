@@ -111,7 +111,8 @@ module.exports = {
 
       },
       get_number_notifi:function(req,res){
-        let username = req.body.username||req.session.user.username
+        let username = req.body.username||req.session.user&&req.session.user.username||null
+        if(username){
         this.reset_number_notifi(username);
 
         User.findOne({username}).exec((err,user)=>{
@@ -126,6 +127,9 @@ module.exports = {
             }
             return res.send(OutputInterface.errServer('Khong tim thay user'))
           });
+        }
+        return res.send(OutputInterface.errServer('Chưa login'))
+
       },
       reset_number_notifi: function(username){
          

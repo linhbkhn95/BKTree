@@ -131,7 +131,22 @@ module.exports = {
             if(err){
                 res.send([])
             }
+            
             res.send(list)
+        })
+    },
+    getoptions_reactselect:function(req,res){
+        Group_tree.find().exec((err,list)=>{
+            if(err){
+                res.send([])
+            }
+            var result = list.map((item)=>{
+                return{
+                    label:item.groupname,
+                    value:item.id
+                }
+            })
+            res.send(result);
         })
     },
     getlist: async function (req, res) {

@@ -55,8 +55,17 @@ module.exports = {
                 })
             
          },
+         getlist_grouptree:function(req,res){
+
+
+         },
+         
          getall:function(req,res){
-            StoredProcedure.query("call tree_bk.getall_coordinates()", [], function (err, [data, server_status]) {
+             let data = {}
+             if(req.body)
+                   data  = req.body;
+            let grouptree_id = data.grouptree_id||0
+            StoredProcedure.query("call tree_bk.getall_coordinates(?)", [grouptree_id], function (err, [data, server_status]) {
                 if (err) {
                     return res.send(OutputInterface.errServer('Lỗi hệ thống'))
                 }
@@ -67,7 +76,9 @@ module.exports = {
                     type:"FeatureCollection",
 
                 }
+               
                 let features = data.map((item)=>{
+                    console.log('item',item)
                      return{
                          type:"Feature",
                          properties:{
@@ -75,8 +86,8 @@ module.exports = {
                              note:item.code,
                              status:item.status,
                              url_image:item.url_image,
-                             tree_id:item.tree_id
-
+                             tree_id:item.tree_id,
+                             short:item.waterneed-item.waternow
                          },
                          geometry:{
                             type:"Point",
@@ -88,6 +99,57 @@ module.exports = {
                 return res.send(OutputInterface.success(result))
                 
             });
-         }
+         },
+         getlist:function(req,res){
+           let {listgrouptree_id} = req.body
+           console.log('list',req.body.listgrouptree_id)
+           
+           let list =listgrouptree_id.map((item)=>{
+               return item.value
+           })
+           if(list.length){
+          
+            console.log('listxxxx',list.toString())
+
+                StoredProcedure.query("call tree_bk.getlist_coordinates(?)", [list.toString()], function (err, [data, server_status]) {
+                    if (err) {
+                        return res.send(OutputInterface.errServer('Lỗi hệ thống'))
+                    }
+                    // console.log('data menu',data,server_status)
+                    // { "type": "FeatureCollection", "features": [{ "type": "Feature", "properties": { "name": "diem1" }, "geometry": { "type": "Point", "coordinates": [105.81516265869139, 21.037723438590533]} }, { "type": "Feature", "properties": { "name": "diem2" }, "geometry": { "type": "Point", "coordinates": [105.81087112426758, 21.031154308064544]} }, { "type": "Feature", "properties": { "name": "diem3" }, "geometry": { "type": "Point", "coordinates": [105.8287239074707, 21.036922340619142]}}] }
+                    
+                    let result ={
+                        type:"FeatureCollection",
+
+                    }
+                    
+                    let features = data.map((item)=>{
+                        console.log('item',item)
+                            return{
+                                type:"Feature",
+                                properties:{
+                                    name:item.groupname,
+                                    note:item.code,
+                                    status:item.status,
+                                    url_image:item.url_image,
+                                    tree_id:item.tree_id,
+                                    short:item.waterneed-item.waternow
+                                },
+                                geometry:{
+                                type:"Point",
+                                coordinates:[item.X,item.Y]
+                                }
+                            }
+                    })
+                    result.features =features
+                    return res.send(OutputInterface.success(result))
+                    
+                });
+            }
+           else
+                
+               return res.send(OutputInterface.errServer(''))
+
+        }
 };
 

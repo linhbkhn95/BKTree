@@ -115,7 +115,7 @@ class CreateUSer extends React.Component{
                         self.props.history.push('/login');
                     }
                     else{
-                        self.setState({err_msg:res.data.EM})
+                        self.setState({err_msg:res.data.DT})
                     }
                 })
             }
