@@ -41,3 +41,9 @@
     color: green;
     padding: 10px;
 }
+.btn-close-menuleft{
+    font-size: 21px;
+    padding-right: 12px;
+    padding-top: 6px;
+    color: #387f07;
+}

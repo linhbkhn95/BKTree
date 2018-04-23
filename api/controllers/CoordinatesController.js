@@ -45,6 +45,55 @@ module.exports = {
                 }
                 
          },
+         
+         create: async function(req,res){
+            console.log(req.body);
+            let {tree_id} = req.body
+            let data = await Coordinates.findOne({tree_id});
+            if(!data)
+                Coordinates.create(req.body).exec((err,coordinates)=>{
+                    if(err){
+                        return  res.send(OutputInterface.errServer(err))                        }
+                    if(coordinates)
+                       return  res.send(OutputInterface.success(coordinates))
+                    return res.send(OutputInterface.errServer('Không tồn tại tree_id'))                       
+                })
+            else{
+                res.send(OutputInterface.errServer('Cây đã dc tạo điểm trên bản đồ'))                       
+            }
+        
+        },
+         update:function(req,res){
+            console.log(req.body);
+            let {tree_id} = req.body
+            if(tree_id)
+                Coordinates.update({tree_id},req.body).exec((err,coordinates)=>{
+                    if(err){
+                        return  res.send(OutputInterface.errServer(err))                        }
+                    if(coordinates)
+                       return  res.send(OutputInterface.success(coordinates))
+                    return res.send(OutputInterface.errServer('Không tồn tại tree_id'))                       
+                })
+            else{
+                res.send(OutputInterface.errServer('Không truyền vào tree_id'))                       
+            }
+        
+        },
+        remove:function(req,res){
+            console.log(req.body);
+            let {tree_id} = req.body
+            if(tree_id)
+                Coordinates.destroy({tree_id}).exec((err,coordinates)=>{
+                    if(err){
+                        return  res.send(OutputInterface.errServer(err))                        }
+                    if(coordinates)
+                       return  res.send(OutputInterface.success(coordinates))
+                    return res.send(OutputInterface.errServer('Không tồn tại tree_id'))                       
+                })
+            else{
+                res.send(OutputInterface.errServer('Không truyền vào tree_id'))                       
+            }
+        },
          delete:function(req,res){
                 let tree_id = req.body.tree_id
                 console.log(req.body);
@@ -78,7 +127,6 @@ module.exports = {
                 }
                
                 let features = data.map((item)=>{
-                    console.log('item',item)
                      return{
                          type:"Feature",
                          properties:{
@@ -95,11 +143,34 @@ module.exports = {
                          }
                      }
                 })
-                result.features =features
-                return res.send(OutputInterface.success(result))
-                
+                let listTree = data.map((item)=>{
+                    return{
+                       value:item.tree_id,
+                       label:item.code,
+                       _latlng:{
+                            lat:item.Y,
+                            lng:item.X
+                       },
+                       properties:{
+                        name:item.groupname,
+                        note:item.code,
+                        status:item.status,
+                        url_image:item.url_image,
+                        tree_id:item.tree_id,
+                        short:item.waterneed-item.waternow
+                     },
+                    }
+                  })
+                  result.features =features
+                  let response ={
+                      geoJson:result,
+                      listTree
+                  }
+                  return res.send(OutputInterface.success(response))
+                  
             });
          },
+     
          getlist:function(req,res){
            let {listgrouptree_id} = req.body
            console.log('list',req.body.listgrouptree_id)
@@ -141,8 +212,23 @@ module.exports = {
                                 }
                             }
                     })
+                    let listTree = data.map((item)=>{
+                         return{
+                            value:item.tree_id,
+                            label:item.code,
+                            _latlng:{
+                                 lat:item.Y,
+                                 lng:item.X
+                            }
+                         }
+                    })
+
                     result.features =features
-                    return res.send(OutputInterface.success(result))
+                    let response ={
+                        geoJson:result,
+                        listTree
+                    }
+                    return res.send(OutputInterface.success(response))
                     
                 });
             }

@@ -16,11 +16,11 @@
                 getlistTree(grouptree_id)
             });
             function refreshData(){
-                getSession(function(user){
+                // getSession(function(user){
                     // GetData_Map();
                     getlistGroupTree()
                     // getall_coordinates()
-                });
+                // });
              
 
             }
@@ -33,7 +33,7 @@
 
                 if (data&& data.name) {
 
-                    popupContent += "<div class='line-info'><strong>Nhóm cây</strong>: "+ data.name +"</div>";
+                    popupContent += "<hr style='margin-bottom: 5px; margin-top: 5px;' /><div class='line-info'><strong>Nhóm cây</strong>: "+ data.name +"</div>";
                     popupContent += "</div>";
 
 
@@ -54,14 +54,14 @@
                     popupContent += "</div>";
                 }   
                    if(!data.datanew&&user.rolecode=="PM"){
-                    popupContent += "<div id='btn-remove-tree' class='btn-remove'>";
-                    popupContent+=  "<button onclick='return user_tree("+data.tree_id+")' class='btn btn-primary'>"+'<i class="glyphicon glyphicon-tint"></i> Tưới cây </button>'
-                    popupContent+=  "<button style='margin-left:3px' onclick='return removeCood("+data.tree_id+")' class='btn btn-danger'>"+'<i class="glyphicon glyphicon-remove"></i> Xóa </button>'
+                    popupContent += "<hr style='margin-bottom: 5px; margin-top: 5px;'<div id='btn-remove-tree' class='btn-remove'>";
+                    popupContent+=  "<button onclick='return showModalUseWater("+data.tree_id+")' class='btn btn-success'>"+'<i class="glyphicon glyphicon-tint"></i> Tưới cây </button>'
+                    popupContent+=  "<button style='margin-left:3px' onclick='return removeCood("+data.tree_id+")' class='btn btn-info'>"+'<i class="fa fa-eye" aria-hidden="true"></i>Xem chi tiết</button>'
                     popupContent += "</div>";
                    }
                    else{
-                    popupContent += "<div id='btn-remove-tree' class='btn-remove'>";
-                    popupContent+=  "<button onclick='return user_tree("+data.tree_id+")' class='btn btn-primary'>"+'<i class="glyphicon glyphicon-tint"></i> Tưới cây </button>'
+                    popupContent += "<hr style='margin-bottom: 5px; margin-top: 5px;'<div id='btn-remove-tree' class='btn-remove'>";
+                    popupContent+=  "<button onclick='return user_tree("+data.tree_id+")' class='btn btn-success'>"+'<i class="glyphicon glyphicon-tint"></i> Tưới cây </button>'
                     // popupContent+=  "<button style='margin-left:3px' onclick='return removeCood("+data.tree_id+")' class='btn btn-danger'>"+'<i class="glyphicon glyphicon-remove"></i> Xóa </button>'
                     popupContent += "</div>";
                    }
@@ -198,6 +198,80 @@
                         }
                     })
                 }
+               
+            }
+            function updateCood(layer){
+                
+                $.ajax({
+
+                        type: "POST",
+                        url: sUrl_OSM_Server + "coordinates/update",
+                        //   data: '{toado:"' + JSON.stringify(drawnItems.toGeoJSON()) + '",name:"' + name + '",note:"' + name + '"}',
+                          data: {tree_id:layer.feature.properties.tree_id, X:layer._latlng.lng,Y:layer._latlng.lat},
+                        // contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (data) {
+                            if(data.EC==0){
+                                console.log(data)
+                                toastr["warning"]("kkkkk", "kkkk")
+
+                                toastr.success('Cập nhật thành công')
+                            }
+                            else{
+
+                            }
+  
+                        }
+                    })
+                
+               
+            }
+            function createCood(layer,cb){
+                    console.log(layer)
+                $.ajax({
+
+                        type: "POST",
+                        url: sUrl_OSM_Server + "coordinates/create",
+                        //   data: '{toado:"' + JSON.stringify(drawnItems.toGeoJSON()) + '",name:"' + name + '",note:"' + name + '"}',
+                          data: {tree_id:layer.properties.tree_id, X:layer._latlng.lng,Y:layer._latlng.lat},
+                        // contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (data) {
+                          
+                                
+                                  cb(data)
+                               
+                        }
+                              
+                           
+                    })
+                
+               
+            }
+            function deleteCood(layer){
+                
+                $.ajax({
+
+                        type: "POST",
+                        url: sUrl_OSM_Server + "coordinates/delete",
+                        //   data: '{toado:"' + JSON.stringify(drawnItems.toGeoJSON()) + '",name:"' + name + '",note:"' + name + '"}',
+                          data: {tree_id:layer.feature.properties.tree_id, X:layer._latlng.lng,Y:layer._latlng.lat},
+                        // contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (data) {
+                            if(data.EC==0){
+                                console.log(data)
+                                toastr["warning"]("kkkkk", "kkkk")
+
+                                toastr.success('Cập nhật thành công')
+                            }
+                            else{
+
+                            }
+  
+                        }
+                    })
+                
                
             }
             function getSession(cb) {

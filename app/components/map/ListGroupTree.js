@@ -9,6 +9,7 @@ class App extends React.Component {
     listGroupTree:[],
     selectedOption: '',
     grouptree:null,
+    tree:null,
     switched:false
   }
   toggleSwitch = () => {
@@ -28,11 +29,13 @@ class App extends React.Component {
   }
   
   componentDidMount(){
+       let self = this
         axios.get('/coordinates/getall')
         .then((res)=>{
             // self.setState({listGroupTree:res.data})
             if(res.data.EC==0){
-              layerTree =  L.geoJson(res.data.DT, {
+              self.setState({listTree:res.data.DT.listTree})
+              layerTree =  L.geoJson(res.data.DT.geoJson, {
                 onEachFeature: onEachFeatureTree,
                 
                 pointToLayer: function(feature, latlng) {
@@ -57,12 +60,13 @@ class App extends React.Component {
   }
   getCood(listgrouptree_id){
     map.removeLayer(layerTree);
-
+    let self =this
     axios.post('/coordinates/getlist',{listgrouptree_id})
         .then((res)=>{
             // self.setState({listGroupTree:res.data})
             if(res.data.EC==0){
-              layerTree =  L.geoJson(res.data.DT, {
+              self.setState({listTree:res.data.DT.listTree})
+              layerTree =  L.geoJson(res.data.DT.geoJson, {
                 onEachFeature: onEachFeatureTree,
                 
                 pointToLayer: function(feature, latlng) {
@@ -95,6 +99,9 @@ class App extends React.Component {
   async getOptionsSYMBOL(input) {
     return { options: this.state.listGroupTree }
   }
+  async getOptionsTree(input) {
+    return { options: this.state.listTree }
+  }
   onChangeSYMBOL(e) {
     var that = this;
     if(e){
@@ -103,7 +110,19 @@ class App extends React.Component {
     }
     this.setState({ grouptree: e });
   }
-
+  onChangeTree(e) {
+    var that = this;
+    if(e){
+      var LatLng = e._latlng;
+      let ly = map.panTo(LatLng,{animate: true});
+      var popup=L.popup()
+      .setLatLng(LatLng)
+      .setContent(getPopupContent(e.properties))
+      .openOn(map);
+      // this.getCood(e)
+    }
+    this.setState({ tree: e });
+  }
 	getContributors (input, callback) {
 		input = input.toLowerCase();
 		var options = CONTRIBUTORS.filter(i => {
@@ -141,12 +160,32 @@ Chế độ hiển thị cây trên bản đồ </div>
                   multi={true}
                   name="form-field-name"
                   disabled={this.state.switched}
-                  placeholder="Nhậ tên nhóm cây"
+                  placeholder="Nhập tên nhóm cây"
                   loadOptions={this.getOptionsSYMBOL.bind(this)}
                   value={this.state.grouptree}
                 
                   options={this.state.listGroupTree}
                   onChange={this.onChangeSYMBOL.bind(this)}
+                  cache={false}
+                />
+              </div>
+      
+            </div>
+            <div style={{marginTop:"5px"}} className="col-xs-12">
+              <h5 className="col-xs-5">Đi đến cây</h5>
+              <div className="col-xs-7 ">
+                {/* <InputComponent placeholder="VFMVF1" validate={this.state.SYMBOL.validate} type="text" name="SYMBOL"
+                        tooltip={this.state.SYMBOL.tooltip} onChange={this.handleChange.bind(this)} /> */}
+                {/* <SelectFactory isAutoUppercase={true} type="SYMBOL" CDTYPE="SA" CDNAME="FUND" onChange={this.onChangeAllcode.bind(this)}  placeholder="Nhập MCCQ" /> */}
+                <Select.Async
+                 
+                  name="form-field-name"
+                  placeholder="Nhập mã cây"
+                  loadOptions={this.getOptionsTree.bind(this)}
+                  value={this.state.tree}
+                
+                  options={this.state.listTree}
+                  onChange={this.onChangeTree.bind(this)}
                   cache={false}
                 />
               </div>
