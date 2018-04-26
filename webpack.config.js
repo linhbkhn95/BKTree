@@ -5,16 +5,20 @@ module.exports={
   entry:
       //   'script!jquery/dist/jquery.min.js',
       // 'script!foundation-sites/dist/js/foundation.min.js',
-    { 
-      app: 'app/index.js',
-        map:['babel-polyfill','app/map.js',]
+      // 'app/index.js',
+      // 'babel-polyfill'
+   { 
+      index: 'app/index.js',
+        vendor:['app/map.js',  "babel-polyfill",'app/components//map/ListGroupTree.js']
       },
   
   output:{
     //  path:__dirname,
     //  filename:'./assets/js/bundel.js'
     path: __dirname,
-    filename: './assets/js/[name].bundel.js'
+    filename: './assets/jsx/[name].bundel.js',
+    // chunkFilename: '[id].[hash].bundle.js',
+
   },
   // externals: {
   //   jquery: 'jQuery'
@@ -30,9 +34,19 @@ module.exports={
         '__SERVER__': 'false',
         '__BROWSER__': 'true', // you really only need one of these, but I like to have both
     }),
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'map',
-    })
+    // new webpack.optimize.CommonsChunkPlugin({
+    //   name: 'map',
+    // })
+  //   new webpack.optimize.CommonsChunkPlugin({
+  //     names: ['app'],
+  //     filename: '[name].js'
+  // }),
+  new webpack.optimize.CommonsChunkPlugin({
+    name: 'vendor',
+    minChunks: 1
+
+  })
+
   ],
   resolve:{
     modules: [__dirname, 'node_modules'],

@@ -53,18 +53,15 @@
                     popupContent += "<div class='line-info'><strong>Lượng nước cần tưới</strong>: "+ data.short +" ml</div>"
                     popupContent += "</div>";
                 }   
-                   if(!data.datanew&&user.rolecode=="PM"){
+                let datastring = data.tree_id + ',"' + data.name+'","'+data.note+'"'
+              
                     popupContent += "<hr style='margin-bottom: 5px; margin-top: 5px;'<div id='btn-remove-tree' class='btn-remove'>";
-                    popupContent+=  "<button onclick='return showModalUseWater("+data.tree_id+")' class='btn btn-success'>"+'<i class="glyphicon glyphicon-tint"></i> Tưới cây </button>'
-                    popupContent+=  "<button style='margin-left:3px' onclick='return removeCood("+data.tree_id+")' class='btn btn-info'>"+'<i class="fa fa-eye" aria-hidden="true"></i>Xem chi tiết</button>'
+                    popupContent+=  "<button onclick='return showModalUseWater("+datastring
+                    +")' class='btn btn-success'>"+'<i class="glyphicon glyphicon-tint"></i> Tưới cây </button>'
+                    popupContent+=  "<button style='margin-left:3px' onclick='return showModalDetail("+data.tree_id+")' class='btn btn-info'>"+'<i class="fa fa-eye" aria-hidden="true"></i>Xem chi tiết</button>'
                     popupContent += "</div>";
-                   }
-                   else{
-                    popupContent += "<hr style='margin-bottom: 5px; margin-top: 5px;'<div id='btn-remove-tree' class='btn-remove'>";
-                    popupContent+=  "<button onclick='return user_tree("+data.tree_id+")' class='btn btn-success'>"+'<i class="glyphicon glyphicon-tint"></i> Tưới cây </button>'
-                    // popupContent+=  "<button style='margin-left:3px' onclick='return removeCood("+data.tree_id+")' class='btn btn-danger'>"+'<i class="glyphicon glyphicon-remove"></i> Xóa </button>'
-                    popupContent += "</div>";
-                   }
+                   
+               
 
                     return popupContent
             }

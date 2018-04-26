@@ -3,6 +3,24 @@ import Select from 'react-select';
 import { NavigationFullscreen } from 'material-ui';
 import axios from 'axios'
 import Switch from 'react-toggle-switch'
+require("babel-core/register");
+require("babel-polyfill");
+var LeafIcon = L.Icon.extend({
+  options: {
+      shadowUrl: 'leaf-shadow.png',
+      iconSize:     [38, 95],
+      shadowSize:   [50, 64],
+      iconAnchor:   [22, 94],
+      shadowAnchor: [4, 62],
+      popupAnchor:  [-3, -76]
+  }
+});
+
+var green = new LeafIcon({iconUrl: '../View/leaf-green.png'}),
+   blue = new LeafIcon({iconUrl: '../View/leaf-blue.png'}),
+  red = new LeafIcon({iconUrl: '../View/leaf-red.png'}),
+  orange = new LeafIcon({iconUrl: '../View/leaf-orange.png'});
+
 
 class App extends React.Component {
   state = {
@@ -13,7 +31,11 @@ class App extends React.Component {
     switched:false
   }
   toggleSwitch = () => {
-    
+    let self = this;
+    map.removeLayer(layerTree);
+
+    if(!this.state.switched)
+      this.getallCood()
     this.setState(prevState => {
       return {
         switched: !prevState.switched
@@ -29,35 +51,40 @@ class App extends React.Component {
   }
   
   componentDidMount(){
-       let self = this
-        axios.get('/coordinates/getall')
-        .then((res)=>{
-            // self.setState({listGroupTree:res.data})
-            if(res.data.EC==0){
-              self.setState({listTree:res.data.DT.listTree})
-              layerTree =  L.geoJson(res.data.DT.geoJson, {
-                onEachFeature: onEachFeatureTree,
-                
-                pointToLayer: function(feature, latlng) {
-                        // var smallIcon = new L.Icon({
-                        //         iconSize: [27, 27],
-                        //         iconAnchor: [13, 27],
-                        //         popupAnchor:  [1, -24],
-                        //         iconUrl:feature.properties
-                            
-                        // });
-                    let icon
-                    if(feature.properties.status)
-                         icon= feature.properties.status.trim()=="tốt"?greenIcon:feature.properties.status.trim()=="kém"?redIcon:orangeIcon
-                    else
-                        icon  = greenIcon 
-                        return L.marker(latlng, {icon});
-                    },
-           
-                     }).addTo(map);
-            }
-        })
+        this.getallCood()
+
+        
   }
+  getallCood(){
+    let self = this
+           axios.get('/coordinates/getall')
+           .then((res)=>{
+               // self.setState({listGroupTree:res.data})
+               if(res.data.EC==0){
+                 self.setState({listTree:res.data.DT.listTree})
+                 layerTree =  L.geoJson(res.data.DT.geoJson, {
+                   onEachFeature: onEachFeatureTree,
+                   
+                   pointToLayer: function(feature, latlng) {
+                           // var smallIcon = new L.Icon({
+                           //         iconSize: [27, 27],
+                           //         iconAnchor: [13, 27],
+                           //         popupAnchor:  [1, -24],
+                           //         iconUrl:feature.properties
+                               
+                           // });
+                       let icon
+                       if(feature.properties.status)
+                            icon= feature.properties.status.trim()=="tốt"?green:feature.properties.status.trim()=="kém"?red:orange
+                       else
+                           icon  = green
+                           return L.marker(latlng, {icon});
+                       },
+              
+                        }).addTo(map);
+               }
+           })
+     }
   getCood(listgrouptree_id){
     map.removeLayer(layerTree);
     let self =this
@@ -108,11 +135,12 @@ class App extends React.Component {
       console.log('e',e)
       this.getCood(e)
     }
-    this.setState({ grouptree: e });
+    this.setState({ grouptree: e,tree:null });
   }
   onChangeTree(e) {
     var that = this;
     if(e){
+      console.log('tree',e)
       var LatLng = e._latlng;
       let ly = map.panTo(LatLng,{animate: true});
       var popup=L.popup()

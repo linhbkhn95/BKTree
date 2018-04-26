@@ -128,7 +128,8 @@ module.exports = {
             return res.send(OutputInterface.errServer('Khong tim thay user'))
           });
         }
-        return res.send(OutputInterface.errServer('Chưa login'))
+        else
+          return res.send(OutputInterface.errServer('Chưa login'))
 
       },
       reset_number_notifi: function(username){

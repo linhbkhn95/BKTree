@@ -8,6 +8,9 @@ import LeftMenu from './components/map/Map'
   
 getSession(function(user){
   // GetData_Map();
+  if(user&&user.rolecode=="PM")
+    map.addControl(drawControl);
+
   ReactDOM.render(<LeftMenu now={new Date().toString()}/>, document.getElementById('container'));
   // getall_coordinates()
 }); 

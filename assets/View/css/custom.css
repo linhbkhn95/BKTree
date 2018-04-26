@@ -47,3 +47,6 @@
     padding-top: 6px;
     color: #387f07;
 }
+#modalDetail .form-group .form-control{
+    height:30px !important;
+}

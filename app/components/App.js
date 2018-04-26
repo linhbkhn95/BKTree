@@ -33,6 +33,7 @@ import ProfileUser from './client/user/ProfileUser'
 import EditProfile from './client/user/components/EditUser'
 import ChangePass from './client/user/ModalChangePass'
 import ListTreeAll from './pages/managetree/TableListTreeAll'
+import Search from './client/listtree/SearchTree'
  class App extends React.Component{
 
 // require('style-loader!css-loader!foundation-sites/dist/css/foundation.min.css');
@@ -53,6 +54,8 @@ import ListTreeAll from './pages/managetree/TableListTreeAll'
                       <Route  path="/create-user" component={CreateUser}/>
                       <Route  path="/create-tree" component={CreateTree}/>
                       <Route  path="/treedetail" component={TreeItem}/>
+                      <Route  path="/search-tree" component={Search}/>
+
                       <Route  path="/register" component={Resgister}/>
                       {/* <Route  path="/editProfile" component={EditProfile}/> */}
                       <Route  path="/listall-tree" component={ListTreeAll}/>

@@ -1,5 +1,7 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
+
+
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
@@ -19,5 +21,5 @@ ReactDOM.render(
      		 <App />
    	   
     ,
-  document.getElementById('container')
-);
+    document.getElementById('layout')
+  );

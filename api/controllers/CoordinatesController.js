@@ -219,7 +219,15 @@ module.exports = {
                             _latlng:{
                                  lat:item.Y,
                                  lng:item.X
-                            }
+                            },
+                            properties:{
+                                name:item.groupname,
+                                note:item.code,
+                                status:item.status,
+                                url_image:item.url_image,
+                                tree_id:item.tree_id,
+                                short:item.waterneed-item.waternow
+                             },
                          }
                     })
 
