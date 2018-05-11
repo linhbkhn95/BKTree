@@ -20,6 +20,9 @@ module.exports = {
       },
       room_id:{
         type:'string'
+      },
+      url_ref:{
+        type:'string'
       }
 
   }

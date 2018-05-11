@@ -199,7 +199,7 @@ Chế độ hiển thị cây trên bản đồ </div>
               </div>
       
             </div>
-            <div style={{marginTop:"5px"}} className="col-xs-12">
+            <div style={{marginTop:"5px",marginBottom:"13px"}} className="col-xs-12">
               <h5 className="col-xs-5">Đi đến cây</h5>
               <div className="col-xs-7 ">
                 {/* <InputComponent placeholder="VFMVF1" validate={this.state.SYMBOL.validate} type="text" name="SYMBOL"

@@ -18,7 +18,7 @@ import Contact from 'material-ui-icons/ContactMail';
 
 import Notifications from 'material-ui-icons/Notifications';
 import Book from 'material-ui-icons/Book';
-
+import moment from 'moment'
 import Badge from 'material-ui/Badge';
 import IconButton from 'material-ui/IconButton';
 import NotificationsIcon from 'material-ui/svg-icons/social/notifications';
@@ -29,6 +29,25 @@ import axios from 'axios'
 import { format } from 'util';
 import { ToastContainer, toast } from 'react-toastify';
 import {addNotification} from 'app/action/actionNotification'
+
+class ToastNotifi extends React.Component{
+  render(){
+      let notifi = this.props.notifi
+      console.log('notifi',notifi)
+      return(
+
+          <div style={{borderBottom:"none"}} className=" alert-message">
+                    <NavLink to={notifi.url_ref} > <div className="col-md-3 row"><NavLink to={"/profile."+notifi.data.user.username+"html"} ><img className="avatar-alert" src={notifi.data.user.url_avatar?notifi.user.url_avatar:'/images/user/me.png'} /></NavLink></div>
+                                <div className="col-md-10 row">
+                     <NavLink to={"/profile."+notifi.data.user.username+".html"} >  <strong>{notifi.data.user.fullname}</strong></NavLink> {" đã tưới "+notifi.data.water_use +" cho cây "+notifi.treecode}
+                                    <br />
+                                    <p className="time-alert">{moment(notifi.time_user).lang('vi').fromNow()}</p>
+                                </div>
+                                </NavLink>
+                     </div>
+      )
+  }
+}
  class ListExampleNested extends React.Component {
 
   state = {
@@ -71,40 +90,46 @@ import {addNotification} from 'app/action/actionNotification'
 
       }
     })
+    var {dispatch} = this.props; 
+    let username = this.props.auth.user.username
+
+    io.socket.on('User:'+username, function (data) {
+           dispatch(addNotification(data));
+           console.log('datanotifi',data);
+            toast(<ToastNotifi notifi={data}/>, {autoClose: 500000})
+    })
   }
   render_subscribe_tree(){
-    var {dispatch} = this.props; 
-    let self = this;
-    let username = this.props.auth.user.username
-     let list_subscribe_tree = this.state.list_subscribe_tree;
-     console.log('render_subscribe_tree',list_subscribe_tree)
+   
+    //  let list_subscribe_tree = this.state.list_subscribe_tree;
+    //  console.log('render_subscribe_tree',list_subscribe_tree)
 
-     if(list_subscribe_tree.length>0){
-       for(let i=0;i<list_subscribe_tree.length;i++){
-      //  list_subscribe_tree.map((sb)=>{
-          io.socket.on('follow', function (data) {
-            console.log('Socket `' + data.id + '` đã đăng kí nhận thông báo!',data);
-          });
+    //  if(list_subscribe_tree.length>0){
+    //    for(let i=0;i<list_subscribe_tree.length;i++){
+    //   //  list_subscribe_tree.map((sb)=>{
+    //       io.socket.on('follow', function (data) {
+    //         console.log('Socket `' + data.id + '` đã đăng kí nhận thông báo!',data);
+    //       });
           
-          io.socket.on(list_subscribe_tree[i].room_id, function (data) {
-            dispatch(addNotification(data))
-            let msg =  data.data.user.fullname_user? data.data.user.fullname_user: data.data.user.username+
-         " Đã tưới "+data.data.water_use+"ml nước cho cây"
+    //       io.socket.on(list_subscribe_tree[i].room_id, function (data) {
+    //         dispatch(addNotification(data))
+    //         let msg =  data.data.user.fullname_user? data.data.user.fullname_user: data.data.user.username+
+    //      " Đã tưới "+data.data.water_use+"ml nước cho cây"
 
-            //tawng so notifi trong db
-              // io.socket.post('/user/count_number_notifi',{username},function(res,jwres){
+    //         //tawng so notifi trong db
+    //           // io.socket.post('/user/count_number_notifi',{username},function(res,jwres){
 
-              // })
+    //           // })
 
 
-              toast.success(msg, {
-                position: toast.POSITION.TOP_CENTER
-            });
-            console.log('Socket `' + data.id + '` joined the party!',data);
-        //  });
-         })
-      }
-     }
+    //           toast.success(msg, {
+    //             position: toast.POSITION.TOP_CENTER
+    //         });
+    //         console.log('Socket `' + data.id + '` joined the party!',data);
+    //     //  });
+    //      })
+    //  }
+    // }
   }
   render() {
     let auth = this.props.auth
@@ -112,7 +137,7 @@ import {addNotification} from 'app/action/actionNotification'
     let url_profile = "/profile."+auth.user.username+".html"
     return (
       <div>
-        {this.render_subscribe_tree()}
+        {/* {this.render_subscribe_tree()} */}
         {/* <Toggle
           toggled={this.state.open}
           onToggle={this.handleToggle}
@@ -152,12 +177,11 @@ import {addNotification} from 'app/action/actionNotification'
           {this.props.auth.user&&this.props.auth.user.rolecode=="CTV"?
           
           <List>
-          <Subheader>Tìm kiếm</Subheader>
-          {/* <ListItem primaryText="Tìm đường" leftIcon={<Search />} /> */}
+          {/* <Subheader>Tìm kiếm</Subheader>
        
           <ListItem primaryText="Cây cần hỗ trợ" leftIcon={<Search />} />
           <ListItem primaryText="Trạng thái của cây" leftIcon={<Search />} />
-          <Divider />
+          <Divider /> */}
           <Subheader>Thao tác</Subheader>
           <ListItem  containerElement={ <a href="/map/map"></a>}  primaryText="Bản đồ cây" leftIcon={<Assignment />} />
 

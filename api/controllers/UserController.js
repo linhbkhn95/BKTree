@@ -14,7 +14,10 @@ module.exports = {
           if(userexits){
             return res.send(OutputInterface.errServer('Tên đăng nhập đã tồn tại'))
           }
-          User.create(req.body).exec(function (err, user) {
+          let data  = req.body;
+          data.status = "Hoạt động"
+          data.rolecode = "CTV"
+          User.create(data).exec(function (err, user) {
             if (err) {
               return  res.send(OutputInterface.errServer(err))
   

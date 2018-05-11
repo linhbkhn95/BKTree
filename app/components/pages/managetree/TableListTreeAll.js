@@ -279,6 +279,7 @@ class QuyDangKy extends React.Component {
                                       </span>)
                               },
                                },
+                               
                             {
                                 Header: props => <div className="">Mô tả</div>,
                                 id: "description",
@@ -292,7 +293,36 @@ class QuyDangKy extends React.Component {
                               }
 
                            },
-                           
+                           {
+                            Header: props => <div className="">Tọa độ X</div>,
+                            id: "X",
+                            sortable: false,
+                            width:300,
+                            accessor: "X",
+                            Cell: ({ value }) => {
+                              return (
+                                  <span className="col-left">
+                                      {value}
+                                  </span>)
+                          },  Filter: ({ filter, onChange }) =>
+                          null
+
+                       },
+                       {
+                        Header: props => <div className="">Tọa độ Y</div>,
+                        id: "Y",
+                        width:300,
+                        accessor: "Y",
+                        Cell: ({ value }) => {
+                          return (
+                              <span className="col-left">
+                                  {value}
+                              </span>)
+                      },  Filter: ({ filter, onChange }) =>
+                      null
+
+                   },
+                   
                             {
                                 Header: props => <div className="">Ngày tạo</div>,
                                 id: "begindate",

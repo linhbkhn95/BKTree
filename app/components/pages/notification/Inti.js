@@ -12,6 +12,7 @@ import moment from 'moment';
 import {setNotification,resetNotification} from 'app/action/actionNotification'
 import {connect} from 'react-redux'
 import Inti from './Inti'
+import {NavLink} from 'react-router-dom'
 // import ReactTooltip from 'react-tooltip'
  var date = Date.now();
 var datedemo=1511399642970;
@@ -39,13 +40,15 @@ class Layout extends React.Component {
         items: 10,
         listNotifi:[],
         page:1,
-        loadingState: false
+        loadingState: false,
+        fulldata:false,
+
       };
     }
   
     componentDidMount() {
       this.refs.iScroll.addEventListener("scroll", () => {
-        if (this.refs.iScroll.scrollTop + this.refs.iScroll.clientHeight >= this.refs.iScroll.scrollHeight -20){
+        if (this.refs.iScroll.scrollTop + this.refs.iScroll.clientHeight >= this.refs.iScroll.scrollHeight -20 &&!this.state.fulldata){
           this.loadMoreItems();
         }
       });
@@ -54,7 +57,10 @@ class Layout extends React.Component {
       io.socket.post('/notification/getlist',{page:this.state.page},function(res,jwres){
         if(res.EC==0){
             console.log(res.DT)
-            self.setState({listNotifi:res.DT,page:self.state.page+1,loadingState:false})
+            if(res.DT.length<10)
+              self.state.fulldata = true
+
+            self.setState({listNotifi:res.DT,page:self.state.page+1,loadingState:false,fulldata:self.state.fulldata})
             dispatch(resetNotification());
 
         }
@@ -80,9 +86,11 @@ class Layout extends React.Component {
     
        io.socket.post('/notification/getlist',{page:this.state.page},function(res,jwres){
          if(res.EC==0){
-             console.log('dataaaaaaaaaaaaaaaa',res.DT)
              let data = self.state.listNotifi.concat(res.DT)
-             self.setState({listNotifi:data,page:self.state.page+1,loadingState:false})
+             if(res.DT.length<10)
+                 self.state.fulldata = true
+
+             self.setState({listNotifi:data,page:self.state.page+1,loadingState:false,fulldata:self.state.fulldata})
              dispatch(resetNotification());
 
          }
@@ -104,6 +112,7 @@ class Layout extends React.Component {
            listNotifi.map(( notifi,index)=>{
              return(
                <div key={index}>
+               <NavLink to={notifi.url_ref?notifi.url_ref:"/treedetail."+notifi.room_id+".html"}>
               <ListItem
                     leftAvatar={<Avatar src={ notifi.data.user.url_avatar? notifi.data.user.url_avatar:'images/user/me.png'} />}
                   //   primaryText="Nhỏ Ngọc"
@@ -121,13 +130,14 @@ class Layout extends React.Component {
                       <span className="time-alert">{moment( notifi.data.createdAt).lang('vi').fromNow()=='Invalid date'?'':moment(notifi.data.createdAt).lang('vi').fromNow()}</span>
                   </ ListItem>
                   <Divider inset={true} />
+                  </NavLink>
                 </div>
              )
            }):null
           }
           </List>
-  
-          {this.state.loadingState ? <p className="loading"> loading More Items..</p> : ""}
+       
+          {this.state.loadingState ? <p className="loading"> Đang tải dữ liệu ...</p> : ""}
   
         </div>
       );

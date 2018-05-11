@@ -100,13 +100,15 @@ class CreateUSer extends React.Component{
         let self = this
         let username = data.username.value ;
         let password = data.password.value ;
-        let confirmPassword = data.confirmPassword.value
+        let confirmPassword = data.confirmPassword.value 
+        let fullname = data.fullname.value;
+        let sex  = data.sex.value
         if(username!=''&&password!=''&&confirmPassword!=''){
             if(password!=confirmPassword){
                 this.setState({err_msg:'Mật khẩu không khớp'})
             }
             else{
-                axios.post('/user/create',{username,password,confirmPassword})
+                axios.post('/user/create',{username,password,confirmPassword,fullname,sex})
                 .then((res)=>{
                     if(res.data.EC==0){
                         toast.success('Đăng kí thành công', {

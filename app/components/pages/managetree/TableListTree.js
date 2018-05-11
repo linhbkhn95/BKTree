@@ -30,14 +30,14 @@ class QuyDangKy extends React.Component {
           page: 1,
           showModalEdit:null,
           dataEdit:{},
-          acion:'insert',
+          action:'insert',
           showModalConfirm:false
         }
         this.fetchData = this.fetchData.bind(this);
 
     }
     add(){
-        this.setState({showModalEdit: true,acion:'insert'})
+        this.setState({showModalEdit: true,action:'insert',dataEdit:null})
     }
     close(){
         this.setState({showModalEdit:false })
@@ -80,7 +80,7 @@ showModalConfirm(){
     handleEdit(id){
         this.setState({
             dataEdit: this.state.data.filter(e => e.id === id)[0],
-            stateView: 'update',
+            action: 'update',
             showModalEdit: true
           })
     }
@@ -311,7 +311,7 @@ showModalConfirm(){
             </div>
             <ModalConfirm access={this.delete} show={this.state.showModalConfirm} close={this.closeModalConfirm.bind(this)} />
 
-            <ModalEdit dataEdit={this.state.dataEdit} open={this.state.showModalEdit} close={this.close.bind(this)} />
+            <ModalEdit dataEdit={this.state.dataEdit} action = {this.state.action} open={this.state.showModalEdit} close={this.close.bind(this)} />
             </div>
         );
     }

@@ -125,6 +125,35 @@ class ModalTree extends React.Component{
             this.state.fileName = dataEdit.url_image
             this.setState(this.state)
         }
+        else{
+            this.setState({
+                fileName: '',
+                file: null,
+                
+                data:{
+                       
+                    groupname:{
+                        errorText:'',
+                        value:''
+        
+                    },
+                    country:{
+                        errorText:'',
+                        value:''
+        
+                    },
+                    description:{
+                        errorText:'',
+                        value:''
+        
+                    },
+                    address:{
+                        errorText:'',
+                        value:''
+                    },
+                }
+                })
+        }
     }
     _handleChange(e) {
         e.preventDefault();

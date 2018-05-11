@@ -148,6 +148,13 @@ module.exports = {
             Promise.all(response.map((item) => {
                 return new Promise(async (resolve, reject) => {
                     let groupname = ''
+                    item.X = '',item.Y = ''
+                    let coordinates  = await Coordinates.findOne({tree_id:item.id});
+                    if(coordinates){
+                        item.X = coordinates.X;
+                        item.Y = coordinates.Y
+                    }
+
                     let rs = listgrouptree.filter(grouptree => grouptree.id == item.grouptree_id)
                     if (rs.length > 0) {
                         groupname = rs[0].groupname;
@@ -196,11 +203,13 @@ module.exports = {
                     dataNotify.data = result;
                     dataNotify.room_id = tree_id;
                     dataNotify.time = Date.now();
+                    dataNotify.url_ref = "treedetail."+tree_id+".html"
                     console.log('datanotify',dataNotify)
+                    
                     let notify_tree = await Notifi_tree.create(dataNotify);
                     let list_count_notifi = await NotificationController.count_number_notifi(dataNotify.room_id);
-                    sails.sockets.broadcast('Subscribe_Tree',tree_id, notify_tree, req);
-                    
+                    notify_tree.treecode = tree.code
+                    NotificationUtils.notifi_userTree(notify_tree,req)
                     tree.save(()=>{
                         console.log('update thành công')
                        return  res.send(OutputInterface.success(tree))
