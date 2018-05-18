@@ -50,6 +50,7 @@ function usetree(){
             io.socket.post('/tree/use_tree',{wateruse,tree_id},(res,status)=>{
                 console.log(res)
                 if(res.EC==0){
+                    alert('Tưới thành công')
                 //    self.state.infoTree.waternow = res.DT.waternow;
                    
                 //    self.setState({infoTree:self.state.infoTree})

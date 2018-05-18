@@ -143,13 +143,17 @@ showModalConfirm(){
         this.state.selectedRows.forEach((key, value, set) => {
             let data = this.state.data.filter(e => e.id === value);
             let success = null;
-            axios.post('/group_tree/delete', data[0])
+            console.log('data',data)
+            axios.post('/group_tree/delete',{ idDelete:data[0].id})
                 .then(res => success = res.data.EC)
                 .then(() => {
                     success ? toast.error("Xoá  thất bại !" +res.data.DT, { position: toast.POSITION.BOTTOM_RIGHT })
                         : toast.success("Xoá  thành công !", { position: toast.POSITION.BOTTOM_RIGHT });
                 })
+            
         })
+            this.setState({showModalConfirm:false, selectedRows: new Set(),
+            unSelectedRows: []})
     }
     render() {
         const pageSize = 5;

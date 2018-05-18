@@ -86,6 +86,9 @@ const style = {
 
        }
     })
+    axios.get('/tree/setAllStatus').then((resdata)=>{
+         
+    })
     io.socket.post('/notification/get_number_notifi',{username:this.props.auth.user.username},function(res,jwRes){
         if(res.EC==0){
           dispatch(setNotification(res.DT))

@@ -18,7 +18,7 @@ module.exports = {
     insert: function (req, res) {
         // upload.single('file')
         // console.log()
-        sails.log.info('req.headers', req.headers);
+        // sails.log.info('req.headers', req);
         let file = req.file('file');
         // let filename = req.file.
         // console.log(file)
@@ -29,10 +29,11 @@ module.exports = {
         // fileReader.on('data', function (data) {
         //     console.log("chunkSize:", data.length);
         //   });
-        let data ={}
-         data.groupname = req.headers.groupname;
-         data.country = req.headers.country;
-         data.description = req.headers.description
+        let data =req.body
+        console.log('aa',req.groupname)
+        //  data.groupname = req.headers.groupname;
+        //  data.country = req.headers.country;
+        //  data.description = req.headers.description
     
         req.file('file').upload({
           // don't allow the total upload size to exceed ~100MB
@@ -41,12 +42,15 @@ module.exports = {
           dirname: '../../assets/images/tree'
         }, async function (err, uploadedFile) {
           // if error negotiate
-          if (err) return res.negotiate(err);
-             console.log('filename',uploadedFile[0]);
-             data.url_image_gobal = uploadedFile[0].fd
-           var img = uploadedFile[0].fd.split("/");
-          
-           data.url_image = '/images/tree/'+img[img.length-1]
+          data.url_image = ""
+          if (err)  data.url_image="";
+
+            if(uploadedFile&&uploadedFile[0]&&uploadedFile.fd&&uploadedFile.fb.length>0){
+                data.url_image_gobal = uploadedFile[0].fd
+                var img = uploadedFile[0].fd.split("/");
+                
+                data.url_image = '/images/tree/'+img[img.length-1]
+            }
           Group_tree.create(data).exec((err,gt)=>{
             if(err){
                 res.send(OutputInterface.errServer(err))
@@ -114,8 +118,9 @@ module.exports = {
       },
     delete:async function(req,res){
         let idDelete = req.body.idDelete
-        let count_listtree = await Tree.find({grouptree_id:idDelete}).count();
-        if(count_listtree>0)
+        console.log('idle',idDelete)
+        let count_listtree = await Tree.find({grouptree_id:idDelete});
+        if(count_listtree.length>0)
             res.send(OutputInterface.errServer('Bạn phải xóa hết các cây trong nhóm cây trước'))
 
         

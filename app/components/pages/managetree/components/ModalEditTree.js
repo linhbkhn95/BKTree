@@ -147,7 +147,7 @@ class ModalTree extends React.Component{
         
         const formData = new FormData();
         formData.append('file', file);
-
+        
         const config = {
             headers: {
                 'Content-Type': 'multipart/form-data',

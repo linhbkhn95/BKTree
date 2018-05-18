@@ -154,11 +154,11 @@ class QuyDangKy extends React.Component {
         this.state.selectedRows.forEach((key, value, set) => {
             let data = this.state.data.filter(e => e.username === value);
             let success = null;
-            axios.post('/user/delete', data[0])
+            axios.post('/user/delete',{username: data[0].username})
                 .then(res => success = res.data.EC)
                 .then(() => {
                     success ? toast.error("Xóa "+ value+ "thất bại"+res.data.DT , { position: toast.POSITION.BOTTOM_RIGHT })
-                        : toast.success("Xoá "+value+"quỹ thành công !", { position: toast.POSITION.BOTTOM_RIGHT });
+                        : toast.success("Xoá "+value+" thành công !", { position: toast.POSITION.BOTTOM_RIGHT });
                 })
         })
         this.setState({showModalConfirm:false, selectedRows: new Set(),

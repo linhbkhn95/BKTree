@@ -414,6 +414,7 @@ var googleStreets = 'http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}';
             var layers = e.layers;
             layers.eachLayer(function (layer) {
                 deleteCood(layer)
+                alert('Xóa thành công')
                 //do whatever you want, most likely save back to db
             });
         });
@@ -424,6 +425,8 @@ var googleStreets = 'http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}';
             layers.eachLayer(function (layer) {
                 console.log('layers',layer)
                 updateCood(layer)
+                 alert('Update thành công')
+
                 // layer.on('click', function (event) {
                 //     var content = 'HIHI';
                 //     popup
@@ -563,7 +566,7 @@ var googleStreets = 'http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}';
                       
                           let icon = greenIcon ;
                             if(dataBind.status)
-                                 icon = dataBind.status.trim()=="tốt"?greenIcon:dataBind.status.trim()=="kém"?redIcon:orangeIcon 
+                           icon= dataBind.status.trim()=="Tốt"?greenIcon:dataBind.status.trim()=="Trung bình"?orangeIcon:redIcon
                             
                             if(!isCreateMap)
                                 layer_.setIcon(icon).bindPopup(getPopupContent(dataBind));

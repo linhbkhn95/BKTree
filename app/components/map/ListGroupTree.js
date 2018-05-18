@@ -75,7 +75,7 @@ class App extends React.Component {
                            // });
                        let icon
                        if(feature.properties.status)
-                            icon= feature.properties.status.trim()=="tốt"?green:feature.properties.status.trim()=="kém"?red:orange
+                            icon= feature.properties.status.trim()=="Tốt"?greenIcon:feature.properties.status.trim()=="Trung bình"?orangeIcon:redIcon
                        else
                            icon  = green
                            return L.marker(latlng, {icon});
@@ -106,7 +106,7 @@ class App extends React.Component {
                         // });
                     let icon
                     if(feature.properties.status)
-                         icon= feature.properties.status.trim()=="tốt"?greenIcon:feature.properties.status.trim()=="kém"?redIcon:orangeIcon
+                           icon= feature.properties.status.trim()=="Tốt"?greenIcon:feature.properties.status.trim()=="Trung bình"?orangeIcon:redIcon
                     else
                         icon  = greenIcon 
                         return L.marker(latlng, {icon});

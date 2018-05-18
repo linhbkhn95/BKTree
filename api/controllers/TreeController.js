@@ -174,10 +174,42 @@ module.exports = {
        
 
     },
+    setAllStatus:function(req,res){
+           Tree.find({}).exec(function(err,list){
+                Promise.all(list.map((tree) => {
+                    return new Promise( (resolve, reject) => {
+                       let status_tree =""
+                            if(tree.waterneed <tree.waternow)
+                                status_tree = "Tốt"
+                            else{
+                                let kq = tree.waternow/tree.waterneed
+                                if(kq>0.75||kq==0.75)
+                                status_tree = "Tốt"
+                                if(kq>=0.5 && kq<0.75)
+                                    status_tree ="Trung bình"
+                                if(kq<0.5)
+                                    status_tree ="Kém"
+                            }
+                            tree.status = status_tree
+                            tree.save(()=>{})
+                            
+                        
+                    resolve(tree)
+                })
+                }))
+              .then((response)=>{
+                    return  res.send(OutputInterface.success(response))
+                })
+           })
+                
+                
+           
+    },
     use_tree:function(req,res){
         let username = req.session.user.username;
         let wateruse = req.body.wateruse||0;
         let tree_id = req.body.tree_id || null
+       
          // Make sure this is a socket request (not traditional HTTP)
          if (!req.isSocket) {
             return res.badRequest();
@@ -195,7 +227,19 @@ module.exports = {
                     dataHistorytree.tree_id = tree_id;
                     dataHistorytree.time_use = Date.now()
                     tree.waternow += parseInt(wateruse)
-
+                    let status_tree =""
+                    if(tree.waterneed <tree.waternow)
+                        status_tree = "Tốt"
+                    else{
+                        let kq = tree.waternow/tree.waterneed
+                        if(kq>0.75||kq==0.75)
+                         status_tree = "Tốt"
+                        if(kq>=0.5 && kq<0.75)
+                            status_tree ="Trung bình"
+                        if(kq<0.5)
+                            status_tree ="Kém"
+                    }
+                    tree.status = status_tree
                     let result  = await Historytree.create(dataHistorytree);
                     result.user = req.session.user
                     let dataNotify ={}

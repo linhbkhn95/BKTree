@@ -148,14 +148,20 @@ class ModalTree extends React.Component{
         
         const formData = new FormData();
         formData.append('file', file);
+           formData.append('username',this.state.data.username.value)
+                      formData.append('fullname',this.state.data.fullname.value)
+
+               formData.append(    'country',this.state.data.country.value)
+                  formData.append( 'address',this.state.data.address.value)
+                //   formData.append( 'grouptree_id',this.props.dataEdit?this.props.dataEdit.id:"")
 
         const config = {
             headers: {
                 'Content-Type': 'multipart/form-data',
-                 groupname:this.state.data.groupname.value,
-                 country:this.state.data.country.value,
-                 description:this.state.data.description.value,
-                 rolecode:this.props.dataEdit?this.props.dataEdit.id:""
+                //  groupname:this.state.data.groupname.value,
+                //  country:this.state.data.country.value,
+                //  description:this.state.data.description.value,
+                //  rolecode:this.props.dataEdit?this.props.dataEdit.id:""
 
             }
         }

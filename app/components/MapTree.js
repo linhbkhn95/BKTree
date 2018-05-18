@@ -33,11 +33,11 @@ import {addNotification} from 'app/action/actionNotification'
 class ToastNotifi extends React.Component{
   render(){
       let notifi = this.props.notifi
-      console.log('notifi',notifi)
+      console.log('notifi',notifi,notifi.data.user.url_avatar)
       return(
 
           <div style={{borderBottom:"none"}} className=" alert-message">
-                    <NavLink to={notifi.url_ref} > <div className="col-md-3 row"><NavLink to={"/profile."+notifi.data.user.username+"html"} ><img className="avatar-alert" src={notifi.data.user.url_avatar?notifi.user.url_avatar:'/images/user/me.png'} /></NavLink></div>
+                    <NavLink to={notifi.url_ref} > <div className="col-md-3 row"><NavLink to={"/profile."+notifi.data.user.username+"html"} ><img className="avatar-alert" src={notifi.data.user.url_avatar?notifi.data.user.url_avatar:'/images/user/me.png'} /></NavLink></div>
                                 <div className="col-md-10 row">
                      <NavLink to={"/profile."+notifi.data.user.username+".html"} >  <strong>{notifi.data.user.fullname}</strong></NavLink> {" đã tưới "+notifi.data.water_use +" cho cây "+notifi.treecode}
                                     <br />
@@ -95,8 +95,7 @@ class ToastNotifi extends React.Component{
 
     io.socket.on('User:'+username, function (data) {
            dispatch(addNotification(data));
-           console.log('datanotifi',data);
-            toast(<ToastNotifi notifi={data}/>, {autoClose: 500000})
+            toast(<ToastNotifi notifi={data}/>, {autoClose: 6000})
     })
   }
   render_subscribe_tree(){
